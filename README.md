@@ -5,8 +5,8 @@ Code in folder cquot is written by Niels van der Weide and Dan Frumin, and is co
 
 
 To compile:
-coq_makefile -f _CoqProject -o Makefile
-make
+1. `coq_makefile -f _CoqProject -o Makefile`
+2. `make`
 
 To generate documentation:
 coqdoc -R . "A_BPQ" -d doc [list of files]

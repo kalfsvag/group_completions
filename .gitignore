@@ -1,0 +1,11 @@
+
+# Ignore Emacs backup files
+*~
+*#*
+# Ignore compiled files
+*.aux
+*.glob
+*.vo
+*.v.d
+# Ignore makefile
+Makefile

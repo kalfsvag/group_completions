@@ -96,7 +96,7 @@ Section nat_monoid.
   
   (*Strangely, I cannot find any proofs of nat being associative*)
   Open Scope nat_scope.
-  Definition plus_assoc : forall j k l : nat, (j + k) + l = j + (k + l). 
+  Definition nat_plus_assoc : forall j k l : nat, (j + k) + l = j + (k + l). 
     intros j k l.
     induction j.
     - exact idpath.
@@ -106,7 +106,7 @@ Section nat_monoid.
   Definition nat_monoid : Monoid :=
     Build_Monoid
       (BuildhSet nat) Peano.plus O
-      plus_assoc (fun _ => idpath) (fun n => (nat_plus_n_O n)^).
+      nat_plus_assoc (fun _ => idpath) (fun n => (nat_plus_n_O n)^).
 
   Definition nat_symm_monoid : Symmetric_Monoid := Build_Symmetric_Monoid nat_monoid nat_plus_comm.    
 

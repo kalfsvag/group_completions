@@ -10,3 +10,5 @@ make
 
 To generate documentation:
 coqdoc -R . "A_BPQ" -d doc [list of files]
+
+Known to compile with the HoTT library version [1e2173240f85d2a3f8bbc60ae90db96d0617431e](https://github.com/HoTT/HoTT/commit/d79a5b50196a0c101eb192830620cabe2eaa1781).

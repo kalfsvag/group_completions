@@ -205,7 +205,7 @@ Section Monoidal_Map.
     - intro a. simpl. hott_simpl.
       transitivity (path_arrow _ _ (fun b : M => ap (fun x : M => x ⊗ b) (montype_lid a))).
       { simpl. destruct (montype_lid a). simpl. apply inverse. apply path_forall_1. }
-      Check (montype_triangle1 M a).
+      (* Check (montype_triangle1 M a). *)
       rewrite (path_forall _ _ (montype_triangle1 M a)).
       repeat rewrite path_arrow_pp.
       apply whiskerL.
@@ -216,7 +216,7 @@ Section Monoidal_Map.
     - intro a. simpl. hott_simpl.
       transitivity (path_arrow _ _ (fun b : M => ap (fun x : M => x ⊗ b) (montype_rid a))).
       { simpl. destruct (montype_rid a). simpl. apply inverse. apply path_forall_1. }
-      Check (montype_triangle2 M a).
+      (* Check (montype_triangle2 M a). *)
       rewrite (path_forall _ _ (montype_triangle2 M a)).
       repeat rewrite path_arrow_pp.
       apply whiskerL.

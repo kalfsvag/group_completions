@@ -2,9 +2,29 @@ Require Import HoTT.
 Require Import Categories.Functor Category.Morphisms.
 Require Import Category.Core.
 From A_BPQ Require Import quotients categories.
-From A_BPQ Require Import cquot cquot_principles.
+From A_BPQ Require Export cquot cquot_principles.
 
-(* The definition of the 1type-completion is in the folder cquot *)
+(** The definition of the 1type-completion is in the folder cquot *)
+
+(* A simplified version of cquot_rec which doesn't need ce  *)
+Definition cquot_rec' {C : PreCategory} (Y : Type)
+             (cclY : C -> Y)
+             (ccleqY : forall {a₁ a₂ : C},
+                 C a₁ a₂ -> cclY a₁ = cclY a₂)
+             (* (ceY : forall (a : C), ccleqY (identity a) = idpath) *)
+             (cconcatY : forall (a₁ a₂ a₃: C) (c₁: C a₁ a₂) (c₂: C a₂ a₃),
+                 ccleqY (c₂ o c₁)%morphism = ccleqY c₁ @ ccleqY c₂)
+             {truncY : IsTrunc 1 Y}
+  : cquot C -> Y.
+  Proof.
+    refine (cquot_rec Y cclY ccleqY _ cconcatY).
+    intro c.
+    apply (cancelL (ccleqY c c 1%morphism)).
+    refine ((cconcatY c c c _ _)^ @ _).
+    refine (ap (ccleqY c c) (left_identity C c c _) @ _).
+    apply inverse. apply concat_p1.
+  Defined.
+
 
 (** The functor given by the constructors of cquot *)
 Definition include_in_cquot (C : PreCategory)

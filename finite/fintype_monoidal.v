@@ -665,3 +665,5 @@ Section Assoc_Nat_to_Assoc_FinType.
       apply IHa.
   Qed.
 End Assoc_Nat_to_Assoc_FinType.  
+
+Section Bsgn

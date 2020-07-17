@@ -1,5 +1,8 @@
 Require Import HoTT.
 
+(** A few lemmas regarding sigma types that we did not find in the HoTT library  *)
+
+
 Definition distributivity `{Funext} (A : Type) (B : A -> Type) (C : forall a : A, B a -> Type) :
   (forall a : A, {b : B a & C a b}) <~> {b : forall a : A, B a & forall a : A, C a (b a)}.
 Proof.
@@ -27,7 +30,7 @@ Proof.
   apply (concat2 (path_sigma_hprop_1 (x1; x2)) (path_sigma_hprop_1 (x1; x2))).
 Defined.
 
-(*A more general version of trunc_sigma that only requires A to be "locally truncated" wherever there is a [b : Ba] *)
+(** A more general version of trunc_sigma that only requires A to be "locally truncated" wherever there is a [b : Ba] *)
 Definition trunc_sigma' {A : Type} {B : A -> Type} {n : trunc_index} :
            (forall a : A, IsTrunc (n.+1) (B a)) ->
            (forall p q : {a : A & B a}, IsTrunc n (p.1 = q.1)) ->
@@ -40,7 +43,6 @@ Proof.
     exact (BuildEquiv _ _ (path_sigma_uncurried B ab ab') _). }
   apply trunc_sigma.
 Defined.
-
 
 
 Lemma equiv_sigma_sum' (A : Type) (B C : A -> Type) :
@@ -57,16 +59,6 @@ Proof.
   - intros [[a b] | [a c]]; reflexivity.
 Defined.
 
-
-
-(* This was already implemented as equiv_sigma_prod0. *)
-(* Definition sig_const (A B : Type) : *)
-(*   sig (fun _ : A => B) <~> A * B := *)
-(*   (@equiv_adjointify *)
-(*      (sig (fun _ : A => B)) (A * B) *)
-(*      (fun ab => match ab with (a ; b) => (a, b) end) *)
-(*      (fun ab => match ab with (a, b) => (a ;b) end) *)
-(*      (fun _ => idpath) (fun _ => idpath)). *)
 
 (*The section corresponding to a dependent function:*)
 Definition section_of {A : Type} {B : A -> Type} (f : forall a : A, B a) :
@@ -109,9 +101,7 @@ Definition path2_sigma {A : Type} (P : A -> Type) (u v : {a : A & P a})
            (q' : transport P p' u.2 = v.2)
            (h1 : p = p')
            (h2 : transport (fun p0 : u.1=v.1 => (transport P p0 u.2 = v.2)) h1 q = q')
-:
-
-           path_sigma P u v p q = path_sigma P u v p' q'.
+  : path_sigma P u v p q = path_sigma P u v p' q'.
 Proof.
   destruct u as [u1 u2].
   destruct v as [v1 v2].
@@ -135,16 +125,6 @@ Proof.
   simpl in q. destruct q.
   reflexivity.
 Defined.
-  
-(* transport P p^ v.2 = u.2. *)
-(* Proof. *)
-(*   transitivity (transport P p^ (transport P p u.2)). *)
-(*   exact (ap (transport P p^) q^). *)
-(*   apply transport_Vp. *)
-(* Defined. *)
-
-  (* transport_pV *)
-  (*   transport_Vp *)
 
            
   

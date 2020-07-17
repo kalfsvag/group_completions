@@ -7,7 +7,7 @@ Require Import FunextAxiom.
 From A_BPQ Require Import quotients.
 (* Require Import finite_lemmas. *)
 
-(* easier to redefine this that to use the library *)
+(** Easier to redefine this that to use the library *)
 Section Category_Isomorphism.
   Definition IsFullyFaithful {C D : PreCategory} (F : Functor C D)
     := forall (c c' : C), IsEquiv (@morphism_of _ _ F c c').
@@ -32,83 +32,6 @@ Section Category_Isomorphism.
   Defined.
 End Category_Isomorphism.
 
-(* this is groupoid_category. Change. *)
-(* Section Type_to_Cat. *)
-(*   Local Notation "x --> y" := (morphism _ x y) (at level 99, right associativity, y at level 200) : type_scope. *)
-(*   Definition Type_to_Cat : 1-Type -> PreCategory. *)
-(*   Proof. *)
-(*     intro X. *)
-(*     srapply (Build_PreCategory (fun x y : X => x = y)). *)
-(*     - reflexivity. *)
-(*     - cbn. intros x y z p q. *)
-(*       exact (q @ p). *)
-(*     - intros x1 x2 x3 x4 p q r. simpl. apply concat_p_pp. *)
-(*     - cbn. intros x1 x2 p. apply concat_p1. *)
-(*     - intros x y p. simpl. apply concat_1p. *)
-(*   Defined. *)
-
-(*   Global Instance isgroupoid_type_to_cat (X : 1-Type) (x1 x2 : (Type_to_Cat X)) (f : x1 --> x2) : *)
-(*     IsIsomorphism f. *)
-(*   Proof. *)
-(*     srapply @Build_IsIsomorphism. *)
-(*     - exact f^. *)
-(*     - apply concat_pV. *)
-(*     - apply concat_Vp. *)
-(*   Defined. *)
-  
-
-(*   Definition arrow_to_functor {X Y : 1-Type} (F : X -> Y) : *)
-(*     Functor (Type_to_Cat X) (Type_to_Cat Y). *)
-(*   Proof. *)
-(*     srapply (Build_Functor (Type_to_Cat X) (Type_to_Cat Y) F). *)
-(*     - intros x1 x2. simpl. *)
-(*       exact (ap F). *)
-(*     - simpl. intros x1 x2 x3 p q. *)
-(*       apply ap_pp. *)
-(*     - simpl. reflexivity. *)
-(*   Defined. *)
-
-(*   Definition cat_of_arrow (X Y : 1-Type) : *)
-(*     Functor (Type_to_Cat (BuildTruncType 1 (X -> Y))) *)
-(*             (functor_category (Type_to_Cat X) (Type_to_Cat Y)). *)
-(*   Proof. *)
-(*     srapply @Build_Functor; simpl. *)
-(*     - apply arrow_to_functor. *)
-(*     - intros f g p. *)
-(*       srapply @Build_NaturalTransformation; simpl. *)
-(*       + apply (ap10 p). *)
-(*       + intros x1 x2 q. *)
-(*         destruct p, q. reflexivity.         *)
-(*     - intros f g h p q. simpl. *)
-(*       unfold NaturalTransformation.Composition.Core.compose. simpl. destruct p, q. simpl. *)
-(*       apply NaturalTransformation.path_natural_transformation. simpl. intro x. reflexivity. *)
-(*     - intro f. simpl. *)
-(*       apply NaturalTransformation.path_natural_transformation. simpl. intro x. reflexivity. *)
-(*   Defined. *)
-(* End Type_to_Cat. *)
-
-
-(* (* TODO: Change to defn in thesis *) *)
-(* Definition double_transport {A B : Type} (P : A -> B -> Type) *)
-(*            {a a' : A} {b b' : B} *)
-(*            (p : a = a') (q : b = b') : *)
-(*   P a b -> P a' b'. *)
-(* Proof. *)
-(*   destruct p. destruct q. exact idmap. *)
-(* Defined. *)
-
-(* Definition double_transport_compose {A B : Type} (P : A -> B -> Type) *)
-(*            {a a' a'' : A} {b b' b'' : B} *)
-(*            (p : a = a') (p' : a' = a'') *)
-(*            (q : b = b') (q' : b' = b'') *)
-(*   : double_transport P (p @ p') (q @ q') == *)
-(*     double_transport P p' q' o double_transport P p q. *)
-(* Proof. *)
-(*   intro x. *)
-(*   destruct q'. destruct q. *)
-(*   destruct p'. destruct p. reflexivity. *)
-(* Defined. *)
-
 Definition idtohom {C : PreCategory} {c d : C}
   : c = d -> morphism C c d.
 Proof.
@@ -123,52 +46,88 @@ Proof.
     destruct p; apply identity_identity.
 Defined.
 
-
-
-Definition path_functor' {C D : PreCategory} (F G : Functor C D)
-           (p0 : forall c : C, F c = G c)
-           (p1 : forall (c d : C) (f : morphism C c d),
-               (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
-                morphism_of G f )%morphism)
+Section Path_Functor.
+(** We describe the path types of functors (using function extensionality).   *)
+  Definition path_functor' {C D : PreCategory} (F G : Functor C D)
+             (p0 : forall c : C, F c = G c)
+             (p1 : forall (c d : C) (f : morphism C c d),
+                 (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
+                  morphism_of G f )%morphism)
   : F = G.
-Proof.
-  srapply @Functor.path_functor.
-  - apply path_forall. exact p0.
-  - apply path_forall. intro s. apply path_forall. intro d.
-    apply path_arrow. intro f.
-    refine (_ @ p1 _ _ f).
-    rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 s).
-    rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 d).
-    change (path_forall (Core.object_of F) (Core.object_of G) p0) with
-    (path_forall F G p0).
-    destruct (path_forall F G p0). simpl.
-    rewrite left_identity. rewrite right_identity.
-    reflexivity.
-Defined.
+  Proof.
+    srapply @Functor.path_functor.
+    - apply path_forall. exact p0.
+    - apply path_forall. intro s. apply path_forall. intro d.
+      apply path_arrow. intro f.
+      refine (_ @ p1 _ _ f).
+      rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 s).
+      rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 d).
+      change (path_forall (Core.object_of F) (Core.object_of G) p0) with
+      (path_forall F G p0).
+      destruct (path_forall F G p0). simpl.
+      rewrite left_identity. rewrite right_identity.
+      reflexivity.
+  Defined.
 
+  (** Showing directly that path_functor' is an equivalence proved cumbersome. Do this instead.  *)
+  Definition equiv_path_functor {C D : PreCategory} (F G : Functor C D)
+    : {p0 : forall c : C, F c = G c &
+                          forall (c d : C) (f : morphism C c d),
+                            (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
+                             morphism_of G f )%morphism } <~> F = G.
+  Proof.
+    transitivity {p : object_of F = object_of G  &
+                      transport (fun F0 : C -> D => forall s d : C,
+                                     morphism C s d -> morphism D (F0 s) (F0 d)) p
+                                (morphism_of F) = morphism_of G}.
+    { srapply @equiv_functor_sigma'.
+      - apply equiv_path_arrow.
+      - simpl. intro p0.
+        
+        transitivity
+          (forall (c d : C) (f : morphism C c d),
+              (idtohom ((apD10 (path_forall F G p0) d)) o F _1 f o
+                       idtohom ((apD10 (path_forall F G p0)) c)^)%morphism = (G _1 f)%morphism).
+        { apply (equiv_functor_forall' equiv_idmap).
+          intro c.
+          apply (equiv_functor_forall' equiv_idmap). intro b.
+          apply (equiv_functor_forall' equiv_idmap).  intro f.
+          apply equiv_concat_l . simpl.
+          apply (ap (fun p => (idtohom (p b) o F _1 f o idtohom (p c)^)%morphism)).
+          srefine (eissect (equiv_path_arrow _ _) p0). }
+        destruct G as [G0 G1 G_comp G_id]. simpl in *.
+        generalize (path_forall F G0 p0). intro p. clear p0. destruct p.
+        simpl.
+        refine (equiv_path_forall _ _ oE _).
+        apply (equiv_functor_forall' equiv_idmap). simpl. intro c.
+        refine (equiv_path_forall _ _ oE _).
+        apply (equiv_functor_forall' equiv_idmap). simpl. intro d.
+        refine (equiv_path_forall _ _ oE _).
+        apply (equiv_functor_forall' equiv_idmap). simpl. intro f.
+        apply equiv_concat_l. apply inverse.
+        refine (right_identity _ _ _ _ @ _).
+        refine (left_identity _ _ _ _ ). }
+    apply (BuildEquiv _ _ (Paths.path_functor_uncurried F G)
+                      (Paths.isequiv_path_functor_uncurried F G)).
+  Defined.
+  
+                                
 
-(* (* TODO: Change to defn in thesis *) *)
-(* Definition path_functor' {C D : PreCategory} (F G : Functor C D) *)
-(*            (p0 : forall c : C, F c = G c) *)
-(*            (p1 : forall (c d : C) (f : morphism C c d), *)
-(*                double_transport (morphism D) (p0 c) (p0 d) (morphism_of F f ) *)
-(*                = morphism_of G f) *)
-(*   : F = G. *)
-(* Proof. *)
-(*   srapply @path_functor. *)
-(*   - apply path_forall. exact p0. *)
-(*   - apply path_forall. intro s. apply path_forall. intro d. *)
-(*     apply path_arrow. intro f. *)
-(*     refine (_ @ p1 _ _ f). *)
-(*     rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 s). *)
-(*     rewrite <- (apD10_path_forall (object_of F) (object_of G) p0 d). *)
-(*     change (path_forall (Core.object_of F) (Core.object_of G) p0) with *)
-(*     (path_forall F G p0). *)
-(*     destruct (path_forall F G p0). simpl. *)
-(*     reflexivity. *)
-(* Defined. *)
+  Definition isequiv_path_functor {C D : PreCategory} (F G : Functor C D)
+    : IsEquiv (path_functor_uncurried F G).
+  Proof.
+    srapply @isequiv_adjointify.
+    - intros [].
+      exists (fun _ => idpath).
+      simpl. intros.
+      refine (right_identity _ _ _ _ @ _).
+      refine (left_identity _ _ _ _ ).
+    - intros [].
+      unfold path_functor_uncurried. 
+      
+      
 
-
+End Path_Functor.
 
 
 Section Pi_0.

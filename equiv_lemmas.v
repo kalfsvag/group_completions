@@ -1,5 +1,7 @@
 Require Import HoTT.
 
+(** A few lemmas regarding equivalences we either didn't find in the HoTT library, or wanted to do differently. *)
+
 Definition equiv_emoveR_fV `{Funext} {A B C : Type} (e : A <~> B) (f : B -> C) (g : A -> C) : 
   g = f o e <~> g o e^-1 = f.
 Proof.

@@ -2418,6 +2418,8 @@ simpl. *) *)
       reflexivity.
   Defined.
 
+
+  (** TODO: Explain notational difference from book  *)
   Definition equiv_Z0_fin2 : Z0 <~> Finite_Types 2.
   Proof.
     apply (equiv_adjointify Z0_to_fin2 fin2_to_Z0).

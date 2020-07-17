@@ -32,7 +32,7 @@ Section Univalent_Group_Completion_FinType.
   Qed.
 End Univalent_Group_Completion_FinType.
 
-Definition Z := cquot (group_completion_FinType).
+Definition Z := N1 (group_completion_FinType).
 
 
 Definition ccleq_concat_Z (S A1 B1 : FinType) (A2 A3 : FinType * FinType)
@@ -520,7 +520,7 @@ Section N1_FinType_set_ind.
     (*        fun x : FinType * FinType => *)
     (*          match x with *)
     (*            (A1, A2) => f A1 A2 end). *)
-    srapply @cquot_rec'.
+    srefine (N1_rec' _ _ _ _).
     - simpl. intros [A1 A2]. exact (f A1 A2).
     - simpl. intros [A1 A2]. intro B.
       unfold monoidal_action_morphism.
@@ -610,7 +610,7 @@ Section N1_FinType_set_ind.
                     path_over P (lcancel_canon s m n) (f m n) (f (m+s)%nat (n+s)%nat)))
     : forall z : Z, P z.
   Proof.
-    srapply @cquot_ind_set.
+    srefine (N1_ind_set _ _ _ _).
     - simpl.
       intros [[a x] [b y]]. 
       change (ccl group_completion_FinType

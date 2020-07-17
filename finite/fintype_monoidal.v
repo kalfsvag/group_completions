@@ -1,7 +1,7 @@
 Require Import HoTT.
 
 From A_BPQ
-     Require Import equiv_lemmas sigma_lemmas finite_types permutations monoidal_1type.
+     Require Import equiv_lemmas sigma_lemmas finite_types finite.permutations monoidal_1type.
      (* group_complete_1type. *)
      (* pointed_lemmas *)
      (* nat_lemmas trunc_lemmas  *)
@@ -666,4 +666,3 @@ Section Assoc_Nat_to_Assoc_FinType.
   Qed.
 End Assoc_Nat_to_Assoc_FinType.  
 
-Section Bsgn

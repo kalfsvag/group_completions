@@ -1,20 +1,12 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
 
-From A_BPQ Require Import sigma_lemmas.
-From A_BPQ Require Import monoids_and_groups.
-From A_BPQ Require Import quotients.
+From A_BPQ Require Import sigma_lemmas monoids_and_groups quotients.
 
-(* Defining sets with a monoid action (see MacLane, p5) *)
+
 Section Monoid_action.
+  (** Defining sets with a monoid action (see MacLane, p5) *)
   Open Scope monoid_scope.
-
-
-  (* Global Instance isset_hom {M N : Monoid} : IsHSet (Hom M N). *)
-  (* Proof. *)
-  (*   apply (trunc_equiv' _ (issig_hom M N)). *)
-  (* Defined.   *)
-
   Record Monoid_Action (M : Monoid) (X : hSet)
     := {function_of : M -> (X -> X);
         assoc_function_of : forall (m1 m2 : M) (x : X),
@@ -24,8 +16,8 @@ Section Monoid_action.
        }.
   Global Arguments function_of {M} {X} _ _ _.
 
-    (* [S X] *)
-  (* The quotient X/~, where x ~ y if there is a s : S s.t. s + x = y *)
+  (** If M acts on X, we define the localization of the action to be )
+  the quotient X/~, where x ~ y if there is an [s : S] such that [s + x = y] *)
   Definition grp_compl_relation {M : Monoid} (X : hSet) (a : Monoid_Action M X) : relation X
     := (fun x y => {m : M | function_of a m x = y}).
 
@@ -42,13 +34,9 @@ Section Monoid_action.
       exact (isfree_a m1 m2 x (p1 @ p2^)).
   Qed.
 
-  (* Lemma relation_is_transitive  *)
-
-  (* Lemma classes_eq_related *)
-
 End Monoid_action.
 
-Section Group_Completion_Quotient.
+Section Set_Group_Completion.
   Open Scope monoid_scope.
   Variable M : Symmetric_Monoid.
   Variable right_cancellation_M : forall l m n : M, m + l = n + l -> m = n.
@@ -74,17 +62,19 @@ Section Group_Completion_Quotient.
     exact (ap fst p).
   Defined.
 
-  Instance product_action_is_mere : is_mere_relation (M*M) (grp_compl_relation (BuildhSet (M*M)) product_action) :=
+  Instance product_action_is_mere
+    : is_mere_relation (M*M) (grp_compl_relation (BuildhSet (M*M)) product_action) :=
     relation_is_mere (BuildhSet (M*M)) (product_action) right_cancel_action.
 
-  Definition group_completion  :=
+  (** The group completion of a monoid.  *)
+  Definition set_group_completion  :=
     set_quotient (grp_compl_relation (BuildhSet (M*M)) product_action).
 
-  Definition group_completion_rec (Y : Type) {isset_Y : IsTrunc 0 Y}
+  Definition set_group_completion_rec (Y : Type) {isset_Y : IsTrunc 0 Y}
              (f : M -> M -> Y)
              (cancel_f : forall (s : M) (a b : M),
                  f a b = f (s + a) (s + b))
-    : group_completion -> Y.
+    : set_group_completion -> Y.
   Proof.
     srapply @set_quotient_rec.
     - intros [a b]. exact (f a b).
@@ -95,7 +85,7 @@ Section Group_Completion_Quotient.
       apply cancel_f.
   Defined.
 
-  Definition to_groupcompletion' : M -> M -> group_completion.
+  Definition to_groupcompletion' : M -> M -> set_group_completion.
   Proof.
     intros m n. apply class_of.
     exact (m, n).
@@ -111,18 +101,19 @@ Section Group_Completion_Quotient.
     reflexivity.
   Defined.
 
-  Definition group_completion_ind_prop
-             (P : group_completion -> Type)
-             {isprop_P : forall z : group_completion, IsHProp (P z)}
+  Definition set_group_completion_ind_prop
+             (P : set_group_completion -> Type)
+             {isprop_P : forall z : set_group_completion, IsHProp (P z)}
              (f : forall (a b : M), P (to_groupcompletion' a b))
-    : forall z : group_completion, P z.
+    : forall z : set_group_completion, P z.
   Proof.
     apply (@set_quotient_ind_prop _ _ P isprop_P).
     intros [a b]. exact (f a b).
   Defined.
 
 
-  Definition grp_compl_mult : group_completion -> group_completion -> group_completion.
+  (** Now we prove that the group completion is a group  *)
+  Definition grp_compl_mult : set_group_completion -> set_group_completion -> set_group_completion.
   Proof.
     srapply @set_quotient_rec2; simpl.
     - intros [a1 a2] [b1 b2].
@@ -150,29 +141,19 @@ Section Group_Completion_Quotient.
         apply (ap (mon_mult a2)). apply (ap snd p).
   Defined.
 
-  Definition grp_compl_inv : group_completion -> group_completion.
+  Definition grp_compl_inv : set_group_completion -> set_group_completion.
   Proof.
-    srapply group_completion_rec.
+    srapply set_group_completion_rec.
     - intros a b. exact (to_groupcompletion' b a).
     - intros s a b. simpl.
       apply lcancel_to_groupcompletion.
   Defined.
     
-  (*   srapply @set_quotient_functor. *)
-  (*   - intros [a1 a2]. exact (a2,a1). *)
-  (*   - intros [a1 a2] [b1 b2]. *)
-  (*     intros [s p].  *)
-  (*     exists s. simpl in p. simpl. *)
-  (*     apply path_prod. *)
-  (*     + apply (ap snd p). + apply (ap fst p). *)
-  (* Defined. *)
-
   Definition grp_compl_linv :
-    forall x : group_completion,
+    forall x : set_group_completion,
       grp_compl_mult (grp_compl_inv x) x = to_groupcompletion' mon_id mon_id.
-      (* class_of _ (mon_id,  mon_id). *)
   Proof.
-    apply group_completion_ind_prop.
+    apply set_group_completion_ind_prop.
     - intro x.
       srefine (set_quotient_set (grp_compl_relation (BuildhSet (M * M)) product_action) _ _).
     - intros a b. simpl.
@@ -183,24 +164,12 @@ Section Group_Completion_Quotient.
       +  apply mon_sym. + reflexivity.
   Defined.
     
-  (*   apply set_quotient_ind_prop. *)
-  (*   - intro x. *)
-  (*     srefine (set_quotient_set (grp_compl_relation (BuildhSet (M * M)) product_action) _ _). *)
-  (*   - intros [a1 a2]. simpl. *)
-  (*     apply inverse. *)
-  (*     apply related_classes_eq. red. *)
-  (*     exists (a1 + a2). simpl. *)
-  (*     apply path_prod; simpl. *)
-  (*     + refine (mon_rid _ @ _). apply mon_sym. *)
-  (*     + apply mon_rid. *)
-  (* Defined. *)
-
   Definition grp_compl_rinv :
-    forall x : group_completion,
+    forall x : set_group_completion,
       grp_compl_mult x (grp_compl_inv x) = to_groupcompletion' mon_id mon_id.
       (* class_of _ (mon_id,  mon_id). *)
   Proof.
-    apply group_completion_ind_prop.
+    apply set_group_completion_ind_prop.
     - intro x.
       srefine (set_quotient_set (grp_compl_relation (BuildhSet (M * M)) product_action) _ _).
     - intros a b. simpl.
@@ -212,26 +181,11 @@ Section Group_Completion_Quotient.
       + apply mon_sym. 
   Defined.
 
-
-    
-  (*   apply set_quotient_ind_prop. *)
-  (*   - intro x. *)
-  (*     srefine (set_quotient_set _ _ _). *)
-  (*   - intros [a1 a2]. simpl. *)
-  (*     apply inverse. *)
-  (*     apply related_classes_eq. red. *)
-  (*     exists (a1 + a2). simpl. *)
-  (*     apply path_prod; simpl. *)
-  (*     + apply mon_rid. *)
-  (*     + refine (mon_rid _ @ _). apply mon_sym. *)
-  (* Defined. *)
-
-  (* Is group *)
-  Definition group_completion_group : Group.
+  Definition set_group_completion_group : Group.
   Proof.
     srapply @Build_Group.
     { srapply @Build_Monoid.
-      - exact (BuildTruncType 0 group_completion).
+      - exact (BuildTruncType 0 set_group_completion).
       - simpl.
         apply grp_compl_mult.
       - simpl.
@@ -239,24 +193,24 @@ Section Group_Completion_Quotient.
         (* apply class_of. *)
         (* exact (mon_id, mon_id). *)
       - unfold associative. simpl.
-        apply (group_completion_ind_prop
-                 (fun a : group_completion  => forall b c : group_completion,
+        apply (set_group_completion_ind_prop
+                 (fun a : set_group_completion  => forall b c : set_group_completion,
                       grp_compl_mult (grp_compl_mult a b) c = grp_compl_mult a (grp_compl_mult b c))).
         intros a1 b1.
-        apply (group_completion_ind_prop
-                 (fun b : group_completion => forall c : group_completion,
+        apply (set_group_completion_ind_prop
+                 (fun b : set_group_completion => forall c : set_group_completion,
                       grp_compl_mult (grp_compl_mult (to_groupcompletion' a1 b1) b) c =
                       grp_compl_mult (to_groupcompletion' a1 b1) (grp_compl_mult b c))).
         intros a2 b2.
-        apply (group_completion_ind_prop _).
+        apply (set_group_completion_ind_prop _).
         intros a3 b3. simpl.
         apply (ap011 to_groupcompletion'); apply mon_assoc.
       - unfold left_identity.
-        apply (group_completion_ind_prop _).
+        apply (set_group_completion_ind_prop _).
         intros a b. simpl.
         apply (ap011 to_groupcompletion'); apply mon_lid.
       - unfold right_identity.
-        apply (group_completion_ind_prop _).
+        apply (set_group_completion_ind_prop _).
         intros a b. simpl.
         apply (ap011 to_groupcompletion'); apply mon_rid. }
     - simpl.
@@ -267,12 +221,11 @@ Section Group_Completion_Quotient.
       apply grp_compl_rinv.
   Defined.
 
-  Definition to_groupcompletion : Hom M (group_completion_group).
+  (** The inclusion of a monoid into a group.  *)
+  Definition to_groupcompletion : Hom M (set_group_completion_group).
   Proof.
     srapply @Build_Homomorphism.
     - intro a. apply (to_groupcompletion' a mon_id).
-      (* apply class_of. *)
-      (* exact (a, mon_id). *)
     - simpl. reflexivity.
     - simpl. intros a b.
       apply (ap (to_groupcompletion' (a + b))).
@@ -280,23 +233,12 @@ Section Group_Completion_Quotient.
   Defined.
 
 
-  (* Definition antihom_inv {G : Group} : *)
-  (*   forall (g1 g2 : G), *)
-  (*     grp_inv (g1 + g2) = grp_inv g2 + grp_inv g1. *)
-  (* Proof. *)
-  (*   intros. *)
-  (*   apply grp_moveL_Vg. *)
-  (*   apply grp_moveL_V1. *)
-  (*   refine (mon_assoc^ @ _). *)
-  (*   apply (grp_rinv (g1 + g2)). *)
-  (* Defined. *)
-
   Definition inverse_precompose_groupcompletion (G : Abelian_Group) :
-    Hom M G -> Hom group_completion_group G.
+    Hom M G -> Hom set_group_completion_group G.
   Proof.
     intro g.
     srapply @Build_Homomorphism.
-    { srapply @group_completion_rec.
+    { srapply @set_group_completion_rec.
       - intros a b.
         exact (g a - g b).
       - intros s a b. simpl.
@@ -311,9 +253,9 @@ Section Group_Completion_Quotient.
     + simpl.
       apply grp_rinv.
     + intro a. 
-      apply (group_completion_ind_prop _). intros a2 b2.
+      apply (set_group_completion_ind_prop _). intros a2 b2.
       revert a.
-      apply (group_completion_ind_prop _). intros a1 b1. simpl.
+      apply (set_group_completion_ind_prop _). intros a1 b1. simpl.
       rewrite preserve_mult. rewrite preserve_mult.
       refine (mon_assoc @ _ @ mon_assoc^).
       apply (ap (fun x => g a1 + x)).
@@ -324,7 +266,7 @@ Section Group_Completion_Quotient.
   Defined.  
 
   Definition universal_groupcompletion (G : Abelian_Group) :
-    IsEquiv (fun f : Hom group_completion_group G => compose_hom f to_groupcompletion).
+    IsEquiv (fun f : Hom set_group_completion_group G => compose_hom f to_groupcompletion).
   Proof.
     srapply @isequiv_adjointify.
     - apply inverse_precompose_groupcompletion.
@@ -335,19 +277,19 @@ Section Group_Completion_Quotient.
       apply mon_rid.
     - unfold Sect.
       intro g. apply path_hom. apply path_arrow. intro x.  revert x.
-      apply (group_completion_ind_prop _). intros a b. simpl.
+      apply (set_group_completion_ind_prop _). intros a b. simpl.
       rewrite <- preserve_inv.
       rewrite <- preserve_mult. simpl.
       rewrite mon_rid. rewrite mon_lid. reflexivity.
   Defined.
       
     
-  (* This is more in line with the proof in the thesis *)
+  (** This is more in line with the proof in the thesis *)
   Definition universal_groupcompletion' (G : Abelian_Group) :
-    IsEquiv (fun f : Hom group_completion_group G => compose_hom f to_groupcompletion).
+    IsEquiv (fun f : Hom set_group_completion_group G => compose_hom f to_groupcompletion).
   Proof.
     apply (isequiv_isepi_ismono
-             (BuildhSet (Hom group_completion_group G))
+             (BuildhSet (Hom set_group_completion_group G))
              (BuildhSet (Hom M G))).
     - apply issurj_isepi.
       apply BuildIsSurjection. intro f.
@@ -362,7 +304,7 @@ Section Group_Completion_Quotient.
       intro H.
       apply path_hom. apply path_arrow.
       intro x. revert x.
-      apply (group_completion_ind_prop _).
+      apply (set_group_completion_ind_prop _).
       intros a b.
       cut (f (to_groupcompletion' a mon_id) - f (to_groupcompletion' b mon_id) =
            g (to_groupcompletion' a mon_id) - g (to_groupcompletion' b mon_id)).
@@ -382,19 +324,16 @@ Section Group_Completion_Quotient.
           (ap10 (equiv_inverse (path_hom (f oH to_groupcompletion) (g oH to_groupcompletion)) H) b).
   Defined.
 
-End Group_Completion_Quotient.
+End Set_Group_Completion.
 
 Section Integers.
+  (** We define the integers to be the group completion of the natural numbers.  *)
   Definition Integers : Group.
   Proof.
-    srapply group_completion_group.
+    srapply set_group_completion_group.
     - apply (Build_Symmetric_Monoid (nat_monoid)).
       intros a b. simpl.
       apply nat_plus_comm.
-    (* - simpl. intros l m n. *)
-    (*   intro p. *)
-    (*   apply (nat_lemmas.nat_plus_cancelL l) . *)
-    (*   refine (nat_plus_comm _ _ @ p @ nat_plus_comm _ _). *)
   Defined.
 
   Definition nat_to_integer : nat -> Integers.
@@ -406,7 +345,7 @@ Section Integers.
 
   Definition integer_to_nat : Integers -> nat.
   Proof.
-    srapply group_completion_rec.
+    srapply set_group_completion_rec.
     - simpl. intros a b.
       apply (nat_minus b a).
     - simpl.
@@ -423,13 +362,10 @@ Section Integers.
   Definition natnat_to_integer : nat -> nat -> Integers.
   Proof.
     intros a b.
-    unfold Integers. unfold group_completion_group. simpl.
+    unfold Integers. unfold set_group_completion_group. simpl.
     apply (to_groupcompletion').
     - exact a.
     - exact b.
-    (* unfold group_completion_quotient.group_completion. *)
-    (* apply (set_quotient.Set_Quotient.class_of). *)
-    (* exact (a, b). *)
   Defined.
 
   Definition rcancel_integers (s a b : nat) :
@@ -438,6 +374,7 @@ Section Integers.
     apply lcancel_to_groupcompletion.
   Defined.
 
+  (** The function from nat to the integers is injective.  *)
   Definition inj_nat_to_integer (a b : nat) (p : nat_to_integer a = nat_to_integer b) : a = b.
   Proof.
     refine ((issect_to_groupcompletion a)^ @ _ @ issect_to_groupcompletion b).
@@ -453,8 +390,8 @@ Section Integers.
     - apply inverse. apply nat_plus_n_O.
   Defined.
 
-  (* This definition of integers is equivalent to the other *)
-    (* The function +1 from nat to the positives *)
+  (** Now we prove that this definition of integers is equivalent to the one in the HoTT library *)
+  (* The function +1 from nat to the positives *)
   Definition succ_nat_to_pos : nat -> Pos.
   Proof.
     intro a. induction a.
@@ -496,7 +433,7 @@ Section Integers.
 
   Definition integers_to_int : Integers -> Int.
   Proof.
-    srapply (group_completion_rec); simpl.
+    srapply (set_group_completion_rec); simpl.
     - intros a b. exact (nat_int_minus a b).
     - intros s a b. simpl.
       induction s; try reflexivity. apply IHs.
@@ -558,21 +495,6 @@ Section Integers.
     apply (ap S IHa).
   Defined.
 
-  (* Fixpoint retr_nat (a b : nat) *)
-  (*   : int_to_integers (integers_to_int (natnat_to_integer a b)) = natnat_to_integer a b. *)
-  (* Proof. *)
-  (*   destruct a, b; simpl; try reflexivity. *)
-  (*   - unfold int_to_integers. simpl. *)
-  (*     apply (ap (natnat_to_int 0)). *)
-  (*     induction b. *)
-  (*     { reflexivity. } apply (ap S IHb). *)
-  (*   - unfold int_to_integers. simpl. *)
-  (*     refine (ap011 natnat_to_int _ idpath). *)
-  (*     induction a. { reflexivity. } apply (ap S IHa). *)
-  (*   - refine (retr_nat a b @ _). *)
-  (*     apply (rcancel_integers 1). *)
-  (* Defined. *)
-
   Fixpoint retr_int_natnat (a b : nat) :
     natnat_to_integer
       (fst (int_to_natnat (nat_int_minus a b)))
@@ -600,7 +522,7 @@ Section Integers.
         apply (ap pos).
         apply succ_pred_nat_pos.
     - intro z. revert z.
-      apply (group_completion_ind_prop _ _).
+      apply (set_group_completion_ind_prop _ _).
       simpl. intros a b.
       unfold int_to_integers.
       apply retr_int_natnat.

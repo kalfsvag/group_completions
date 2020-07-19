@@ -3,8 +3,8 @@ Require Import UnivalenceAxiom.
 (* Load group_complete_1type. *)
 (* Load monoidal_1type. *)
 
-
 Section Monoids_and_Groups.
+  (** We write out the definition of a monoid *)
   Definition associative {A : Type}  (m : A->A->A) := forall a b c : A, m (m a b) c = m a (m b c).
   Definition left_identity {A : Type} (m : A->A->A) (e : A) := forall a : A, m e a = a.
   Definition right_identity {A : Type} (m : A->A->A) (e : A) := forall a : A, m a e = a.
@@ -13,7 +13,6 @@ Section Monoids_and_Groups.
     forall a : A, m (inv a) a = e.
   Definition right_inverse {A : Type} (m : A -> A -> A) (e : A) (inv : A -> A) :=
     forall a : A, m a (inv a) = e.
-
 
   Record Monoid : Type := { mon_set :> hSet;
                             (* mon_isset : IsHSet mon_set; *)
@@ -30,8 +29,6 @@ Section Monoids_and_Groups.
   (*   srapply (Build_Monoid (BuildTruncType 0 (Trunc 0 M))). *)
   (*   simpl. *)
   (*   (@mon_mult M)). *)
-  
-
   (* Definition monoid_to_1type : Monoid -> Monoidal_1Type. *)
   (* Proof. *)
   (*   intro M. *)
@@ -42,27 +39,20 @@ Section Monoids_and_Groups.
   (*   - intros a b. apply (istrunc_trunctype_type M). *)
   (*   - intros a b c d. apply (istrunc_trunctype_type M). *)
   (* Defined. *)
-
   (* Coercion monoid_to_1type : Monoid >-> Monoidal_1Type. *)
   
 
   Record Symmetric_Monoid : Type := {mon :> Monoid;
                                      mon_sym : symmetric (mon_mult mon) }.
   Global Arguments mon_sym {S} {a} {b} :rename.
-
   (* (*Makes mon_isset an implicit argument*) *)
   (* Global Arguments Build_Monoid mon_set {mon_isset} mon_mult mon_id mon_assoc mon_lid mon_rid. *)
-
   Global Arguments mon_id {M} : rename.
   Global Arguments mon_mult {M} a b : rename.
   Global Arguments mon_assoc {M} {a} {b} {c} : rename.
   Global Arguments mon_lid {M} a : rename.
   Global Arguments mon_rid {M} a : rename.
-
-  
-
   Global Instance ispointed_M {M : Monoid} : IsPointed M := (@mon_id M).
-
   (*  (*Formulate the cancellation law for a monoid*)
   Definition right_cancellation_law (M : Monoid) :=
     forall a b s : M, a + s = b + s -> a = b.   *)
@@ -88,12 +78,10 @@ Section Monoids_and_Groups.
     fun A => Build_Symmetric_Monoid A (@grp_sym A).
 
   Coercion forget_to_SymMon : Abelian_Group >-> Symmetric_Monoid.    
-
 End Monoids_and_Groups.
 
-
 Section nat_monoid.
-  
+  (** The natural numbers is a monoid.  *)
   (*Strangely, I cannot find any proofs of nat being associative*)
   Open Scope nat_scope.
   Definition nat_plus_assoc : forall j k l : nat, (j + k) + l = j + (k + l). 
@@ -110,11 +98,9 @@ Section nat_monoid.
 
   Definition nat_symm_monoid : Symmetric_Monoid := Build_Symmetric_Monoid nat_monoid nat_plus_comm.    
 
-
-  (** Cancellation in nat*)
-  (** Subtraction of natural numbers.
-   Is given by [m,n => -m + n] 
-   This is the same as [minus] in HoTT library, but the below lemma is much easier to prove *)
+  (** We prove that nat has cancellation *)
+  (** First we define subtraction of natural numbers.
+      This is the same as [minus] in HoTT library, but the lemma below is easier to prove with this definition *)
   Fixpoint nat_minus (m n : nat) : nat :=
     match m with
     |0 => n (*-0 + m := m*)
@@ -124,7 +110,7 @@ Section nat_monoid.
              end
     end.
 
-  (* Just to show that this is the same as the old minus. *)
+  (** Just to show that this is the same as the minus in the HoTT library. *)
   Lemma nat_minus_is_minus (m n : nat) : nat_minus m n = minus n m.
   Proof.
     revert n.
@@ -172,6 +158,7 @@ Notation "'grp_rid'" := (@mon_rid (grp_mon _)) (at level 0) : monoid_scope.
 
 
 Section Examples.
+  (** The loop space of a 1-type is a group.  *)
   Definition loopGroup (A : Type) (a0 : A) {istrunc_A : IsTrunc 1 A} : Group.
     srapply Build_Group.
     - exact (Build_Monoid (BuildhSet (a0 = a0)) concat idpath concat_pp_p concat_1p concat_p1). 
@@ -180,6 +167,7 @@ Section Examples.
     - exact concat_pV.
   Defined.
 
+  (** The automorphisms of a set is a group. *)
   Definition AutGroup (A : Type) `{isset_A : IsHSet A} : Group :=
     Build_Group
       (Build_Monoid (BuildhSet (A <~> A)) (fun f g => equiv_compose' g f) equiv_idmap
@@ -191,10 +179,10 @@ Section Examples.
 End Examples.
 
 Section Group_2.
+  (** We define the group with two elements.  *)
   Inductive grp_2_set : Type :=
   |even : grp_2_set
   |odd : grp_2_set.
-
 
   Definition id_2 : grp_2_set -> grp_2_set :=
     fun i => if i then even else odd.
@@ -214,7 +202,7 @@ Section Group_2.
              |odd => idpath
              end.
 
-  (* for some reason things freeze later if we use idmap and not id_2. . . *)
+  (** for some reason things freeze later if we use idmap and not id_2. . . *)
   Definition mult_2 : grp_2_set -> grp_2_set -> grp_2_set :=
     fun i =>
       if i then id_2 else twist_2.
@@ -254,6 +242,7 @@ Section Group_2.
     - unfold right_inverse. simpl.
       intros [|]; reflexivity.
   Defined.
+  
   Open Scope monoid_scope.
   Definition symm_group_2 : forall a b : group_2,
       (a + b = b + a).
@@ -263,11 +252,11 @@ Section Group_2.
 
   Definition ι : group_2 := even.
   Definition τ : group_2 := odd.
-  
 End Group_2.
 
 
 Section Group_lemmas.
+  (** A list of results that are nice to have when working with a group.  *)
   Open Scope monoid_scope.
   Context {G : Group}.
   Definition grp_whiskerL {a b c : G} : b = c -> a + b = a + c
@@ -471,6 +460,7 @@ Section Group_lemmas.
 End Group_lemmas.
 
 Section Homomorphism.
+  (** We define the type of homomorphisms between monoids.  *)
   Open Scope type_scope.
   Open Scope monoid_scope.
   
@@ -488,7 +478,6 @@ Section Homomorphism.
   Definition ishom {M N : Monoid} (f : M -> N) :=
     (f (mon_id) = mon_id) * (forall m1 m2 : M, f (m1 + m2) = f m1 + f m2).
   
-
   Definition issig_hom (M N : Monoid) :
     {f : M -> N &  ishom f} <~> Homomorphism M N.
   Proof.
@@ -535,7 +524,7 @@ Section Homomorphism.
     apply (trunc_equiv' _ (issig_hom M N)).
   Defined.  
 
-  (*Two homomorphisms are equal if their underlying maps are equal.*)
+  (** Two homomorphisms are equal if their underlying maps are equal.*)
   Definition path_hom {M N : Monoid} (f g : Homomorphism M N) :    
     (hom_map f = hom_map g) <~> f = g :> Homomorphism M N.
   Proof.
@@ -557,6 +546,8 @@ Section Homomorphism.
       exact (preserve_mult g ).
   Defined.
 
+  (** Per definition a group homomorphism is the same as a monoid homomorphism, but for groups we need
+ not specify that it preserves identity.  *)
   Definition Build_GrpHom {G H : Group}
              (hom_map : G -> H)
              (preserve_mult : forall g1 g2 : G,
@@ -571,7 +562,7 @@ Section Homomorphism.
     refine (grp_linv _ ).
   Defined.    
 
-  (*A homomorphism of groups preserve inverses*)
+  (** A homomorphism of groups preserve inverses*)
   Definition preserve_inv {G H : Group} (f : Homomorphism G H) (a : G) :
     f (- a) = - (f a).
   Proof.
@@ -580,12 +571,14 @@ Section Homomorphism.
     refine (_ @ preserve_id f).
     exact (ap f (grp_rinv a)).
   Defined.
+
+  
+
 End Homomorphism.
 
 Notation "'Hom'" := Homomorphism : monoid_scope.
 Infix "oH" := compose_hom (at level 40, left associativity).
 
-(* move? *)
 Definition homcompose_f_ff {K L M N : Monoid}
            (f : Homomorphism K L) (g : Homomorphism L M) (h : Homomorphism M N)
   : h oH (g oH f) = (h oH g) oH f.
@@ -594,10 +587,8 @@ Proof.
 Defined.
 
 
-
-
-
 Section Isomorphism.
+  (** An isomorphism of monoids is a homomorphism that is also an equivalence.  *)
   Class Isomorphism (M N : Monoid) :=
     {iso_hom : Homomorphism M N; iso_isequiv : IsEquiv iso_hom}.
 
@@ -668,8 +659,6 @@ Section Isomorphism.
   Proof.
     apply path_hom. apply path_arrow. apply (eisretr f).
   Defined.
-
-
 End Isomorphism.
 
 
@@ -698,7 +687,7 @@ Section HomFunctor.
     Homomorphism X1 X2 <~> Homomorphism Y1 Y2 :=
     BuildEquiv _ _ (functor_hom f1 f2) (isequiv_functor_hom f1 f2).
 
-  (* A version of equiv_functor_hom that stays covariant in both arguments *)
+  (** A version of equiv_functor_hom that stays covariant in both arguments *)
   Definition equiv_functor_hom' {X1 X2 Y1 Y2 : Monoid}
     : Isomorphism X1 Y1 -> Isomorphism X2 Y2 -> (Homomorphism X1 X2 <~> Homomorphism Y1 Y2).
   Proof.
@@ -706,7 +695,6 @@ Section HomFunctor.
     - apply iso_inv. exact f.
     - exact g.
   Defined.
-
 
   Lemma functor_hom_compose {X1 X2 Y1 Y2 Z1 Z2}
         (f1 : Homomorphism Y1 X1) (f2 : Homomorphism X2 Y2)
@@ -717,7 +705,6 @@ Section HomFunctor.
     intro h.
     apply path_hom. reflexivity.
   Defined.
-
 
   Definition equiv_functor_hom_compose {X1 X2 Y1 Y2 Z1 Z2 : Monoid}
              (f1 : Isomorphism X1 Y1) (f2 : Isomorphism X2 Y2)
@@ -753,13 +740,10 @@ Section HomFunctor.
     apply (ap (f3 o h2)).
     apply inverse. apply eisretr.
   Defined.
-  
-
-
-
 End HomFunctor.
 
 Section Product.
+  (** Defining the product of two monoids.  *)
   Open Scope monoid_scope.
   Definition mon_prod (M N : Monoid) : Monoid.
   Proof.
@@ -828,7 +812,6 @@ Section Product.
     apply isequiv_functor_prod.
   Defined.
 
-  (* move? *)
   Definition functor_mon_prod {A1 A2 B1 B2 C1 C2 D1 D2}
              (f1 : Homomorphism C1 A1)
              (f2 : Homomorphism C2 A2)
@@ -844,7 +827,6 @@ Section Product.
     apply path_hom. apply path_arrow. intros [c1 c2]; reflexivity.
   Defined.
 
-  (* move? *)
   Definition mon_prod_hom_compose {A1 A2 A3 B1 B2 B3 : Monoid}
              (f1 : Homomorphism A1 A2)
              (f2 : Homomorphism A2 A3)
@@ -901,45 +883,48 @@ End Product.
 (*   Defined. *)
 (* End Iso_Loop_Aut. *)
 
-Definition hom_prod_loopGroup
-           (A B : Type) (a0 : A) (b0 : B)
-           {istrunc_A : IsTrunc 1 A}
-           {istrunc_B : IsTrunc 1 B}
+Section Prod_loopGroup.
+  (** The loop group preserves product. *)
+  Definition hom_prod_loopGroup
+             (A B : Type) (a0 : A) (b0 : B)
+             {istrunc_A : IsTrunc 1 A}
+             {istrunc_B : IsTrunc 1 B}
   : Homomorphism (loopGroup (A*B) (a0, b0))
                  (grp_prod (loopGroup A a0) (loopGroup B b0)).
-Proof.
-  srapply @Build_Homomorphism.
-  - exact (fun p => (ap fst p, ap snd p)).
-  - reflexivity.
-  - simpl. intros p q.
-    apply path_prod; simpl; refine (ap_pp _ p q).
-Defined.
+  Proof.
+    srapply @Build_Homomorphism.
+    - exact (fun p => (ap fst p, ap snd p)).
+    - reflexivity.
+    - simpl. intros p q.
+      apply path_prod; simpl; refine (ap_pp _ p q).
+  Defined.
 
-Definition isequiv_prod_loopGroup
-           (A B : pType) (a0 : A) (b0 : B)
-           {istrunc_A : IsTrunc 1 A}
-           {istrunc_B : IsTrunc 1 B}
-  : IsEquiv (hom_prod_loopGroup A B a0 b0).
-Proof.
-  simpl. srapply @isequiv_adjointify.
-  - intros [p q]. unfold point.
-    exact (path_prod (_,_) (_,_) p q).
-  - simpl. intros [[] [] ]. reflexivity.
-  - simpl. intro p. 
-    revert p.
-    cut (forall (ab : A * B) (p : (a0, b0) = ab),
-            path_prod (a0,b0) ab (ap fst p) (ap snd p) = p).
-    { intro H. apply H. }
-    intros ab []. reflexivity.
-Defined.    
+  Definition isequiv_prod_loopGroup
+             (A B : pType) (a0 : A) (b0 : B)
+             {istrunc_A : IsTrunc 1 A}
+             {istrunc_B : IsTrunc 1 B}
+    : IsEquiv (hom_prod_loopGroup A B a0 b0).
+  Proof.
+    simpl. srapply @isequiv_adjointify.
+    - intros [p q]. unfold point.
+      exact (path_prod (_,_) (_,_) p q).
+    - simpl. intros [[] [] ]. reflexivity.
+    - simpl. intro p. 
+      revert p.
+      cut (forall (ab : A * B) (p : (a0, b0) = ab),
+              path_prod (a0,b0) ab (ap fst p) (ap snd p) = p).
+      { intro H. apply H. }
+      intros ab []. reflexivity.
+  Defined.    
 
-Definition iso_prod_loopGroup
-           (A B : pType) (a0 : A) (b0 : B)
-           {istrunc_A : IsTrunc 1 A}
-           {istrunc_B : IsTrunc 1 B} :
-  Isomorphism (loopGroup (A*B) (a0,b0))
-              (grp_prod (loopGroup A a0) (loopGroup B b0))
-  := Build_Isomorphism _ _ (hom_prod_loopGroup A B a0 b0) (isequiv_prod_loopGroup A B a0 b0).
+  Definition iso_prod_loopGroup
+             (A B : pType) (a0 : A) (b0 : B)
+             {istrunc_A : IsTrunc 1 A}
+             {istrunc_B : IsTrunc 1 B} :
+    Isomorphism (loopGroup (A*B) (a0,b0))
+                (grp_prod (loopGroup A a0) (loopGroup B b0))
+    := Build_Isomorphism _ _ (hom_prod_loopGroup A B a0 b0) (isequiv_prod_loopGroup A B a0 b0).
+End  Prod_loopGroup.
 (* Proof. *)
 (*   srapply Build_Grp_Iso'. *)
 (*   - simpl. *)

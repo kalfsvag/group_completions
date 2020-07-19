@@ -47,6 +47,26 @@ Proof.
 Defined.
 
 
+Lemma path_arrow_V {A B : Type} {f g : A -> B} (H : f == g) :
+  path_arrow g f (fun a => (H a)^) = (path_arrow f g H)^.
+Proof.
+  transitivity (path_arrow f g (ap10 (path_forall _ _ H)))^.
+  - transitivity (path_arrow g f (fun a => (ap10 (path_forall _ _ H) a)^)).
+    + apply (ap (path_arrow g f)). apply path_forall.
+      intro a. apply (ap inverse). apply inverse. apply (ap10_path_arrow).
+    +  destruct (path_forall f g H). simpl.
+       destruct (path_forall _ _ (ap10_1 (f:= f)))^.
+       destruct (path_arrow_1 f)^. reflexivity.
+  - apply (ap inverse). apply (ap (path_arrow f g)). apply (path_forall _ _ (ap10_path_arrow f g H)).
+Defined.
+
+Definition path_prod_VV {A B : Type} (z z' : A*B) (p1 : fst z = fst z') (p2 : snd z = snd z') :
+  path_prod z' z p1^ p2^ = (path_prod z z' p1 p2)^.
+Proof.
+  destruct z as [z1 z2]. destruct z' as [z1' z2']. simpl in *. destruct p1, p2. reflexivity.
+Defined.
+
+
 
 Definition path_triple_prod {A B C : Type} (a1 a2 : A * (B * C)) :
   (fst a1 = fst a2) * ((fst (snd a1) = fst (snd a2)) * (snd (snd a1) = snd (snd a2))) -> a1 = a2.

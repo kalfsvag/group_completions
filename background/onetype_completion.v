@@ -10,7 +10,7 @@ Notation "'N1_rec'" := cquot_rec.
 Notation "'N1_ind'" := cquot_ind.
 Notation "'N1_ind_set'" := cquot_ind_set.
 
-(** A simplified version of N1_rec which doesn't need ce  *)
+(** A simplified version of N1_rec where we don't need to specify that identities are preserved  *)
 Definition N1_rec' {C : PreCategory} (Y : Type)
              (cclY : C -> Y)
              (ccleqY : forall {a₁ a₂ : C},
@@ -41,6 +41,7 @@ Proof.
   - apply ce.
 Defined.
 
+(** N1 is functorial *)
 Definition functor_groupoid_category
            (X Y : Type) {istrunc_X : IsTrunc 1 X} {istrunc_Y : IsTrunc 1 Y}
   : (X -> Y) -> Functor (Core.groupoid_category X) (Core.groupoid_category Y).

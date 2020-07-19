@@ -1,12 +1,12 @@
 Require Import HoTT.
-(* Require Import trunc_lemmas. *)
+
 From A_BPQ Require Import sigma_lemmas equiv_lemmas conn_ptype categories.
 Require Import UnivalenceAxiom.
 
 
-(* Reverse the notation of plus so that n.+1 = n+1 by definition *)
+(** Reverse the notation of plus so that n.+1 = n+1 by definition. *)
 Notation "a +' b" := (Peano.plus b a) (at level 50).
-(* Change notation since "Fin" is something else in the thesis *)
+(** Change notation since "Fin" is something else in the thesis. *)
 Notation "'fintype'" := Fin. 
 
 Definition equiv_fin2_bool : fintype 2 <~> Bool.
@@ -23,7 +23,7 @@ Proof.
 Defined.
 
 
-(* The type of decidable propositions is finite *)
+(** The type of decidable propositions is finite *)
 Global Instance finite_dprop : Finite DProp.
 Proof.
   refine (finite_equiv' (fintype 2) _ _).
@@ -32,7 +32,7 @@ Proof.
 Qed.
 
 
-(*Finite types are sets *)
+(** Finite types are sets *)
 Definition isset_fintype (n : nat) : IsHSet (fintype n).
 Proof.
   induction n.
@@ -56,6 +56,7 @@ Proof.
 Qed.
 
 Section Equiv_Finsum.
+  (** [fintype] preserves sum  *)
   Definition finl (m n : nat) : fintype m -> fintype (n + m).
   Proof.
     induction n.
@@ -72,36 +73,12 @@ Section Equiv_Finsum.
       exact (functor_sum IHn idmap).
   Defined.
 
-
-  (* move *)
-
   Definition finsum (m n : nat) : fintype m + fintype n -> fintype (n+m).
   Proof.
-  (*   induction n; simpl. *)
-  (*   - apply sum_empty_r. *)
-  (*   - exact (functor_sum (IHn) idmap o (equiv_sum_assoc' _ _ _)^-1). *)
-  (* Defined. *)
     intros [i | j].
     - exact (finl _ _ i).
     - exact (finr _ _ j).
   Defined.
-
-  (* Definition finsum_l (m n : nat) (x : fintype m) *)
-  (*   : finsum m n (inl x) = finl m n x. *)
-  (* Proof. *)
-  (*   induction n; try reflexivity. *)
-  (*   simpl. exact (ap inl IHn). *)
-  (* Defined. *)
-
-  (* Definition finsum_r (m n : nat) (x : fintype n) *)
-  (*   : finsum m n (inr x) = finr m n x. *)
-  (* Proof. *)
-  (*   induction n; try reflexivity. *)
-  (*   simpl. *)
-  (*   destruct x as [x | x]; try reflexivity. simpl. *)
-  (*   exact (ap inl (IHn x)). *)
-  (* Defined.     *)
-             
   
   Definition finsum_succ (m n : nat)
     : finsum m n.+1 == (functor_sum (finsum m n) idmap) o (sum_assoc_inv _ _ _).
@@ -138,25 +115,10 @@ Section Equiv_Finsum.
       destruct x as [x | x]; try reflexivity.
       simpl. exact (ap inl (IHn x)).
   Defined.
-    (* induction n. *)
-    (* - simpl. *)
-    (*   assert (h : finsum m 0 = (sum_empty_r (fintype m))). *)
-    (*   { apply path_arrow. *)
-    (*     intros [x | []]; reflexivity. } *)
-    (*   rewrite h.  exact _. *)
-    (* - assert (h : finsum m n.+1 = *)
-    (*               (functor_sum (finsum m n) idmap) o (equiv_sum_assoc (fintype m) (fintype n) Unit)^-1). *)
-    (*   { apply path_arrow. *)
-    (*     intros [i | [i | []]]; reflexivity. } *)
-    (*   rewrite h. *)
-    (*   apply (isequiv_compose (g := (functor_sum (B := Unit) (finsum m n) (idmap)))). *)
 
 
   Definition equiv_finsum (m n : nat) : (fintype m) + (fintype n) <~> fintype (n + m) :=
     BuildEquiv _ _ (finsum m n) isequiv_finsum.
-
-  (* Definition equiv_finsum_last (m n : nat) : *)
-  (*   equiv_finsum m n.+1 (inr (inr tt)) = (inr tt) := idpath. *)
 
   Lemma inj_finl {m n : nat} (i j : fintype m) :
     finl m n i = finl m n j -> i = j.
@@ -171,13 +133,10 @@ Section Equiv_Finsum.
     intro p. apply (path_sum_inr (fintype m)).
     apply (equiv_inj (finsum m n)).  exact p.
   Qed.
-
-
-  
 End Equiv_Finsum.
 
-(* Require Import (* B_Aut *) pointed_lemmas. *)
 Section Finite_Types.
+  (** The type of finite types of cardinality n  *)
   Definition Finite_Types  (n : nat) :=
     {A : Type & merely (A <~> fintype n)}.
 
@@ -188,10 +147,10 @@ Section Finite_Types.
     Build_Finite A.1 n A.2.
 
 
-  (* Canonical finite types *)
+  (** Canonical finite types *)
   Global Instance canon (n : nat) : IsPointed (Finite_Types n) := (fintype n; tr equiv_idmap).    
 
-  (* A detachable subset of a finite set has smaller cardinal *)
+  (** A detachable subset of a finite set has smaller cardinal *)
   Definition leq_card_subset {n : nat} (A : Finite_Types n) (P : A -> Type)
              (isprop_P : forall a : A, IsHProp (P a)) (isdec_P : forall a : A, Decidable (P a)) :
     (fcard {a : A & P a} <= fcard A)%nat.
@@ -204,7 +163,7 @@ Section Finite_Types.
     - apply isprop_P.
   Qed.
 
-  (* Plus one for finite types *)
+  (*( Plus one for finite types *)
   Definition add_one {n : nat} : Finite_Types n -> Finite_Types n.+1.
   Proof.
     intros [A H].
@@ -216,7 +175,6 @@ Section Finite_Types.
     exact (equiv_functor_sum' H equiv_idmap).
   Defined.
 
-  (* Move to finite_types.v when created *)
   Definition sum_finite_types {m n : nat} (A : Finite_Types m) (B : Finite_Types n) :
     Finite_Types (n + m).
   Proof.
@@ -226,13 +184,10 @@ Section Finite_Types.
     refine (_ oE equiv_functor_sum' fA fB).
     apply equiv_finsum.
   Defined.
-
-  
 End Finite_Types.
 
 Section Path_Finite_Types.
-
-  (* Path types in various "types of finite types" *)
+  (** Describing path types in [Finite_Types]   *)
   Definition path_finite_types (n : nat) (s t : Finite_Types n)
     : (s <~> t) -> s = t
     :=  path_sigma_hprop _ _ o path_universe_uncurried.
@@ -270,20 +225,10 @@ Section Path_Finite_Types.
                  (eissect (path_sigma_hprop s t) (path_universe_uncurried f)) @ _).
       apply eissect.
   Defined.
-  (* := isequiv_compose (f := path_universe_uncurried) (g := path_sigma_hprop _ _). *)
 
   Definition equiv_path_finite_types (n : nat) (s t : Finite_Types n)
     : (s <~> t) <~> (s = t)
     := BuildEquiv _ _ (path_finite_types n s t) (isequiv_path_finite_types n s t).
-
-
-  (* Global Instance isequiv_path_finite_types (n : nat) (s t : Finite_Types n) *)
-  (*   : IsEquiv (path_finite_types n s t) *)
-  (*   := isequiv_compose (f := path_universe_uncurried) (g := path_sigma_hprop _ _). *)
-
-  (* Definition equiv_path_finite_types (n : nat) (s t : Finite_Types n) *)
-  (*   : (s <~> t) <~> (s = t) *)
-  (*   := BuildEquiv _ _ (path_finite_types n s t) (isequiv_path_finite_types n s t). *)
 
   Definition equiv_path_finite_types' (s t : {A : Type & Finite A}) :
     (s.1 <~> t.1) <~> s = t :=
@@ -346,15 +291,6 @@ Section Path_Finite_Types.
                                                      (fun A : Type => A -> X)) x @ _).
     exact (transport_exp X A.1 B.1 e x).
   Defined.
-
-  (* Lemma path_finite_types_id (m : nat) (A : Finite_Types m) : *)
-  (*   path_finite_types m A A equiv_idmap = idpath. *)
-  (* Proof. *)
-  (*   unfold path_finite_types. apply moveR_equiv_M. *)
-  (*   simpl. unfold path_universe_uncurried. *)
-  (*   apply moveR_equiv_V. *)
-  (*   apply path_equiv. reflexivity. *)
-  (* Defined. *)
   
   Lemma path_finite_types_compose (m : nat) (A B C : Finite_Types m)
         (e1 : A <~> B) (e2 : B <~> C) :
@@ -377,8 +313,6 @@ Proof.
   - apply istrunc_equiv.
 Qed.
 
-(* Global Instance ispointed_finite_types {m : nat} : IsPointed (Finite_Types m) := canon m. *)
-
 Definition sum_finite_types_canon {m n : nat} :
   sum_finite_types (canon m) (canon n) = canon (n + m).
 Proof.
@@ -394,7 +328,6 @@ Proof.
   apply tr. apply inverse. apply path_finite_types.
   exact fA.
 Qed.
-
 
 Definition pFin (m : nat) : Conn_pType.
 Proof.

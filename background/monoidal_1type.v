@@ -1,12 +1,9 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
-(* Load finite_lemmas. *)
-(* From A_BPQ Require Import equiv_lemmas. *)
-(* Require Import path_lemmas. *)
-(* Require Import trunc_lemmas. *)
 
-(*Defining the type of monoidal 1-Types (this corresponds to a monoidal category*)
+From A_BPQ Require Import path_lemmas.
 
+(** We definine the type of monoidal 1-Types (this corresponds to a monoidal category)*)
 Definition associative {A : Type}  (m : A-> A -> A) := forall (a b c: A),  m (m a b) c = m a (m b c).
 Definition left_identity_mult {A : Type} (m : A->A->A) (e : A) := forall a : A, m e a = a.
 Definition right_identity_mult {A : Type} (m : A->A->A) (e : A) := forall a : A, m a e = a.
@@ -55,6 +52,7 @@ Definition left_faithful {A B : Type} (m : A -> B -> B) :=
 
 
 Section Monoidal_Map.
+  (** Definining monoidal maps.  *)
   Record Monoidal_Map (M N : Monoidal_1Type) :=
     {montype_map :> M -> N;
      montype_map_mult (a b : M) : montype_map (a ⊗ b) = (montype_map a) ⊗ (montype_map b) ;
@@ -150,7 +148,7 @@ Section Monoidal_Map.
   Defined.
   
 
-  (* Given a 1-Type X, the type X->X is a monoidal 1-type *)
+  (** Given a 1-Type X, the type X->X is a monoidal 1-type *)
   Definition endomorphism (X : 1-Type) : Monoidal_1Type.
   Proof.
     srapply @Build_Monoidal_1Type.
@@ -163,19 +161,6 @@ Section Monoidal_Map.
     - unfold coherence_triangle1. cbn. reflexivity.
     - unfold coherence_triangle2. cbn. reflexivity.
     - unfold coherence_pentagon. cbn. reflexivity.
-  Defined.
-
-  Lemma path_arrow_V {A B : Type} {f g : A -> B} (H : f == g) :
-    path_arrow g f (fun a => (H a)^) = (path_arrow f g H)^.
-  Proof.
-    transitivity (path_arrow f g (ap10 (path_forall _ _ H)))^.
-    - transitivity (path_arrow g f (fun a => (ap10 (path_forall _ _ H) a)^)).
-      + apply (ap (path_arrow g f)). apply path_forall.
-        intro a. apply (ap inverse). apply inverse. apply (ap10_path_arrow).
-      +  destruct (path_forall f g H). simpl.
-         destruct (path_forall _ _ (ap10_1 (f:= f)))^.
-         destruct (path_arrow_1 f)^. reflexivity.
-    - apply (ap inverse). apply (ap (path_arrow f g)). apply (path_forall _ _ (ap10_path_arrow f g H)).
   Defined.
   
   Definition to_endomorphism (M : Monoidal_1Type) : Monoidal_Map M (endomorphism M).
@@ -300,7 +285,8 @@ Section Monoidal_Map.
 End Monoidal_Map.
 
 Section Monoidal_Action.
-  (* Definition monoidal_action (M : Monoidal_1Type) (X : 1-Type) := Monoidal_Map M (endomorphism X). *)
+  (** We could define monoidal actions to be [Monoidal_Map M (endomorphism X)],
+but the following definition is easier to work with.*)
 
   Record monoidal_action (M : Monoidal_1Type) (X : 1-Type) :=
     { act :> M -> X -> X;
@@ -318,9 +304,10 @@ Section Monoidal_Action.
   Global Arguments montype_act_id {M} {X} a x : rename.
   
 
-  Definition action_on_path {M} {X} (a : monoidal_action M X) {s t : M} (x : X) (p : s = t)  := ap (fun s => a s x) p.
+  Definition action_on_path {M} {X} (a : monoidal_action M X) {s t : M} (x : X) (p : s = t)
+    := ap (fun s => a s x) p.
 
-
+  (** A monoidal 1-type acts on itself per definition.  *)
   Definition act_on_self (M : Monoidal_1Type) : monoidal_action M M.
   Proof.
     srapply @Build_monoidal_action.
@@ -332,8 +319,9 @@ Section Monoidal_Action.
     - apply montype_pentagon.
   Defined.
 
-  Definition endomorphism_to_action (M : Monoidal_1Type) (X : 1-Type) (F : Monoidal_Map M (endomorphism X)):
-    monoidal_action M X.
+  Definition endomorphism_to_action (M : Monoidal_1Type) (X : 1-Type)
+             (F : Monoidal_Map M (endomorphism X))
+    : monoidal_action M X.
   Proof.
     srapply @Build_monoidal_action.
     - exact F.
@@ -375,14 +363,6 @@ Section Monoidal_Action.
     apply (monoidal_map_compose M X (endomorphism X) F).
     apply (to_endomorphism).
   Defined.
-
-  (* move *)
-  Definition path_prod_VV {A B : Type} (z z' : A*B) (p1 : fst z = fst z') (p2 : snd z = snd z') :
-    path_prod z' z p1^ p2^ = (path_prod z z' p1 p2)^.
-  Proof.
-    destruct z as [z1 z2]. destruct z' as [z1' z2']. simpl in *. destruct p1, p2. reflexivity.
-  Defined.
-  
 
   Definition act_on_prod (M : Monoidal_1Type) (X Y: 1-Type)
              (act1 : monoidal_action M X) (act2 : monoidal_action M Y) :
@@ -452,25 +432,18 @@ Section Monoidal_Action.
   (*     repeat rewrite ap_pp. *)
   (*     rewrite montype_pentagon. *)
   (*     repeat rewrite concat_pp_p. apply whiskerL. *)
-  
   (*     repeat rewrite concat_p_pp. apply whiskerR. *)
-
-
-  
-  
   (*     refine (ap_pp _ _ _ @ _). *)
-  
   (*     refine (montype_triangle1 M _ _ @ _). *)
-  
-
-  
 End Monoidal_Action.
 
 
 Section Symmetric_Monoidal_1Type.
+  (** Define symmetric monoidal 1-type.  *)
   
   Definition symmetric {A : Type} (m : A->A->A) := forall a b : A, m a b = m b a.
-  Definition coherence_hexagon {A : Type} {m : A -> A -> A} (assoc : associative m) (symm : symmetric m) :=
+  Definition coherence_hexagon {A : Type} {m : A -> A -> A} (assoc : associative m)
+             (symm : symmetric m) :=
     forall (a b c : A),
       ap (fun x : A => m x c) (symm a b) =
       assoc a b c @ symm a (m b c) @ assoc b c a @ (ap (m b) (symm a c))^ @ (assoc b a c)^.
@@ -483,11 +456,11 @@ Section Symmetric_Monoidal_1Type.
       smontype_lid : left_identity_mult smontype_mult smontype_id ;
       smontype_rid : right_identity_mult smontype_mult smontype_id ;
       smontype_sym : symmetric smontype_mult ;
-      smontype_sym_inv : forall a b : smontype_type, smontype_sym a b = (smontype_sym b a)^;
-                                                                                          smontype_triangle1 : coherence_triangle1 smontype_assoc smontype_lid ;
+      smontype_sym_inv : forall a b : smontype_type, smontype_sym a b = (smontype_sym b a)^ ;
+      smontype_triangle1 : coherence_triangle1 smontype_assoc smontype_lid ;
       smontype_triangle2 : coherence_triangle2 smontype_assoc smontype_lid smontype_rid ;
       smontype_pentagon : coherence_pentagon smontype_assoc;
-      smontype_hexagon : coherence_hexagon smontype_assoc smontype_sym                                         
+      smontype_hexagon : coherence_hexagon smontype_assoc smontype_sym
     }.
   Global Arguments smontype_mult {S} a b : rename.
   Global Arguments smontype_id {S} : rename.
@@ -501,9 +474,6 @@ Section Symmetric_Monoidal_1Type.
                                   (smontype_triangle1 S) (smontype_triangle2 S) (smontype_pentagon S).
 
   Coercion forget_symmetry : Symmetric_Monoidal_1Type >-> Monoidal_1Type.
-
-
-
 End Symmetric_Monoidal_1Type.
 
 

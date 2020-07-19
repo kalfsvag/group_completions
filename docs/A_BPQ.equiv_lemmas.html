@@ -22,6 +22,14 @@
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+A few lemmas regarding equivalences we either didn't find in the HoTT library, or wanted to do differently. 
+</div>
+<div class="code">
+
+<br/>
 <span class="id" type="keyword">Definition</span> <a name="equiv_emoveR_fV"><span class="id" type="definition">equiv_emoveR_fV</span></a> `{<span class="id" type="class">Funext</span>} {<span class="id" type="var">A</span> <span class="id" type="var">B</span> <span class="id" type="var">C</span> : <span class="id" type="keyword">Type</span>} (<span class="id" type="var">e</span> : <a class="idref" href="A_BPQ.equiv_lemmas.html#A"><span class="id" type="variable">A</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#B"><span class="id" type="variable">B</span></a>) (<span class="id" type="var">f</span> : <a class="idref" href="A_BPQ.equiv_lemmas.html#B"><span class="id" type="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.equiv_lemmas.html#C"><span class="id" type="variable">C</span></a>) (<span class="id" type="var">g</span> : <a class="idref" href="A_BPQ.equiv_lemmas.html#A"><span class="id" type="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.equiv_lemmas.html#C"><span class="id" type="variable">C</span></a>) : <br/>
 &nbsp;&nbsp;<a class="idref" href="A_BPQ.equiv_lemmas.html#g"><span class="id" type="variable">g</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#f"><span class="id" type="variable">f</span></a> <span class="id" type="notation">o</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#g"><span class="id" type="variable">g</span></a> <span class="id" type="notation">o</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#e"><span class="id" type="variable">e</span></a><span class="id" type="notation">^-1</span> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.equiv_lemmas.html#f"><span class="id" type="variable">f</span></a>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>

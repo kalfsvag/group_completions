@@ -16,6 +16,7 @@ background/onetype_completion.v
 background/monoids_and_groups.v
 background/monoidal_1type.v
 background/delooping.v
+background/rezk_groupoid.v
 group_completion/group_completion_monoid.v
 group_completion/group_complete_1type.v
 finite/finite_types.v

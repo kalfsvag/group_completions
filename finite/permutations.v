@@ -4,6 +4,7 @@ Require Import UnivalenceAxiom.
 From A_BPQ Require Import finite_types.
 
 Section Fin_Transpose.
+  (** Defining transpositions. [fin_transpose x y] is the permutation that swaps x and y  *)
   Definition fin_transpose {n : nat} (x y : fintype n)
   : fintype n <~> fintype n.
   Proof.
@@ -15,15 +16,6 @@ Section Fin_Transpose.
         * exact (fin_transpose_last_with n (inl y)).
       + exact (fin_transpose_last_with n x).
   Defined.
-
-  (* Definition fin_transpose_is_withlast_r {n : nat} (x : fintype n.+1) : *)
-  (*   fin_transpose x (inr tt) = fin_transpose_last_with n x := idpath. *)
-
-  (* Definition fin_transpose_is_withlast_l {n : nat} (y : fintype n.+1) : *)
-  (*   fin_transpose (n := n.+1) (inr tt) y = fin_transpose_last_with n y. *)
-  (* Proof. *)
-  (*   destruct y as [y | []]; reflexivity. *)
-  (* Defined. *)
 
   Definition fin_transpose_same_is_id {n : nat} (x : fintype n) :
     fin_transpose x x == idmap.
@@ -105,7 +97,7 @@ Section Fin_Transpose.
       + destruct (n_y idpath).
   Defined.
 
-  (* either i = x, i = y, or equal to neither *)
+  (** either i = x, i = y, or equal to neither *)
   Definition decompose_fin_n {n : nat} (x y : fintype n) (i : fintype n) :
     (i = x) + (i = y) + ((i <> x) * (i <> y)).
   Proof.
@@ -150,11 +142,11 @@ Section Fin_Transpose.
         apply (fin_transpose_other _ _ _ neq_x neq_y).
   Qed.
   
-  
 End Fin_Transpose.
 
-Section Sigma2.
-  Definition sigma2_fixlast (σ : fintype 2 <~> fintype 2) :
+Section Sym2.
+  (** The permutations of two letters is the group of two elements.  *)
+  Definition sym2_fixlast (σ : fintype 2 <~> fintype 2) :
     (σ (inr tt) = inr tt) -> σ == equiv_idmap.
   Proof.
     intro p.
@@ -175,7 +167,7 @@ Section Sigma2.
     apply path_equiv. reflexivity.
   Qed.
 
-  Definition sigma2_notfixlast (σ : fintype 2 <~> fintype 2) :
+  Definition sym2_notfixlast (σ : fintype 2 <~> fintype 2) :
     (σ (inr tt) = inl (inr tt)) -> σ == twist2.
   Proof.
     intro p.
@@ -188,19 +180,19 @@ Section Sigma2.
     - exact p.
   Qed.
 
-  Definition symm_sigma2 (σ1 σ2 : fintype 2 <~> fintype 2) :
+  Definition symm_sym2 (σ1 σ2 : fintype 2 <~> fintype 2) :
     σ1 oE σ2 = σ2 oE σ1.
   Proof.
     recall (σ1 (inr tt)) as x eqn:p.
     destruct x as [[[] | []] | []].
-    - rewrite (path_equiv (path_forall _ _ (sigma2_notfixlast σ1 p))).
+    - rewrite (path_equiv (path_forall _ _ (sym2_notfixlast σ1 p))).
       recall (σ2 (inr tt)) as y eqn:q.
       destruct y as [[[] | []] | []].
-      + rewrite (path_equiv (path_forall _ _ (sigma2_notfixlast σ2 q))).
+      + rewrite (path_equiv (path_forall _ _ (sym2_notfixlast σ2 q))).
         reflexivity.
-      + rewrite (path_equiv (path_forall _ _ (sigma2_fixlast σ2 q))).
+      + rewrite (path_equiv (path_forall _ _ (sym2_fixlast σ2 q))).
         rewrite ecompose_e1. rewrite ecompose_1e. reflexivity.
-    - rewrite (path_equiv (path_forall _ _ (sigma2_fixlast σ1 p))).
+    - rewrite (path_equiv (path_forall _ _ (sym2_fixlast σ1 p))).
       rewrite ecompose_e1. rewrite ecompose_1e. reflexivity.
   Qed.
 
@@ -210,9 +202,9 @@ Section Sigma2.
     recall (sigma (inr tt)) as x eqn:p.
     destruct x as [[[] | []] | []].
     - apply inr.
-      apply path_equiv. apply path_arrow. apply sigma2_notfixlast. exact p.
+      apply path_equiv. apply path_arrow. apply sym2_notfixlast. exact p.
     - apply inl.
-      apply path_equiv. apply path_arrow. apply sigma2_fixlast. exact p.
+      apply path_equiv. apply path_arrow. apply sym2_fixlast. exact p.
   Defined.
 
   Lemma invol_SymGrp2 (sigma : fintype 2 <~> fintype 2)
@@ -225,11 +217,10 @@ Section Sigma2.
       apply path_equiv. apply path_arrow.
       intros [[[] | []] | []]; reflexivity.
   Qed.
-
-
-End Sigma2.
+End Sym2.
 
 Section Restrict_Equivalence.
+  (** Given an equivalence [A + Unit <~> B + Unit] fixing Unit, we may restrict it to an equivalence [A <~> B]  *)
   Context {n : nat}
           {A : Type}
           (e : A + Unit <~> fintype n.+1)
@@ -317,6 +308,7 @@ Proof.
 Defined.
 
 Section Transpose_and_restrict.
+  (** Given a permutation [fintype n.+1 <~> fintype n.+1], we compose it with a transposition so that it fixes [n+1] and restricts it to a permutation [fintype n <~> fintype n]  *)
   
   Definition transpose_and_restrict {n : nat} (e : fintype n.+1 <~> fintype n.+1)  :
     fintype n <~> fintype n :=
@@ -328,7 +320,7 @@ Section Transpose_and_restrict.
     apply equiv_restrict_eta.
   Defined.
 
-  (* a reformulation *)
+  (** A reformulation: *)
   Definition factorize_permutation {a : nat} (alpha : fintype a.+1 <~> fintype a.+1)
     : alpha = swap_last alpha oE (transpose_and_restrict alpha +E 1).
   Proof.
@@ -340,8 +332,6 @@ Section Transpose_and_restrict.
     apply emoveR_Ve. apply inverse.
     apply path_equiv. apply path_arrow. apply fin_transpose_invol.
   Defined.
-
-  
 
   Definition transpose_and_restrict_id {n : nat} :
     @transpose_and_restrict n equiv_idmap == equiv_idmap.
@@ -398,13 +388,13 @@ Section Block_Sum.
     rewrite (eissect (equiv_finsum c d)).
     reflexivity.
   Defined.                            
-  
+
   Definition block_sum {m n: nat} (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n) :
     fintype (n+m)%nat <~> fintype (n+m)%nat :=
     fin_equiv_sum (e1 +E e2).
-    (* (equiv_finsum m n) oE (e1 +E e2) oE (equiv_inverse (equiv_finsum m n)). *)
 
-  Definition block_sum_beta_finl {m n : nat} (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n)
+  Definition block_sum_beta_finl {m n : nat}
+             (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n)
              (i : fintype m) :
     block_sum e1 e2 (finl _ _ i) = finl _ _ (e1 i).
   Proof.
@@ -555,7 +545,7 @@ Require Import monoids_and_groups.
 Definition SymGrp (m : nat) := AutGroup (fintype m).
 
 Section Block_Sum_Hom.
-  (* Block sum as a homomorphism *)
+  (** Block sum as a homomorphism *)
   Definition block_sum_hom (m n : nat):
     Homomorphism (grp_prod (SymGrp m) (SymGrp n)) (SymGrp (n+m)).
   Proof.

@@ -1,14 +1,10 @@
+(** This file was originally written by Niels van der Weide and Dan Frumin, with only minor changes here. Namely, that we generalize the construction for all categories, and not only for groupoids.*)
+
 Require Import HoTT.
 From A_BPQ Require Import
      general.
 From A_BPQ.cquot.basics Require Export
      globe_over path_over square.
-(* From A_BPQ.groupoid.grpd_bicategory Require Import *)
-(*      grpd_bicategory prod_grpd grpd_laws. *)
-(* From A_BPQ.groupoid.path_groupoid Require Import *)
-(*      path_groupoid. *)
-(* From A_BPQ.groupoid.groupoid_quotient Require Export *)
-(*      gquot. *)
 Require Import cquot.
 
 From HoTT.Categories Require Import

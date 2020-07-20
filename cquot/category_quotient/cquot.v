@@ -1,40 +1,34 @@
-(** This file defines a groupoid quotient HIT and derives some recursion/induction principles for it. *)
+(** This file defines a 1-type completion of a category as a HIT and derives some recursion/induction principles for it.
+ This file was originally written by Niels van der Weide and Dan Frumin, with only minor changes here. Namely, that we generalize the construction for all categories, and not only for groupoids.*)
+
 Require Import HoTT.
 From A_BPQ Require Import
      general.
 From A_BPQ.cquot.basics Require Export
      globe_over path_over square.
-(* From A_BPQ.cquot Require Import *)
-(*      grpd_bicategory. *)
 
 From HoTT.Categories Require Import
      Category.
 
-(** * The groupoid quotient over a type. *)
-(** Given a type [A] and a groupoid [G], we construct a type [gquot G] such that
-    we have [A -> gquot A G] and the equality of [gquot A G] is described by [G].
+(** * The 1-type completion of a category  *)
+(** Given a type [A] and a category [C], we construct a type [cquot C] such that
+    we have [A -> cquot A C] and the equality of [cquot A C] is described by [C].
     We use the standard method to define the HIT
     <<
-    HIT gquot G :=
-     | gcl : A -> gquot G
-     | gcleq : Π(a₁ a₂ : A), hom G a₁ a₂ -> gcl a₁ = gcl a₂
-     | ge : Π(a : A), gcleq (e a) = idpath
-     | ginv : Π(a₁ a₂ : A) (g : hom G a₁ a₂), gcleq g⁻¹ = (gcleq g)^
-     | gconcat : Π(a₁ a₂ a₃ : A) (g₁ : hom G a₁ a₂) (g₂ : hom G a₂ a₃),
-               gcleq (g₁ × g₂) = gcleq g₁ @ gcleq g₂
-     | gtrunc : Is-1-Type (gquot G)
+    HIT gquot C :=
+     | ccl : A -> cquot C
+     | ccleq : Π(a₁ a₂ : A), hom C a₁ a₂ -> gcl a₁ = gcl a₂
+     | ce : Π(a : A), ccleq (e a) = idpath
+     | cconcat : Π(a₁ a₂ a₃ : A) (g₁ : hom C a₁ a₂) (g₂ : hom C a₂ a₃),
+               ccleq (g₁ × g₂) = ccleq g₁ @ ccleq g₂
+     | ctrunc : Is-1-Type (cquot C)
     >>
-*)
 
-(* modifying this to make a groupoid truncation of any precategory *)
+*)
 
 Module Export cquot.
   Private Inductive cquot (C : PreCategory) :=
   | ccl : C -> cquot C.
-
-  (*   (** The homsets. *) *)
-  (* Definition hom (G : groupoid) : G -> G -> hSet *)
-  (*   := fun x y => BuildhSet (morphism G.1 x y)%morphism. *)
 
   Coercion morphism : PreCategory >-> Funclass.
 
@@ -52,16 +46,6 @@ Module Export cquot.
              (g₁ : C a₁ a₂) (g₂ : C a₂ a₃),
       ccleq C (g₂ o g₁) = ccleq C g₁ @ ccleq C g₂.
 
-  (* Definition cinv *)
-  (*   : forall (G : groupoid) {a₁ a₂ : G} (g : G a₁ a₂), *)
-  (*     ccleq G.1 (inv g) = (ccleq G.1 g)^. *)
-  (* Proof. *)
-  (*   intros G a₁ a₂ g. *)
-  (*   apply moveL_V1. *)
-  (*   rewrite <- cconcat, grpd_right_inverse. , ce. *)
-  (*   reflexivity. *)
-  (* Qed. *)
-  
   Axiom ctrunc
     : forall (C : PreCategory), IsTrunc 1 (cquot C).
 

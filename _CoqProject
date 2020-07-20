@@ -1,4 +1,3 @@
--R . "A_BPQ" COQC = hoqc COQDEP = coqdep
 sigma_lemmas.v
 equiv_lemmas.v
 path_lemmas.v

@@ -3,8 +3,13 @@ Coq code for PhD thesis "Approaching the Barratt-Priddy-Quillen theorem in homot
 
 Code in folder cquot is written by Niels van der Weide and Dan Frumin, and is copied from https://github.com/nmvdw/groupoids, with only minor changes by me.
 
-
 To compile:
+run `.compile.sh`
+
+Alternatively:
+Add
+  `-R . "A_BPQ" COQC = hoqc COQDEP = hoqdep`
+as the first line in _CoqProject, then run
 1. `coq_makefile -f _CoqProject -o Makefile`
 2. `make`
 

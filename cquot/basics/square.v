@@ -1,3 +1,4 @@
+(** This file was originally written by Niels van der Weide and Dan Frumin.  *)
 Require Import HoTT.
 From A_BPQ Require Export basics.heterogeneous_equality basics.path_over.
 

@@ -1,4 +1,4 @@
-(** This file was originally written by Niels van der Weide and Dan Frumin, with only minor changes here. Namely, that we generalize the construction for all categories, and not only for groupoids.*)
+(** This file was originally written by Niels van der Weide and Dan Frumin, with only minor changes here. Namely, that we generalize the construction cquot for all categories, and not only for groupoids.*)
 
 Require Import HoTT.
 From A_BPQ Require Import

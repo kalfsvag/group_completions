@@ -30,7 +30,7 @@ Proof.
   apply (concat2 (path_sigma_hprop_1 (x1; x2)) (path_sigma_hprop_1 (x1; x2))).
 Defined.
 
-(** A more general version of trunc_sigma that only requires A to be "locally truncated" wherever there is a [b : Ba] *)
+(** A more general version of trunc_sigma that only requires A to be "locally truncated" wherever there is a [b : B(a)] *)
 Definition trunc_sigma' {A : Type} {B : A -> Type} {n : trunc_index} :
            (forall a : A, IsTrunc (n.+1) (B a)) ->
            (forall p q : {a : A & B a}, IsTrunc n (p.1 = q.1)) ->

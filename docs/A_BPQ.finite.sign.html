@@ -20,16 +20,10 @@
 
 <div class="code">
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT</span>.<br/>
-
-<br/>
 <span class="id" type="var">From</span> <span class="id" type="var">A_BPQ</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="A_BPQ.finite.finite_types.html#"><span class="id" type="library">finite_types</span></a> <a class="idref" href="A_BPQ.finite.permutations.html#"><span class="id" type="library">permutations</span></a>.<br/>
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Sign"><span class="id" type="section">Sign</span></a>.<br/>
-
-<br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="swap_fix_last"><span class="id" type="lemma">swap_fix_last</span></a> {<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>} (<span class="id" type="var">e</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">.+1</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">.+1</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="A_BPQ.finite.permutations.html#swap_last"><span class="id" type="definition">swap_last</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="notation">oE</span> <a class="idref" href="A_BPQ.finite.sign.html#e"><span class="id" type="variable">e</span></a>) (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>) <span class="id" type="notation">=</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
@@ -45,6 +39,13 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+The sign of a permutations counts (modulo 2) how many nontrivial transpositions a permutation
+   can be factorized into. 
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Fixpoint</span> <a name="sign"><span class="id" type="definition">sign</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">(</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">(</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">2</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">2</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">)</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
@@ -90,8 +91,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="lemma">ecompose_e1</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">recall</span> (<span class="id" type="var">e</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [ [[] | []] | []]; <span class="id" type="tactic">apply</span> <span class="id" type="definition">inverse</span>; <span class="id" type="tactic">apply</span> <span class="id" type="definition">path_equiv</span>; <span class="id" type="tactic">apply</span> <span class="id" type="definition">path_arrow</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.finite.permutations.html#sigma2_notfixlast"><span class="id" type="definition">sigma2_notfixlast</span></a> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.finite.permutations.html#sigma2_fixlast"><span class="id" type="definition">sigma2_fixlast</span></a> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.finite.permutations.html#sym2_notfixlast"><span class="id" type="definition">sym2_notfixlast</span></a> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.finite.permutations.html#sym2_fixlast"><span class="id" type="definition">sym2_fixlast</span></a> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
@@ -130,30 +131,12 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
 
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
+<div class="doc">
+The sign sends block sum to composition  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="sgn_block_sum"><span class="id" type="definition">sgn_block_sum</span></a> {<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>} (<span class="id" type="var">e1</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a>) (<span class="id" type="var">e2</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> (<a class="idref" href="A_BPQ.finite.sign.html#n"><span class="id" type="variable">n</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Peano.html#::nat_scope:x_'+'_x"><span class="id" type="notation">+</span></a><a class="idref" href="A_BPQ.finite.sign.html#m"><span class="id" type="variable">m</span></a>) (<a class="idref" href="A_BPQ.finite.permutations.html#block_sum"><span class="id" type="definition">block_sum</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e1"><span class="id" type="variable">e1</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e2"><span class="id" type="variable">e2</span></a>) <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <a class="idref" href="A_BPQ.finite.sign.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e2"><span class="id" type="variable">e2</span></a> <span class="id" type="notation">oE</span> <a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <a class="idref" href="A_BPQ.finite.sign.html#m"><span class="id" type="variable">m</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e1"><span class="id" type="variable">e1</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
@@ -164,8 +147,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">path_equiv</span>. <span class="id" type="tactic">apply</span> <span class="id" type="definition">path_arrow</span>. <span class="id" type="tactic">intro</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.finite.permutations.html#block_sum_beta_finl"><span class="id" type="definition">block_sum_beta_finl</span></a> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">x</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>.<br/>
-
-<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="definition">path_equiv</span> (<span class="id" type="definition">path_forall</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.permutations.html#transpose_and_restrict_block_sum"><span class="id" type="definition">transpose_and_restrict_block_sum</span></a> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span>))).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">IHn</span> (<a class="idref" href="A_BPQ.finite.permutations.html#transpose_and_restrict"><span class="id" type="definition">transpose_and_restrict</span></a> <span class="id" type="var">e2</span>)).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">ecompose_e_ee</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
@@ -177,10 +158,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">x</span> | <span class="id" type="var">x</span>]; <span class="id" type="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
-
-<br/>
-
-<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="functor_sum_compose"><span class="id" type="lemma">functor_sum_compose</span></a> {<span class="id" type="var">A1</span> <span class="id" type="var">A2</span> <span class="id" type="var">A3</span> <span class="id" type="var">B1</span> <span class="id" type="var">B2</span> <span class="id" type="var">B3</span> : <span class="id" type="keyword">Type</span>}<br/>
@@ -344,15 +321,19 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
 
-<br/>
+<div class="doc">
+The sign preserves composition  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="sgn_compose"><span class="id" type="definition">sgn_compose</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) (<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <a class="idref" href="A_BPQ.finite.sign.html#n"><span class="id" type="variable">n</span></a> (<a class="idref" href="A_BPQ.finite.sign.html#e2"><span class="id" type="variable">e2</span></a> <span class="id" type="notation">oE</span> <a class="idref" href="A_BPQ.finite.sign.html#e1"><span class="id" type="variable">e1</span></a>) <span class="id" type="notation">=</span> <span class="id" type="notation">(</span><a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <a class="idref" href="A_BPQ.finite.sign.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e2"><span class="id" type="variable">e2</span></a><span class="id" type="notation">)</span> <span class="id" type="notation">oE</span> <span class="id" type="notation">(</span><a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <a class="idref" href="A_BPQ.finite.sign.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.sign.html#e1"><span class="id" type="variable">e1</span></a><span class="id" type="notation">)</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span>. { <span class="id" type="tactic">reflexivity</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">ecompose_e_ee</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="definition">ecompose_ee_e</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <span class="id" type="var">n</span> (<a class="idref" href="A_BPQ.finite.permutations.html#transpose_and_restrict"><span class="id" type="definition">transpose_and_restrict</span></a> <span class="id" type="var">e2</span>)) <span class="id" type="var">_</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<a class="idref" href="A_BPQ.finite.permutations.html#symm_sigma2"><span class="id" type="definition">symm_sigma2</span></a> (<a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <span class="id" type="var">n</span> (<a class="idref" href="A_BPQ.finite.permutations.html#transpose_and_restrict"><span class="id" type="definition">transpose_and_restrict</span></a> <span class="id" type="var">e2</span>)) <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<a class="idref" href="A_BPQ.finite.permutations.html#symm_sym2"><span class="id" type="definition">symm_sym2</span></a> (<a class="idref" href="A_BPQ.finite.sign.html#sign"><span class="id" type="definition">sign</span></a> <span class="id" type="var">n</span> (<a class="idref" href="A_BPQ.finite.permutations.html#transpose_and_restrict"><span class="id" type="definition">transpose_and_restrict</span></a> <span class="id" type="var">e2</span>)) <span class="id" type="var">_</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="definition">ecompose_ee_e</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.sign.html#sgn_transpose"><span class="id" type="definition">sgn_transpose</span></a> (<span class="id" type="var">e2</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>)))).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="definition">ecompose_ee_e</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.sign.html#sgn_transpose"><span class="id" type="definition">sgn_transpose</span></a> (<span class="id" type="var">e1</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>)))).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="definition">ecompose_e_ee</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.sign.html#sgn_transpose"><span class="id" type="definition">sgn_transpose</span></a> (<span class="id" type="var">e2</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#inr"><span class="id" type="constructor">inr</span></a> <span class="id" type="constructor">tt</span>)))).<br/>
@@ -419,68 +400,6 @@
 
 <br/>
 <span class="id" type="keyword">End</span> <a class="idref" href="A_BPQ.finite.sign.html#Sign"><span class="id" type="section">Sign</span></a>.<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 
 <br/>
 

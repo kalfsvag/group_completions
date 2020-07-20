@@ -4,9 +4,10 @@ From A_BPQ Require Import
      conn_ptype path_lemmas finite_types delooping permutations fintype_monoidal
      group_complete_1type onetype_completion.
 
-Definition group_completion_FinType := group_completion FinType_smoncat FinType_lcancel.
+(** The group completion of the monoidal category [FinType]  *)
+Definition group_completion_FinType := group_completion_moncat FinType_smoncat FinType_lcancel.
 Section Univalent_Group_Completion_FinType.
-  
+  (** The group completion of FinType is univalent.  *)
   Lemma sum_empty_is_empty (A B : Type) :
     A + B <~> Empty -> A <~> Empty.
   Proof.
@@ -32,9 +33,10 @@ Section Univalent_Group_Completion_FinType.
   Qed.
 End Univalent_Group_Completion_FinType.
 
+(** Define a shorthand for the 1-type completion of the group completion of FinType  *)
 Definition Z := N1 (group_completion_FinType).
 
-
+(** A naturality lemma  *)
 Definition ccleq_concat_Z (S A1 B1 : FinType) (A2 A3 : FinType * FinType)
            (p : (sum_FinType S A1, sum_FinType S B1) = A2)
            (q : A2 = A3)
@@ -61,7 +63,7 @@ Defined.
 
 
 Section N1_FinType_set_ind.
-  
+  (** Here we are defining a set induction principle for  [N1 (group_completion_FinType)]. Here we do this directly, whereas in the thesis we go via showing that (BSym)^-1(BSym) -> Fin^-1Fin is a weak equivalence. *)
   Definition canon_grpclFinType_sum (m1 m2 n1 n2 : nat) :
     FinType_to_Z (sum_FinType (canon_FinType m1) (canon_FinType n1))
                  (sum_FinType (canon_FinType m2) (canon_FinType n2)) =
@@ -70,19 +72,6 @@ Section N1_FinType_set_ind.
     apply (ap011 FinType_to_Z); apply finsum_id.
   Defined.
   
-  (* ccl (group_completion_FinType) *)
-  (*     (functor_prod (sum_FinType (canon_FinType m1)) (sum_FinType (canon_FinType m2)) (canon_FinType n1, canon_FinType n2)) = *)
-  (* ccl (group_completion_FinType) *)
-  (*     (canon_FinType (n1+m1), (canon_FinType (n2+m2))). *)
-  (* Proof. *)
-  (*   apply (ap (ccl group_completion_FinType)). unfold sum_FinType. simpl. *)
-  (*   unfold functor_prod. simpl. unfold canon_FinType. *)
-  (*   exact (ap (fun x : Finite_Types (n1 + m1) * Finite_Types (n2+m2) => *)
-  (*                (fin_to_FinType (fst x), (fin_to_FinType (snd x)))) *)
-  (*         (path_prod (_,_) (_,_) (finsum_id m1 n1) (finsum_id m2 n2)))%nat. *)
-  (* Defined. *)
-
-
   Definition path_Z {A1 B1 A2 B2 : FinType} (S : FinType)
     : (sum_FinType S A1 = A2) -> (sum_FinType S B1 = B2)
       -> FinType_to_Z A1 B1 = FinType_to_Z A2 B2.
@@ -104,7 +93,6 @@ Section N1_FinType_set_ind.
     - exact (FinType_symmetric _ _ @ q).
   Defined.
   
-  (* {s a b : nat} (S : Finite_Types s) (A : Finite_Types a) (B : Finite_Types b) *)
   Definition lcancel_Z (S A B : FinType)
     : FinType_to_Z A B = FinType_to_Z (sum_FinType S A) (sum_FinType S B) :=
     path_Z S idpath idpath.
@@ -112,11 +100,6 @@ Section N1_FinType_set_ind.
   Definition lcancel_Z_fr (A B S : FinType)
     : FinType_to_Z A B = FinType_to_Z (sum_FinType A S) (sum_FinType B S) :=
     path_Z_fr S idpath idpath.
-  (* Proof. *)
-  (*   apply (path_Z S); apply FinType_symmetric. *)
-  (*   (* refine (lcancel_Z S A B @ _); *) *)
-  (*   (* apply (ap011 FinType_to_Z); apply FinType_symmetric. *) *)
-  (* Defined. *)
 
   Definition path_Z_pp_r {A1 B1 A2 B2 A2' B2'} (S : FinType)
              (p1 : sum_FinType S A1 = A2) (p2 : sum_FinType S B1 = B2)
@@ -258,8 +241,6 @@ Section N1_FinType_set_ind.
   Qed.
 
   Definition lcancel_Z_compose (S T A B : FinType)
-    (* {s t a b : nat} *)
-    (* (S : Finite_Types s) (T : Finite_Types t) (A : Finite_Types a) (B : Finite_Types b) *)
     : lcancel_Z (sum_FinType T S) A B  =
       lcancel_Z S A B @ lcancel_Z T (sum_FinType S A) (sum_FinType S B)
                 @ (ap011 FinType_to_Z (FinType_assoc T S A) (FinType_assoc T S B))^.
@@ -295,8 +276,6 @@ Section N1_FinType_set_ind.
   Proof.
     refine (lcancel_Z (canon_FinType s) _ _ @ _).
     apply (ap011 FinType_to_Z); apply finsum_id.
-    (* apply (path_Z (canon_FinType s)); *)
-    (*   apply finsum_id. *)
   Defined.
 
   Definition lcancel_canon_fr (s m n : nat)
@@ -304,8 +283,6 @@ Section N1_FinType_set_ind.
       FinType_to_Z (canon_FinType (m +' s)) (canon_FinType (n +' s)).
   Proof.
     apply (path_Z_fr (canon_FinType s)); apply finsum_id.
-    (* refine (lcancel_Z_fr _ _ (canon_FinType s) @ _). *)
-    (* apply (ap011 FinType_to_Z); apply finsum_id. *)
   Defined.
 
   Definition lcancel_canon_path_fr (s a b : nat)
@@ -314,8 +291,8 @@ Section N1_FinType_set_ind.
     : ap011 FinType_to_Z
             (path_FinType (canon_FinType (a +' s)) (canon_FinType (a +' s)) (block_sum alpha sigma))
             (path_FinType (canon_FinType (b +' s)) (canon_FinType (b +' s)) (block_sum betta sigma)) =
-      (lcancel_canon_fr s a b)^ @
-                                  ap011 FinType_to_Z (path_FinType (canon_FinType a) (canon_FinType a) alpha)
+      (lcancel_canon_fr s a b)^ @ ap011 FinType_to_Z
+                                  (path_FinType (canon_FinType a) (canon_FinType a) alpha)
                                   (path_FinType (canon_FinType b) (canon_FinType b) betta)
                                   @ lcancel_canon_fr s a b.
   Proof.
@@ -326,7 +303,6 @@ Section N1_FinType_set_ind.
     unfold lcancel_canon_fr.
     unfold lcancel_Z_fr.
     rewrite <- path_Z_fr_pp_r.
-    (* rewrite <- path_Z_fr_pp_r. *)
     repeat rewrite concat_1p.
     rewrite concat_p_Vp. rewrite concat_p_Vp.
     destruct (finsum_id a s). destruct (finsum_id b s).
@@ -366,29 +342,15 @@ Section N1_FinType_set_ind.
     rewrite concat_1p. reflexivity.
   Defined.            
   
-  
-
-
-
-  (* Definition plus_assoc_Z (a1 b1 c1 a2 b2 c2 : nat) *)
-  (*   : FinType_to_Z (canon_FinType ((a1 + b1) + c1)) (canon_FinType ((a2 + b2) + c2)) = *)
-  (*     FinType_to_Z (canon_FinType (a1 + (b1 + c1))) (canon_FinType (a2 + (b2 + c2))). *)
-  (* Proof. *)
-  (*   apply (ap011 FinType_to_Z); *)
-  (*     apply (ap canon_FinType); apply nat_lemmas.plus_assoc. *)
-  (* Defined. *)
-
   Definition lcancel_canon_fr_compose (a b s t : nat)
     : lcancel_canon_fr (s +' t) a b =
       lcancel_canon_fr s a b @ lcancel_canon_fr t (a +' s) (b +' s) @
                        (ap011 FinType_to_Z (canon_FinType_assoc _ _ _) (canon_FinType_assoc _ _ _)).
   Proof.
     unfold lcancel_canon_fr. unfold lcancel_Z_fr.
-    (* rewrite <- path_Z_fr_pp_r. *) (* rewrite <- path_Z_fr_pp_r. rewrite <- path_Z_fr_pp_r. *)
     repeat rewrite concat_1p.
     rewrite path_Z_fr_compose. rewrite <- path_Z_fr_pp_r.
     rewrite (path_Z_fr_100 _ _ (finsum_id s t)). 
-    
     rewrite <- path_FinType_1. rewrite <- path_FinType_sum.
     rewrite <- path_FinType_1. rewrite <- path_FinType_sum.
     rewrite path_FinType_V. rewrite path_FinType_V.
@@ -399,7 +361,6 @@ Section N1_FinType_set_ind.
     rewrite <- path_FinType_sum.
     rewrite <- path_FinType_compose.
     rewrite <- path_FinType_compose. rewrite <- path_FinType_compose.
-
     assert (finsum_inv_l : forall (m n : nat),
                finsum_inv m n o (finl m n) == inl).
     { intros m n. intro x.
@@ -408,7 +369,6 @@ Section N1_FinType_set_ind.
                finsum_inv m n o (finr m n) == inr).
     { intros m n. intro x.
       exact (eissect (equiv_finsum m n) (inr x)). }
-    
     apply (ap011 (path_Z_fr _)); (apply (ap (path_FinType _ _)));
       apply path_equiv; apply path_arrow; intro x; 
         repeat destruct x as [x | x]; simpl.
@@ -423,7 +383,6 @@ Section N1_FinType_set_ind.
       rewrite finsum_inv_r. reflexivity.
     - rewrite finsum_inv_r. reflexivity.
   Defined.
-
 
 
   Definition lcancel_canon_compose (m n s t : nat)
@@ -443,7 +402,6 @@ Section N1_FinType_set_ind.
     rewrite lcancel_Z_compose.
     repeat refine (_ @ concat_p_pp _ _ _).
     repeat refine (concat_pp_p _ _ _ @ _). apply whiskerL.
-    (* refine (concat_p_pp _ _ _ @ _). *)
     refine (_ @ (whiskerL _ (concat_p_pp _ _ _ ))).
     refine (_ @ concat_pp_p _ _ _).
     assert (H :lcancel_Z (canon_FinType t)
@@ -463,10 +421,6 @@ Section N1_FinType_set_ind.
     refine (_ @ concat_pp_p _ _ _).
     apply moveL_pV.
     apply moveR_Mp.
-    (* assert (ap011_pp_pp : forall {A B C : Type} (f : A -> B -> C) {x x' x'' : A} {y y' y'' : B} *)
-    (*                              (p : x = x') (p' : x' = x'') (q : y = y') (q' : y' = y''), *)
-    (*            ap011 f (p @ p') (q @ q') = ap011 f p q @ ap011 f p' q'). *)
-    (* { intros. destruct p'. destruct p. destruct q'. destruct q. reflexivity. } *)
     rewrite <- ap011_pp_pp. rewrite <- ap011_pp_pp. rewrite <- ap011_pp_pp.
     rewrite ap011_VV. rewrite <- ap011_pp_pp.
     assert (H : forall (A B C : FinType) (e : A <~> B),
@@ -488,23 +442,13 @@ Section N1_FinType_set_ind.
     rewrite <- path_FinType_compose. rewrite <- path_FinType_compose.
     rewrite path_FinType_V. rewrite path_FinType_V.
     rewrite <- path_FinType_compose. rewrite <- path_FinType_compose.
-    (* now they are basically the same *)
     apply (ap011 (ap011 FinType_to_Z));
       apply (ap (path_FinType _ _)); unfold canon_assoc;
         rewrite einv_ee; repeat rewrite ecompose_e_ee;
           reflexivity.
   Defined.
 
-  (* removable? *)
-  (* Definition uncurry_forall {A B : Type} (P : A -> B -> Type) : *)
-  (*   (forall (a : A) (b : B), P a b) -> (forall ab : A*B, P (fst ab) (snd ab)). *)
-  (* Proof. *)
-  (*   intro f. *)
-  (*   intros [a b]. exact (f a b). *)
-  (* Defined. *)
-
-  (* Local Open Scope nat_scope. *)
-
+  (** A recursion principle for [N1 (group_completion_FinType)].  *)
   Definition grp_compl_FinType_rec
              (P : 1-Type)
              (f : FinType -> FinType -> P)
@@ -516,10 +460,6 @@ Section N1_FinType_set_ind.
                  = act_add S A1 A2 @ act_add T (sum_FinType S A1) (sum_FinType S A2))
     : Z -> P.
   Proof.
-    (* set (uncurry_f := *)
-    (*        fun x : FinType * FinType => *)
-    (*          match x with *)
-    (*            (A1, A2) => f A1 A2 end). *)
     srefine (N1_rec' _ _ _ _).
     - simpl. intros [A1 A2]. exact (f A1 A2).
     - simpl. intros [A1 A2]. intro B.
@@ -563,19 +503,17 @@ Section N1_FinType_set_ind.
   Defined.
 
 
-  (* Auxillary stuff for the next result *)
+  (** Auxillary stuff for the next result *)
   Local Definition grp_compl_FinType_ind_set_fintype {a b : nat}
         (P : Z -> Type) {isset_P : forall z : Z, IsHSet (P z)}
         (f : forall (m n : nat),
             P (Fin_to_Z (canon m) (canon n)))
-        (* P (ccl (group_completion_FinType) ((canon_FinType m), (canon_FinType n)))} *)
         (base_change
          : forall (a b : nat) (alpha : canon a = canon a) (betta : canon b = canon b),
             double_pathover (fun (x : Finite_Types a) (y : Finite_Types b) =>  P (Fin_to_Z x y))
                             alpha betta (f a b) (f a b))
     : forall (x : Finite_Types a) (y : Finite_Types b),
       P (Fin_to_Z x y).
-  (* (ccl group_completion_FinType (fin_to_FinType x, fin_to_FinType y)). *)
   Proof.
     apply (deloop_double_ind_set'
              (pFin a) (pFin b)
@@ -588,7 +526,7 @@ Section N1_FinType_set_ind.
     apply base_change.
   Defined.
 
-  (* Set induction for the group completion of FinType *)
+  (** Set induction for the group completion of FinType *)
   Definition grp_compl_FinType_ind_set
              (P : Z -> Type) {isset_P : forall z : Z, IsHSet (P z)}
              (f : forall (m n : nat),
@@ -596,15 +534,7 @@ Section N1_FinType_set_ind.
              (base_change
               : forall (a b : nat) (alpha : canon a = canon a) (betta : canon b = canon b),
                  double_pathover (fun (x : Finite_Types a) (y : Finite_Types b) => P (Fin_to_Z x y))
-
                                  alpha betta (f a b) (f a b))
-             (* transport *)
-             (*   (fun p : Finite_Types a * Finite_Types b => *)
-             (*      uncurry *)
-             (*        (fun (x : Finite_Types a) (y : Finite_Types b) => *)
-             (*           P (ccl group_completion_FinType (fin_to_FinType x, fin_to_FinType y))) p) *)
-             (*   (path_prod (canon a, canon b) (canon a, canon b) alpha betta) *)
-             (*   (f a b) = f a b) *)
              (act_add :
                 (forall (m n : nat) (s : nat),
                     path_over P (lcancel_canon s m n) (f m n) (f (m+s)%nat (n+s)%nat)))
@@ -618,7 +548,6 @@ Section N1_FinType_set_ind.
                    {| card_FinType := b; fintype_of_FinType := y |}))
       with (Fin_to_Z x y).
       revert x y.
-      (* change {| card_FinType := ?a; fintype_of_FinType := ?A |} with (fin_to_FinType A). *)
       apply (@grp_compl_FinType_ind_set_fintype a b P _ f base_change).
     - simpl. unfold monoidal_action_morphism.
       intros [[a A] [b B]] C [S p].  destruct p. simpl.
@@ -646,22 +575,11 @@ Section N1_FinType_set_ind.
                   (lcancel_canon s a b) @ (canon_grpclFinType_sum s s a b)^).
       { unfold lcancel_canon. unfold canon_grpclFinType_sum.
         destruct (ap011 FinType_to_Z (finsum_id s a) (finsum_id s b)).
-        rewrite concat_p1.  rewrite concat_p1. reflexivity.
-
-        (* unfold path_Z. *)
-        (* unfold canon_grpclFinType_sum. (* unfold lcancel_Z. *) *)
-        (* destruct (finsum_id s a). destruct (finsum_id s b). *)
-        (* simpl. rewrite concat_p1. *)
-        (* rewrite (path_is_lcancel  *)
-      (* reflexivity. *) }
-      (* destruct (canon_grpclFinType_sum s s a b). repeat rewrite concat_p1. reflexivity. } *)
+        rewrite concat_p1.  rewrite concat_p1. reflexivity. }
       rewrite H. clear H.
-      
       srapply @path_over_concat; simpl.
       + apply (grp_compl_FinType_ind_set_fintype P f base_change).
-      (* apply f. *)
-      + (* apply path_to_path_over. *)
-        unfold grp_compl_FinType_ind_set_fintype.
+      + unfold grp_compl_FinType_ind_set_fintype.
         rewrite (deloop_double_ind_set_beta_pt').
         rewrite (deloop_double_ind_set_beta_pt').        
         apply act_add.
@@ -683,31 +601,6 @@ Section N1_FinType_set_ind.
                                                      (sum_finite_types (canon s) (canon b)))).
         { intro H. apply H. }
         intros A B [] []. apply path_over_id.
-        (* apply path_over_inv. *)
-        (* change (grp_compl_FinType_ind_set_fintype (base_change := base_change) ?x ?y) with *)
-        (* (uncurry_forall _ (grp_compl_FinType_ind_set_fintype (base_change := base_change)) (x,y)). *)
-        (* apply *)
-        (*   (apd_po *)
-        (*      (uncurry_forall (fun (x : Finite_Types (a + s)) (y : Finite_Types (b + s)) => *)
-        (*                         P (ccl group_completion_FinType (fin_to_FinType x, fin_to_FinType y))) *)
-        (*                      (grp_compl_FinType_ind_set_fintype (base_change := base_change))) *)
-        (*      (a₁ := (sum_finite_types (canon s) (canon a), sum_finite_types (canon s) (canon b))) *)
-        (*      (a₂ := (canon (a + s), canon (b + s)))). *)
-        
-        (* generalize to some version of apd: *)
-        (* cut (forall (A A' : Finite_Types (a + s)) (B B' : Finite_Types (b + s)) *)
-        (*             (p : A = A') (q : B = B'), *)
-        (*         path_over *)
-        (*           P *)
-        (*           (ap (ccl group_completion_FinType) *)
-        (*               (ap *)
-        (*                  (fun x : Finite_Types (a + s) * Finite_Types (b + s) => *)
-        (*                     (fin_to_FinType (fst x), fin_to_FinType (snd x))) *)
-        (*   (path_prod (A, B) (A', B') p q))) *)
-        (*           (grp_compl_FinType_ind_set_fintype (base_change := base_change) A B) *)
-        (*           (grp_compl_FinType_ind_set_fintype (base_change := base_change) A' B')). *)
-        (* { intro H. apply H. } *)
-        (* intros. destruct p. destruct q. simpl. apply path_over_id. *)
   Defined.
 
 
@@ -724,29 +617,6 @@ Section N1_FinType_set_ind.
       apply hprop_P.
   Defined.
   
-
-  (* (* change to only one act? *) *)
-  (* Definition grp_compl_FinType_ind_set *)
-  (*            (P : Z -> hSet) *)
-  (*            (f : forall (m n : nat), *)
-  (*                P (ccl (group_completion_FinType) ((canon_FinType m), (canon_FinType n)))) *)
-  (*            (act_r : *)
-  (*               forall (m n : nat) (σ : canon n = canon n), *)
-  (*                 transport *)
-  (*                   (fun x : (Finite_Types n) => *)
-  (*                      P (ccl (group_completion_FinType) *)
-  (*                             ((canon_FinType m), (fin_to_FinType x)))) σ (f m n) = (f m n)) *)
-  (*            (act_l : *)
-  (*               forall (m n : nat) (σ : canon m = canon m), *)
-  (*                 transport *)
-  (*                   (fun x : (Finite_Types m) => *)
-  (*                      P (ccl (group_completion_FinType) ((fin_to_FinType x), (canon_FinType n)))) σ (f m n) = (f m n)) *)
-  
-  (*            (act_add : *)
-  (*               (forall (m n : nat) (s : nat), *)
-  (*                 transport P (ccleq_canon m n s) (f m n) = f (m+s)%nat (n+s)%nat)) *)
-  (*            : forall z : Z, P z. *)
-
 End N1_FinType_set_ind.
 
 

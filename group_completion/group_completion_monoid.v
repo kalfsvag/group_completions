@@ -534,6 +534,20 @@ Section Integers.
     intro a. simpl.
     destruct a; reflexivity.
   Defined.
+
+  (** We end by noting that the function from [nat] to [Integers] is injective.  *)
+  Definition inj_nat_to_int (a b : nat) (p : nat_to_int a = nat_to_int b) : a = b.
+  Proof.
+    destruct a, b; try reflexivity.
+    - apply Empty_rec.
+      apply (pos_neq_zero p^).
+    - apply Empty_rec.
+      apply (pos_neq_zero p).
+    - apply (ap S).
+      refine ((pred_succ_nat_pos _)^ @ _ @ pred_succ_nat_pos _).
+      apply (ap pred_pos_to_nat). apply pos_injective. exact p.
+  Defined.
+
 End Integers.
 
 

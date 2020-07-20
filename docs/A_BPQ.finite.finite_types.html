@@ -20,12 +20,26 @@
 
 <div class="code">
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT</span>.<br/>
+
+<br/>
 <span class="id" type="var">From</span> <span class="id" type="var">A_BPQ</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="A_BPQ.sigma_lemmas.html#"><span class="id" type="library">sigma_lemmas</span></a> <a class="idref" href="A_BPQ.equiv_lemmas.html#"><span class="id" type="library">equiv_lemmas</span></a> <a class="idref" href="A_BPQ.conn_ptype.html#"><span class="id" type="library">conn_ptype</span></a> <a class="idref" href="A_BPQ.background.categories.html#"><span class="id" type="library">categories</span></a>.<br/>
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">UnivalenceAxiom</span>.<br/>
 
 <br/>
-<span class="id" type="keyword">Notation</span> <a name=":242"><span class="id" type="notation">"</span></a>a +' b" := (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Peano.html#plus"><span class="id" type="definition">Peano.plus</span></a> <span class="id" type="var">b</span> <span class="id" type="var">a</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 50).<br/>
-<span class="id" type="keyword">Notation</span> <a name=":361"><span class="id" type="notation">"</span></a>'fintype'" := <span class="id" type="definition">Fin</span>.<br/>
+</div>
+
+<div class="doc">
+Reverse the notation of plus so that n.+1 = n+1 by definition. 
+</div>
+<div class="code">
+<span class="id" type="keyword">Notation</span> <a name=":210"><span class="id" type="notation">"</span></a>a +' b" := (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Peano.html#plus"><span class="id" type="definition">Peano.plus</span></a> <span class="id" type="var">b</span> <span class="id" type="var">a</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 50).<br/>
+</div>
+
+<div class="doc">
+Change notation since "Fin" is something else in the thesis. 
+</div>
+<div class="code">
+<span class="id" type="keyword">Notation</span> <a name=":331"><span class="id" type="notation">"</span></a>'fintype'" := <span class="id" type="definition">Fin</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Definition</span> <a name="equiv_fin2_bool"><span class="id" type="definition">equiv_fin2_bool</span></a> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">2</span></a> <span class="id" type="notation">&lt;~&gt;</span> <span class="id" type="inductive">Bool</span>.<br/>
@@ -42,6 +56,12 @@
 <span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+The type of decidable propositions is finite 
+</div>
+<div class="code">
 <span class="id" type="keyword">Global Instance</span> <a name="finite_dprop"><span class="id" type="instance">finite_dprop</span></a> : <span class="id" type="class">Finite</span> <span class="id" type="record">DProp</span>.<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">finite_equiv'</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">2</span></a>) <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
@@ -50,6 +70,12 @@
 <span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+Finite types are sets 
+</div>
+<div class="code">
 <span class="id" type="keyword">Definition</span> <a name="isset_fintype"><span class="id" type="definition">isset_fintype</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) : <span class="id" type="abbreviation">IsHSet</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a>).<br/>
 <span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span>.<br/>
@@ -76,6 +102,12 @@
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Equiv_Finsum"><span class="id" type="section">Equiv_Finsum</span></a>.<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" type="var">fintype</span></span> preserves sum  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="finl"><span class="id" type="definition">finl</span></a> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">(</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">+</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">)</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span>.<br/>
@@ -94,20 +126,12 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="finsum"><span class="id" type="definition">finsum</span></a> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::type_scope:x_'+'_x"><span class="id" type="notation">+</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">(</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">+</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">)</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">i</span> | <span class="id" type="var">j</span>].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#finl"><span class="id" type="definition">finl</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">i</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#finr"><span class="id" type="definition">finr</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">j</span>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="finsum_succ"><span class="id" type="definition">finsum_succ</span></a> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>)<br/>
@@ -153,8 +177,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="constructor">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#finsum"><span class="id" type="definition">finsum</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#m"><span class="id" type="variable">m</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a>) <a class="idref" href="A_BPQ.finite.finite_types.html#isequiv_finsum"><span class="id" type="instance">isequiv_finsum</span></a>.<br/>
 
 <br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="inj_finl"><span class="id" type="lemma">inj_finl</span></a> {<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>} (<span class="id" type="var">i</span> <span class="id" type="var">j</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="A_BPQ.finite.finite_types.html#finl"><span class="id" type="definition">finl</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#m"><span class="id" type="variable">m</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#i"><span class="id" type="variable">i</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.finite.finite_types.html#finl"><span class="id" type="definition">finl</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#m"><span class="id" type="variable">m</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#j"><span class="id" type="variable">j</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#i"><span class="id" type="variable">i</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.finite.finite_types.html#j"><span class="id" type="variable">j</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
@@ -169,14 +191,16 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="definition">path_sum_inr</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">m</span></a>)).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="definition">equiv_inj</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#finsum"><span class="id" type="definition">finsum</span></a> <span class="id" type="var">m</span> <span class="id" type="var">n</span>)). <span class="id" type="tactic">exact</span> <span class="id" type="var">p</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
-
-<br/>
-
-<br/>
 <span class="id" type="keyword">End</span> <a class="idref" href="A_BPQ.finite.finite_types.html#Equiv_Finsum"><span class="id" type="section">Equiv_Finsum</span></a>.<br/>
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Finite_Types"><span class="id" type="section">Finite_Types</span></a>.<br/>
+</div>
+
+<div class="doc">
+The type of finite types of cardinality n  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="Finite_Types"><span class="id" type="definition">Finite_Types</span></a>  (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) :=<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">{</span></a><span class="id" type="var">A</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">:</span></a> <span class="id" type="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">&amp;</span></a> <span class="id" type="definition">merely</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a>)<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">}</span></a>.<br/>
 
@@ -187,9 +211,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="constructor">Build_Finite</span> <span class="id" type="var">A</span><span class="id" type="notation">.1</span> <span class="id" type="var">n</span> <span class="id" type="var">A</span><span class="id" type="notation">.2</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+Canonical finite types 
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Global Instance</span> <a name="canon"><span class="id" type="instance">canon</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) : <span class="id" type="class">IsPointed</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="definition">Finite_Types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a>) := <span class="id" type="notation">(</span><a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">n</span></a><span class="id" type="notation">;</span> <span class="id" type="constructor">tr</span> <span class="id" type="definition">equiv_idmap</span><span class="id" type="notation">)</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+A detachable subset of a finite set has smaller cardinal 
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="leq_card_subset"><span class="id" type="definition">leq_card_subset</span></a> {<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>} (<span class="id" type="var">A</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="definition">Finite_Types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a>) (<span class="id" type="var">P</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="keyword">Type</span>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">isprop_P</span> : <span class="id" type="keyword">forall</span> <span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a><span class="id" type="notation">,</span> <span class="id" type="abbreviation">IsHProp</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#P"><span class="id" type="variable">P</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#a"><span class="id" type="variable">a</span></a>)) (<span class="id" type="var">isdec_P</span> : <span class="id" type="keyword">forall</span> <span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a><span class="id" type="notation">,</span> <span class="id" type="class">Decidable</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#P"><span class="id" type="variable">P</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#a"><span class="id" type="variable">a</span></a>)) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="projection">fcard</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">{</span></a><span class="id" type="var">a</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">:</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">&amp;</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#P"><span class="id" type="variable">P</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#a"><span class="id" type="variable">a</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">}</span></a> <span class="id" type="notation">&lt;=</span> <span class="id" type="projection">fcard</span> <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a>)%<span class="id" type="var">nat</span>.<br/>
@@ -221,16 +257,16 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="notation">oE</span> <span class="id" type="definition">equiv_functor_sum'</span> <span class="id" type="var">fA</span> <span class="id" type="var">fB</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="A_BPQ.finite.finite_types.html#equiv_finsum"><span class="id" type="definition">equiv_finsum</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
-
-<br/>
-
-<br/>
 <span class="id" type="keyword">End</span> <a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="section">Finite_Types</span></a>.<br/>
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Path_Finite_Types"><span class="id" type="section">Path_Finite_Types</span></a>.<br/>
+</div>
 
-<br/>
+<div class="doc">
+Describing path types in <span class="inlinecode"><span class="id" type="var">Finite_Types</span></span>   
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="path_finite_types"><span class="id" type="definition">path_finite_types</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) (<span class="id" type="var">s</span> <span class="id" type="var">t</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="definition">Finite_Types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">(</span></a><a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;:=  <span class="id" type="definition">path_sigma_hprop</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="notation">o</span> <span class="id" type="definition">path_universe_uncurried</span>.<br/>
@@ -275,10 +311,6 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="equiv_path_finite_types"><span class="id" type="definition">equiv_path_finite_types</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) (<span class="id" type="var">s</span> <span class="id" type="var">t</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="definition">Finite_Types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="notation">(</span><a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a><span class="id" type="notation">)</span> <span class="id" type="notation">&lt;~&gt;</span> <span class="id" type="notation">(</span><a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a><span class="id" type="notation">)</span><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" type="constructor">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#path_finite_types"><span class="id" type="definition">path_finite_types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a>) (<a class="idref" href="A_BPQ.finite.finite_types.html#isequiv_path_finite_types"><span class="id" type="instance">isequiv_path_finite_types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#t"><span class="id" type="variable">t</span></a>).<br/>
-
-<br/>
-
-<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="equiv_path_finite_types'"><span class="id" type="definition">equiv_path_finite_types'</span></a> (<span class="id" type="var">s</span> <span class="id" type="var">t</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">{</span></a><span class="id" type="var">A</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">:</span></a> <span class="id" type="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">&amp;</span></a> <span class="id" type="class">Finite</span> <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">}</span></a>) :<br/>
@@ -346,8 +378,6 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="path_finite_types_compose"><span class="id" type="lemma">path_finite_types_compose</span></a> (<span class="id" type="var">m</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>) (<span class="id" type="var">A</span> <span class="id" type="var">B</span> <span class="id" type="var">C</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#Finite_Types"><span class="id" type="definition">Finite_Types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#m"><span class="id" type="variable">m</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e1</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#A"><span class="id" type="variable">A</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#B"><span class="id" type="variable">B</span></a>) (<span class="id" type="var">e2</span> : <a class="idref" href="A_BPQ.finite.finite_types.html#B"><span class="id" type="variable">B</span></a> <span class="id" type="notation">&lt;~&gt;</span> <a class="idref" href="A_BPQ.finite.finite_types.html#C"><span class="id" type="variable">C</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="A_BPQ.finite.finite_types.html#path_finite_types"><span class="id" type="definition">path_finite_types</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#m"><span class="id" type="variable">m</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<a class="idref" href="A_BPQ.finite.finite_types.html#e2"><span class="id" type="variable">e2</span></a> <span class="id" type="notation">oE</span> <a class="idref" href="A_BPQ.finite.finite_types.html#e1"><span class="id" type="variable">e1</span></a>) <span class="id" type="notation">=</span><br/>
@@ -370,8 +400,6 @@
 &nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <a class="idref" href="A_BPQ.finite.finite_types.html#equiv_path_finite_types"><span class="id" type="definition">equiv_path_finite_types</span></a>.<br/>
 &nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="instance">istrunc_equiv</span>.<br/>
 <span class="id" type="keyword">Qed</span>.<br/>
-
-<br/>
 
 <br/>
 <span class="id" type="keyword">Definition</span> <a name="sum_finite_types_canon"><span class="id" type="definition">sum_finite_types_canon</span></a> {<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>} :<br/>

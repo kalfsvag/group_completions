@@ -217,7 +217,9 @@ Section deloop_rec.
 
 End deloop_rec.
 
+
 Section universal.
+  (** Showing a universal principle for connected pointed types. *)
   Context (X : Conn_pType).
   Context (Y : Type) `{istrunc_y : IsTrunc 1 Y}.
 
@@ -298,18 +300,9 @@ Section universal.
 End universal.
 
 Section pointed_rec.
+  (** Reformulate for pointed maps.  *)
   Context (X : Conn_pType).
-  
   Context (Y : pType) {istrunc_y : IsTrunc 1 Y}.
-  
-  (* Record p1Type := *)
-  (*   {onetype_of :> 1-Type ; *)
-  (*    ispointed_1type_of : IsPointed onetype_of}. *)
-  (* Global Instance ispointed_1type_of' (Y : p1Type) : IsPointed Y *)
-  (*   := ispointed_1type_of Y. *)
-  (* Definition ptype_of (Y : p1Type) := Build_pType Y _. *)
-  (* Coercion ptype_of : p1Type >-> pType. *)
-  (* Context (Y : p1Type). *)
 
   Definition equiv_deloop_prec :
     {f : loops X -> loops Y & forall α ω : loops X, f (α @ ω) = f α @ f ω} <~> pMap X Y.

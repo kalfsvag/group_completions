@@ -3,7 +3,8 @@ Require Import HoTT.
 From A_BPQ Require Import
      conn_ptype finite_types monoids_and_groups delooping permutations sign fintype_monoidal.
 
-(** First we name a few results we already have proven. *)
+(** Here we define the function [Bsign : FinType m -> FinType 2] induces by the homomorphism [sign : Hom (SymGrp m) (SymGrp 2)]  *)
+
 Definition iso_path_finite_types (m : nat)
   : Isomorphism (SymGrp m) (loopGroup (Finite_Types m) (canon m)).
 Proof.

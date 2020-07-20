@@ -2,22 +2,16 @@ Require Import HoTT.
 
 From A_BPQ
      Require Import equiv_lemmas sigma_lemmas finite_types finite.permutations monoidal_1type.
-     (* group_complete_1type. *)
-     (* pointed_lemmas *)
-     (* nat_lemmas trunc_lemmas  *)
-     (* monoidal_1type *)
 
-
-(*Defining the monoidal 1-type of finite sets and isomorphisms*)
+(** Defining the monoidal 1-type of finite sets*)
 Section FinType.
     
-  (*This type corresponds to the category of finite sets and isomorphisms*)
+  (** This type is equivalent to the path groupoid of the category BSym
+of finite sets and isomorphisms*)
   Record FinType :=
     {card_FinType : nat ; fintype_of_FinType :> Finite_Types card_FinType}.
     (* {m : nat & Finite_Types m}. *)
     (* { S : Type & Finite S}. *)
-  (* Definition type_of_fin : FinType -> Type := (fun A => A.2.1). *)
-  (* Coercion type_of_fin : FinType  >-> Sortclass. *)
 
   Definition issig_FinType :
     FinType <~> {A : Type & Finite A}.
@@ -45,7 +39,7 @@ Section FinType.
     : Finite_Types n -> FinType
     := Build_FinType n.
 
-  (*Canonical objects in FinType*)
+  (** Canonical objects in FinType*)
   Definition canon_FinType (n : nat) : FinType := fin_to_FinType (canon n).
 
   Lemma finite_types_eqcard {m n : nat} (A : Finite_Types m) (B : Finite_Types n) :
@@ -57,51 +51,12 @@ Section FinType.
     exact (fB oE e oE (equiv_inverse fA)).
   Qed.
 
-  (* in finite_lemmas: *)
-  (* (* Describing the path type of FinType *) *)
-  (* Definition path_FinType {A B : FinType} : A <~> B -> A = B. *)
-  (* Proof. *)
-  (*   refine ((equiv_ap issig_FinType A B)^-1 o _). *)
-  (*   destruct A as [m [A eA]]. destruct B as [n [B eB]]. simpl. *)
-  (*   exact (equiv_path_finite_types' (A; finite_finite_type (A; eA)) (B; finite_finite_type (B; eB))). *)
-  (* Defined. *)
-
-  (* Definition path_FinType_inv {A B : FinType} : A = B -> A <~> B. *)
-  (* Proof. *)
-  (*   intros []. exact equiv_idmap. *)
-  (* Defined. *)
-
-  (* Global Instance isequiv_path_FinType {A B : FinType} : IsEquiv (@path_FinType A B). *)
-  (* Proof. *)
-  (*   srapply @isequiv_adjointify. *)
-  (*   - exact path_FinType_inv. *)
-  (*   - intros []. simpl. *)
-  (*     unfold path_FinType. *)
-
-  (* Definition path_FinType (A B : FinType) : *)
-  (*   (A <~> B) -> A = B. *)
-  (* Proof. *)
-  (*   refine (equiv_inverse (equiv_ap issig_FinType A B) o _). *)
-  (*   intro e. *)
-  (*   apply equiv_path_finite_types'. exact e. *)
-  (* Defined. *)
-
-  (* Definition path_FinType_id (A : FinType) : *)
-  (*   path_FinType A A (equiv_idmap) = idpath. *)
-  (* Proof. *)
-  (*   unfold path_FinType. *)
-  (*   apply moveR_equiv_V. simpl. *)
-  (*   apply (moveR_equiv_M). simpl. *)
-  (*   apply (moveR_equiv_M). simpl. reflexivity. *)
-  (* Defined. *)
-
+  (** Describing the path types in FinType.  *)
   Definition inv_path_FinType {A B : FinType}
     : A = B -> A <~> B.
   Proof.
     intros []. exact equiv_idmap.
   Defined.
-
-
 
   Definition equiv_path_FinType (A B : FinType) :
     (A <~> B) <~> A = B.
@@ -119,30 +74,6 @@ Section FinType.
 
   Definition path_FinType (A B : FinType) : A <~> B -> A = B
     := equiv_path_FinType A B.
-
-    
-  (* Proof. *)
-  (*   destruct A as [m A]. destruct B as [n B]. simpl. *)
-  (*   intro e. *)
-  (*   destruct (finite_types_eqcard A B e). *)
-  (*   apply (path_sigma (fun m : nat => Finite_Types m) (m; A) (m;B) idpath). simpl. *)
-  (*   apply path_finite_types. *)
-  (*   exact e. *)
-  (* Defined. *)
-
-
-  (* Definition isequiv_path_FinType {A B : FinType} : IsEquiv (@path_FinType A B). *)
-  (* Proof. *)
-  (*   srapply @isequiv_adjointify. *)
-  (*   - intros []. exact equiv_idmap. *)
-  (*   - intros []. *)
-  (*     unfold path_FinType. *)
-  (*     assert (H : (finite_types_eqcard (pr2 A) (pr2 A) equiv_idmap) = idpath). *)
-  (*     { apply hset_nat. } destruct H. *)
-  (*     destruct . *)
-
-
-  (* shorter proof than in finite_lemmas *)
 
   Definition path_FinType_1 (A : FinType) :
     path_FinType _ _ (equiv_idmap A) = idpath.
@@ -167,8 +98,6 @@ Section FinType.
   Definition pft_to_pbs {m : nat} {A B : Finite_Types m}
     : A = B -> (fin_to_FinType A) = (fin_to_FinType B) 
     := ap (fin_to_FinType).
-    (* : A = B -> (m;A) = (m;B) :> FinType *)
-    (* := fun p => path_sigma Finite_Types (m; A) (m; B) idpath p. *)
 
   Definition path_FinType_fix {m : nat} (A B : Finite_Types m) (e : A <~> B)
     : pft_to_pbs (path_finite_types m A B e)
@@ -197,12 +126,9 @@ Section FinType.
     apply equiv_isequiv.
   Qed.
 
-
-  (* (* path_FinType respects composition *) *)  
+  (** path_FinType respects composition *)  
   Definition path_FinType_compose {A B C : FinType} (e1 : A <~> B) (e2 : B <~> C) :
     path_FinType _ _ (e2 oE e1) = path_FinType _ _ e1 @ path_FinType _ _ e2.
-  Proof.
-    (* path_FinType e2 @ path_FinType e1 = path_FinType (e1 oE e2). *)
   Proof.
     refine
       (ap011 (fun g1 g2 => path_FinType A C (g2 oE g1))
@@ -223,34 +149,8 @@ Section FinType.
 
   Local Notation "S1 ⊕ S2" := (sum_FinType S1 S2) (at level 50, no associativity).
 
-  (* (* symmetry *) *)
-  (* Definition path_FinType_twist (a b : nat) : *)
-  (*   (@path_FinType *)
-  (*     (sum_FinType (canon_FinType a) (canon_FinType b)) *)
-  (*     (sum_FinType (canon_FinType b) (canon_FinType a)) *)
-  (*     (equiv_sum_symm (canon_FinType a) (canon_FinType b))) *)
-  (*   @ *)
-  (*     @path_FinType *)
-        
-  (*       (sum_FinType (canon_FinType b) (canon_FinType a)) *)
-  (*       (canon_FinType _) *)
-  (*       (equiv_finsum b a) *)
-  (*   = *)
-  (*   @path_FinType *)
-  (*     (sum_FinType (canon_FinType a) (canon_FinType b)) *)
-  (*     (canon_FinType _) *)
-  (*     (equiv_finsum a b) *)
-  (*   @ *)
-  (*   ap canon_FinType (nat_plus_comm b a). *)
-  (* Proof. *)
-  (*   induction a. *)
-  (*   - simpl. *)
-  (*     induction b. *)
-  (*     + simpl. *)
-  (*       refine ((path_FinType_compose _ _ )^ @ _). *)
-        
 
-  (* path_FinType behaves well with respect to sum *)
+  (** path_FinType behaves well with respect to sum *)
   Lemma path_FinType_sum (A1 A2 B1 B2 : FinType)
         (e1 : A1 <~> B1) (e2  : A2 <~> B2)
     : path_FinType (sum_FinType A1 A2) (sum_FinType B1 B2) (e1 +E e2)
@@ -269,12 +169,13 @@ Section FinType.
   
   
   Definition finsum_id (m n : nat) :
-    sum_FinType (canon_FinType m) (canon_FinType n) = canon_FinType (n+m) :=
-    path_FinType (sum_FinType (canon_FinType m) (canon_FinType n)) (canon_FinType (n+m)) (equiv_finsum m n).
+    sum_FinType (canon_FinType m) (canon_FinType n) = canon_FinType (n+m)
+    :=  path_FinType (sum_FinType (canon_FinType m) (canon_FinType n)) (canon_FinType (n+m))
+                     (equiv_finsum m n).
 
   Definition finsum_id_fix (m n : nat)
-    : sum_finite_types (canon m) (canon n) = canon (n + m) :=
-    path_finite_types _ (sum_finite_types (canon m) (canon n)) (canon (n+m)) (equiv_finsum m n).
+    : sum_finite_types (canon m) (canon n) = canon (n + m)
+    := path_finite_types _ (sum_finite_types (canon m) (canon n)) (canon (n+m)) (equiv_finsum m n).
 
 
 
@@ -282,7 +183,6 @@ Section FinType.
              (alpha : canon_FinType a <~> canon_FinType a)
              (betta : canon_FinType b <~> canon_FinType b)
     : path_FinType (canon_FinType (a +' b)) (canon_FinType (a +' b)) (block_sum alpha betta) =
-
       (finsum_id a b)^ @ (ap011 sum_FinType (path_FinType _ _ alpha) (path_FinType _ _ betta) @
                                 finsum_id a b).
   Proof.
@@ -293,7 +193,6 @@ Section FinType.
     reflexivity.
   Defined.
 
-  (* rename the following and define them using the previous lemma *)
   Definition natural_path_FinType_l {S1 S2 S3: FinType} (e : S1 <~> S2)
     : ap (fun x : FinType => x ⊕ S3) (path_FinType _ _ e)
     = path_FinType (S1 ⊕ S3) (S2 ⊕ S3) (equiv_functor_sum_r (B := S3) e).
@@ -319,9 +218,9 @@ Section FinType.
     apply (ap (path_FinType _ _)).
     apply path_equiv. apply path_arrow. intros [s1 | s2]; reflexivity.
   Qed.
+
   
-  (*The monoidal structure on FinType*)
-  
+  (** The monoidal structure on FinType*)
   Definition FinType_assoc : associative sum_FinType.
   Proof.
     intros S1 S2 S3.
@@ -410,7 +309,7 @@ Section FinType.
   Defined.
 
 
-  (* The next two lemmas should be moved *)
+  (** A couple auxiliary lemmas. *)
   Definition isinj_functor_sum {A1 A2 B1 B2 : Type} (f1 f1' : A1 -> B1) (f2 f2': A2 -> B2) :
     functor_sum f1 f2 = functor_sum f1' f2' -> (f1 = f1') * (f2 = f2').
   Proof.
@@ -430,7 +329,8 @@ Section FinType.
     refine (fst ((isinj_functor_sum e1 e2 idmap idmap) _)).
     apply (path_equiv^-1 p).
   Defined.    
-  
+
+  (** FinType has left cancellation  *)
   Definition FinType_lcancel (S1 S2 : FinType) (p q : S1 = S2) (T : FinType) :
     ap (fun x => x ⊕ T) p = ap (fun x => x ⊕ T) q -> p = q.
   Proof.
@@ -446,7 +346,7 @@ Section FinType.
       - apply inverse. apply eisretr.
   Defined.
 
-  
+  (** FinType is a symmetric monoidal category  *)
   Definition FinType_smoncat : Symmetric_Monoidal_1Type :=
     Build_Symmetric_Monoidal_1Type
       (BuildTruncType 1 FinType) sum_FinType (canon_FinType 0) FinType_assoc
@@ -456,14 +356,8 @@ End FinType.
 
 From A_BPQ Require Import monoids_and_groups.
 Section Assoc_Nat_to_Assoc_FinType.
-  (* Now we prove that associativity of sum_FinType on canonical finite types correspond to*)
-  (* associativity of natural numbers. *)
-  (* move to better place? *)
-  (* Lemma ap_pr1_assoc (A B C : FinType) *)
-  (*   : (ap pr1 (FinType_assoc A B C))^ = (plus_assoc (pr1 C) (pr1 B) (pr1 A)). *)
-  (* Proof. *)
-  (*   apply hset_nat. *)
-  (* Qed. *)
+  (** Now we prove that associativity of sum_FinType on canonical finite types correspond to
+   associativity of natural numbers. *)
 
   Definition equiv_sum_assoc_Fin (j k l : nat)
     : (Fin l + Fin k) + Fin j <~>
@@ -507,17 +401,6 @@ Section Assoc_Nat_to_Assoc_FinType.
     apply (equiv_functor_sum_l (equiv_finsum _ _)).
   Defined.
 
-  (* Definition canon_assoc (a b c : nat) *)
-  (*   : Fin ((a + b) + c ) <~> Fin (a + (b + c)). *)
-  (* Proof. *)
-  (*   refine (_ oE (equiv_finsum _ _)^-1). *)
-  (*   refine (_ oE (equiv_functor_sum_l (equiv_finsum _ _))^-1). *)
-  (*   refine (_ oE ((equiv_sum_assoc _ _ _))^-1). *)
-  (*   refine (equiv_finsum _ _ oE _). *)
-  (*   apply (equiv_functor_sum_r (equiv_finsum _ _)). *)
-  (* Defined. *)
-
-  
   Definition equiv_functor_sum_r_compose
     : forall (A A1 A2 B : Type)
              (e1 : A <~> A1)
@@ -529,7 +412,6 @@ Section Assoc_Nat_to_Assoc_FinType.
     intros [x | x]; reflexivity.
   Defined.
 
-  (* move *)
   Definition equiv_finsum_succ (a b : nat)
     : equiv_finsum a (b.+1) = equiv_functor_sum_r (equiv_finsum a b) oE (equiv_sum_assoc' _ _ _)^-1.
   Proof.
@@ -537,6 +419,7 @@ Section Assoc_Nat_to_Assoc_FinType.
     intro x. simpl. apply finsum_succ.
   Defined.
 
+  (** More auxiliary results  *)
   Definition functor_sum_assoc {A B C A' B' C' : Type} (f : A -> A') (g : B -> B') (h : C -> C')
     : functor_sum (functor_sum f g) h  o (sum_assoc_inv _ _ _) ==
       sum_assoc_inv _ _ _  o (functor_sum f (functor_sum g h)).
@@ -558,8 +441,7 @@ Section Assoc_Nat_to_Assoc_FinType.
     intros [a | b]; reflexivity.
   Defined.
 
-  
-  Definition equiv_functor_sum_r_V (A A' B : Type) (e : A <~> A')
+    Definition equiv_functor_sum_r_V (A A' B : Type) (e : A <~> A')
     : equiv_functor_sum_r (B := B) (e^-1) = equiv_inverse (equiv_functor_sum_r e).
   Proof.
     apply path_equiv. reflexivity.
@@ -595,43 +477,8 @@ Section Assoc_Nat_to_Assoc_FinType.
   Proof.
     apply path_FinType. exact (canon_assoc a b c).
   Defined.
-
-  (* Definition canon_FinType_succ (a : nat) *)
-  (*   : canon_FinType (a.+1) = sum_FinType (canon_FinType a) (canon_FinType 1). *)
-  (* Proof. *)
-  (*   apply path_FinType. apply equiv_functor_sum_l. *)
-  (*   simpl. apply equiv_inverse. *)
-  (*   apply sum_empty_l. *)
-  (* Defined. *)
-
-  (* Definition canon_FinType_assoc_succ (a b c : nat) *)
-  (*   : canon_FinType_assoc (a.+1) b c *)
-  (*     = canon_FinType_succ _ @ ap (fun x => sum_FinType x (canon_FinType 1)) (canon_FinType_assoc a b c) *)
-  (*                         @ (canon_FinType_succ _)^. *)
-  (* Proof. *)
-  (*   unfold canon_FinType_assoc. unfold canon_FinType_succ. *)
-  (*   apply moveR_Vp. apply moveR_Vp. *)
-  (*   unfold sum_canon_FinType.     *)
-  (*   repeat rewrite path_FinType_V. simpl. *)
-  (*   rewrite natural_path_FinType_l. rewrite natural_path_FinType_l. *)
-  (*   rewrite natural_path_FinType_r. rewrite natural_path_FinType_r. *)
-  (*   rewrite path_FinType_V.  *)
-  (*   repeat rewrite <- path_FinType_compose. *)
-  (*   rewrite natural_path_FinType_l. repeat rewrite <- path_FinType_compose. *)
     
-  (*   apply (ap path_FinType).  *)
-  (*   apply path_equiv. apply path_arrow. *)
-  (*   intros [x | [x | [x | x]]]; simpl. *)
-  (*   - apply (ap inl). *)
-  (*     unfold finsum.  *)
-  (*   unfold canon_FinType in x. unfold canon in x.  *)
-  (*   simpl in x. *)
-    
-    
-    
-    
-    
-  
+  (** Associativity in nat and FinType correspond  *)
   Definition eq_canon_FinType_assoc (a b c : nat)
     : canon_FinType_assoc a b c = ap canon_FinType (nat_plus_assoc a b c)^.
   Proof.

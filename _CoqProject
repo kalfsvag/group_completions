@@ -1,4 +1,4 @@
--R . "A_BPQ" COQC = hoqc COQDEP = hoqdep
+-R . "A_BPQ" COQC = hoqc COQDEP = coqdep
 sigma_lemmas.v
 equiv_lemmas.v
 path_lemmas.v
@@ -26,7 +26,3 @@ finite/fintype_monoidal.v
 finite/Bsgn.v
 finite/grp_complete_fintype.v
 finite/fundamental_group_grpcompl.v
-
-
-
-

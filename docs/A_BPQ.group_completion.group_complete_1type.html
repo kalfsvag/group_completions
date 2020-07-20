@@ -21,22 +21,27 @@
 <div class="code">
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT</span>.<br/>
 <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT.Categories</span> <span class="id" type="library">Category</span>.<br/>
-<span class="id" type="var">From</span> <span class="id" type="var">A_BPQ</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="A_BPQ.background.categories.html#"><span class="id" type="library">categories</span></a> <a class="idref" href="A_BPQ.sigma_lemmas.html#"><span class="id" type="library">sigma_lemmas</span></a>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">A_BPQ</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="A_BPQ.background.categories.html#"><span class="id" type="library">categories</span></a> <a class="idref" href="A_BPQ.sigma_lemmas.html#"><span class="id" type="library">sigma_lemmas</span></a> <a class="idref" href="A_BPQ.path_lemmas.html#"><span class="id" type="library">path_lemmas</span></a>.<br/>
 <span class="id" type="var">From</span> <span class="id" type="var">A_BPQ</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#"><span class="id" type="library">monoidal_1type</span></a>.<br/>
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Localize"><span class="id" type="section">Localize</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+if we have a monoidal action with left_cancellation, we can build a category with objects X and
+       arrows  <span class="inlinecode">{<span class="id" type="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">M</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" type="var">m</span></span> <span class="inlinecode">⊗</span> <span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">m</span></span> <span class="inlinecode">⊗</span> <span class="inlinecode"><span class="id" type="var">y</span>}</span> 
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="monoidal_action_morphism"><span class="id" type="definition">monoidal_action_morphism</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>) :<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="keyword">Type</span>) := <span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">{</span></a><span class="id" type="var">s</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">:</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">&amp;</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#y"><span class="id" type="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Specif.html#::type_scope:'{'_x_':'_x_'&'_x_'}'"><span class="id" type="notation">}</span></a>.<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Instance</span> <a name="isset_mon_morphism"><span class="id" type="instance">isset_mon_morphism</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>) (<span class="id" type="var">x1</span> <span class="id" type="var">x2</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a>)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;:<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="abbreviation">IsHSet</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#monoidal_action_morphism"><span class="id" type="definition">monoidal_action_morphism</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x1"><span class="id" type="variable">x1</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x2"><span class="id" type="variable">x2</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="abbreviation">IsHSet</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#monoidal_action_morphism"><span class="id" type="definition">monoidal_action_morphism</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x1"><span class="id" type="variable">x1</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x2"><span class="id" type="variable">x2</span></a>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#monoidal_action_morphism"><span class="id" type="definition">monoidal_action_morphism</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s1</span> <span class="id" type="var">p1</span>] [<span class="id" type="var">s2</span> <span class="id" type="var">p2</span>].<br/>
@@ -60,8 +65,6 @@
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="monoidal_action_cat"><span class="id" type="definition">monoidal_action_cat</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a>)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="record">PreCategory</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="definition">Build_PreCategory</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#monoidal_action_morphism"><span class="id" type="definition">monoidal_action_morphism</span></a> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">a</span>) <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> =&gt; <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#isset_mon_morphism"><span class="id" type="instance">isset_mon_morphism</span></a> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">a</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x1"><span class="id" type="variable">x1</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x2"><span class="id" type="variable">x2</span></a> <span class="id" type="var">left_cancel</span>)).<br/>
@@ -95,12 +98,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">moveR_Vp</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="notation">@</span> <span class="id" type="notation">(</span><span class="id" type="definition">concat_p1</span> <span class="id" type="var">_</span><span class="id" type="notation">)^</span>). <span class="id" type="tactic">apply</span> <span class="id" type="definition">inverse</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_act_triangle2"><span class="id" type="projection">montype_act_triangle2</span></a>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="include_in_monoidal_action_cat"><span class="id" type="definition">include_in_monoidal_action_cat</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>)<br/>
@@ -173,44 +170,6 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="left_cancel_localize"><span class="id" type="definition">left_cancel_localize</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#act_on_prod"><span class="id" type="definition">act_on_prod</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#act_on_self"><span class="id" type="definition">act_on_self</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>) <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#act"><span class="id" type="variable">act</span></a>).<br/>
@@ -231,8 +190,7 @@
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="localize_action"><span class="id" type="definition">localize_action</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="record">PreCategory</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="record">PreCategory</span>.<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#monoidal_action_cat"><span class="id" type="definition">monoidal_action_cat</span></a> <span class="id" type="var">M</span> (<span class="id" type="constructor">BuildTruncType</span> 1 (<span class="id" type="var">M</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::type_scope:x_'*'_x"><span class="id" type="notation">*</span></a><span class="id" type="var">X</span>)) (<a class="idref" href="A_BPQ.background.monoidal_1type.html#act_on_prod"><span class="id" type="definition">act_on_prod</span></a> <span class="id" type="var">M</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#act_on_self"><span class="id" type="definition">act_on_self</span></a> <span class="id" type="var">M</span>) <span class="id" type="var">act</span>)).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel_localize"><span class="id" type="definition">left_cancel_localize</span></a>. <span class="id" type="tactic">apply</span> <span class="id" type="var">left_cancel</span>.<br/>
@@ -251,10 +209,15 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="group_completion"><span class="id" type="definition">group_completion</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
+</div>
+
+<div class="doc">
+The group completion of a monoidal category. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span class="id" type="record">PreCategory</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="record">PreCategory</span> :=<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#localize_action"><span class="id" type="definition">localize_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#act_on_self"><span class="id" type="definition">act_on_self</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>) <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>.<br/>
 
 <br/>
@@ -275,9 +238,15 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+Given a : M, get an endofunctor +a on the group completion  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="act_on_grp_compl"><span class="id" type="definition">act_on_grp_compl</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="record">Functor</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion"><span class="id" type="definition">group_completion</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion"><span class="id" type="definition">group_completion</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="record">Functor</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="constructor">Build_Functor</span>.<br/>
@@ -315,12 +284,12 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
 
-<br/>
-
-<br/>
-
-<br/>
+<div class="doc">
+The action preserves the monoid multiplication.  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="act_on_grp_compl_mult"><span class="id" type="definition">act_on_grp_compl_mult</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">a</span> <span class="id" type="var">b</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>) (<span class="id" type="var">x</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::type_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>)<br/>
@@ -334,25 +303,15 @@
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
 
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
+<div class="doc">
+The following results implies that the action is an equivalence after taking the 1-type completion.  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="act_on_grp_compl_inv"><span class="id" type="definition">act_on_grp_compl_inv</span></a> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a>))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="record">Functor</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion"><span class="id" type="definition">group_completion</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion"><span class="id" type="definition">group_completion</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="record">Functor</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="constructor">Build_Functor</span>.<br/>
@@ -413,14 +372,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="definition">path_prod_pp</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">ap_snd_path_prod</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_p1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">moveR_pM</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.background.monoidal_1type.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.path_lemmas.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="definition">path_prod_pp</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="definition">functor_prod</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> <span class="id" type="notation">(</span><span class="id" type="definition">path_prod</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="definition">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_mult"><span class="id" type="projection">smontype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">x1</span>) (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="definition">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_mult"><span class="id" type="projection">smontype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">x2</span>) (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<span class="id" type="notation">)^</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">destruct</span> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>). <span class="id" type="tactic">reflexivity</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="definition">equiv_inj</span> <span class="id" type="definition">inverse</span>). <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_V</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.background.monoidal_1type.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.path_lemmas.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_hexagon"><span class="id" type="projection">smontype_hexagon</span></a>. <span class="id" type="tactic">rewrite</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_hexagon"><span class="id" type="projection">smontype_hexagon</span></a>.<br/>
@@ -453,14 +412,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="definition">path_prod_pp</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">ap_snd_path_prod</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_p1</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">moveR_pM</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.background.monoidal_1type.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.path_lemmas.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="definition">path_prod_pp</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="definition">functor_prod</span>. <span class="id" type="tactic">simpl</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> <span class="id" type="notation">(</span><span class="id" type="definition">path_prod</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><span class="id" type="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="definition">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_mult"><span class="id" type="projection">smontype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">x1</span>) (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="definition">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_mult"><span class="id" type="projection">smontype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">x2</span>) (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<span class="id" type="notation">)^</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">destruct</span> (<a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_sym"><span class="id" type="projection">smontype_sym</span></a> <span class="id" type="var">a</span> <span class="id" type="var">s</span>). <span class="id" type="tactic">reflexivity</span>. }<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="definition">equiv_inj</span> <span class="id" type="definition">inverse</span>). <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_V</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.background.monoidal_1type.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <a class="idref" href="A_BPQ.path_lemmas.html#path_prod_VV"><span class="id" type="definition">path_prod_VV</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">inv_pV</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_hexagon"><span class="id" type="projection">smontype_hexagon</span></a>. <span class="id" type="tactic">rewrite</span> <a class="idref" href="A_BPQ.background.monoidal_1type.html#smontype_hexagon"><span class="id" type="projection">smontype_hexagon</span></a>.<br/>
@@ -472,63 +431,9 @@
 <br/>
 
 <br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="ap_homotopy_idmap"><span class="id" type="definition">ap_homotopy_idmap</span></a> {<span class="id" type="var">A</span> : <span class="id" type="keyword">Type</span>} (<span class="id" type="var">f</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#A"><span class="id" type="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#A"><span class="id" type="variable">A</span></a>) (<span class="id" type="var">h</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#f"><span class="id" type="variable">f</span></a> <span class="id" type="notation">==</span> <span class="id" type="abbreviation">idmap</span>) (<span class="id" type="var">a</span> : <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#A"><span class="id" type="variable">A</span></a>):<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="definition">ap</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#f"><span class="id" type="variable">f</span></a> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#h"><span class="id" type="variable">h</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a>) <span class="id" type="notation">=</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#h"><span class="id" type="variable">h</span></a> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#f"><span class="id" type="variable">f</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#a"><span class="id" type="variable">a</span></a>).<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">cut</span> (<span class="id" type="keyword">forall</span> <span class="id" type="var">p</span> : <span class="id" type="var">f</span> <span class="id" type="var">a</span> <span class="id" type="notation">=</span> <span class="id" type="var">a</span><span class="id" type="notation">,</span><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="definition">ap</span> <span class="id" type="var">f</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#p"><span class="id" type="variable">p</span></a> <span class="id" type="notation">=</span> <span class="id" type="var">h</span> (<span class="id" type="var">f</span> <span class="id" type="var">a</span>) <span class="id" type="notation">@</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#p"><span class="id" type="variable">p</span></a> <span class="id" type="notation">@</span> <span class="id" type="notation">(</span><span class="id" type="var">h</span> <span class="id" type="var">a</span><span class="id" type="notation">)^</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">H</span> (<span class="id" type="var">h</span> <span class="id" type="var">a</span>) <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">concat_pp_p</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">whiskerL</span> <span class="id" type="var">_</span> (<span class="id" type="definition">concat_pV</span> <span class="id" type="var">_</span>) <span class="id" type="notation">@</span> <span class="id" type="var">_</span>). <span class="id" type="tactic">apply</span> <span class="id" type="definition">concat_p1</span>.<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> []. <span class="id" type="tactic">destruct</span> (<span class="id" type="var">h</span> (<span class="id" type="var">f</span> <span class="id" type="var">a</span>)). <span class="id" type="tactic">reflexivity</span>.<br/>
-&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="to_groupcompletion"><span class="id" type="definition">to_groupcompletion</span></a> (<span class="id" type="var">S</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> (@<a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_mult"><span class="id" type="projection">montype_mult</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#S"><span class="id" type="variable">S</span></a>))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="record">Functor</span> (<span class="id" type="definition">groupoid_category</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#S"><span class="id" type="variable">S</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion"><span class="id" type="definition">group_completion</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#S"><span class="id" type="variable">S</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="record">Functor</span> (<span class="id" type="definition">groupoid_category</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#S"><span class="id" type="variable">S</span></a>) (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#group_completion_moncat"><span class="id" type="definition">group_completion_moncat</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#S"><span class="id" type="variable">S</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#left_cancel"><span class="id" type="variable">left_cancel</span></a>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#include_in_monoidal_action_cat"><span class="id" type="definition">include_in_monoidal_action_cat</span></a>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>. <span class="id" type="tactic">exact</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">a</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="A_BPQ.background.monoidal_1type.html#montype_id"><span class="id" type="projection">montype_id</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#::core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a>.<br/>
@@ -539,6 +444,12 @@
 
 <br/>
 <span class="id" type="keyword">Section</span> <a name="Univalent_GroupGompletion"><span class="id" type="section">Univalent_GroupGompletion</span></a>.<br/>
+</div>
+
+<div class="doc">
+We show when the group completion is a univalent category.  
+</div>
+<div class="code">
 &nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">M</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#Monoidal_1Type"><span class="id" type="record">Monoidal_1Type</span></a>) (<span class="id" type="var">X</span> : 1<span class="id" type="notation">-</span><span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#monoidal_action"><span class="id" type="record">monoidal_action</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#M"><span class="id" type="variable">M</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#X"><span class="id" type="variable">X</span></a>)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel_act</span> : <a class="idref" href="A_BPQ.background.monoidal_1type.html#left_faithful"><span class="id" type="definition">left_faithful</span></a> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#act"><span class="id" type="variable">act</span></a>).<br/>
 
@@ -617,24 +528,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#Univalent_GroupGompletion.unit_is_id"><span class="id" type="variable">unit_is_id</span></a> <span class="id" type="var">s</span> <span class="id" type="var">t</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> ((<a class="idref" href="A_BPQ.sigma_lemmas.html#equiv_path_sigma"><span class="id" type="definition">equiv_path_sigma</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>) <span class="id" type="var">right_inverse</span>).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
-
-<br/>
 <span class="id" type="keyword">End</span> <a class="idref" href="A_BPQ.group_completion.group_complete_1type.html#Univalent_GroupGompletion"><span class="id" type="section">Univalent_GroupGompletion</span></a>.<br/>
 
 <br/>

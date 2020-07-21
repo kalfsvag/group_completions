@@ -71,7 +71,7 @@ Section Path_Functor.
     - intros [F0 F1 comp id]. reflexivity.
   Defined.
 
-    Definition equiv_path_forall_3 {X Y : Type} {Z : X -> Y -> Type}
+  Definition equiv_path_forall_3 {X Y : Type} {Z : X -> Y -> Type}
              {P : forall (x : X) (y : Y), Z x y -> Type}
              (f g : forall (x : X) (y : Y) (z : Z x y), P x y z)
     : (forall (x : X) (y : Y) (z : Z x y), f x y z = g x y z) <~> f = g.
@@ -85,16 +85,33 @@ Section Path_Functor.
 
   Definition inv_path_functor  {C D : PreCategory} (F G : Functor C D)
     : F = G -> {p0 : forall c : C, F c = G c &
-                                   forall (c d : C) (f : morphism C c d),
-                                     (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
-                                      morphism_of G f )%morphism }.
+                          forall (c d : C) (f : morphism C c d),
+                            (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
+                             morphism_of G f )%morphism }
+                 (* {p0 : forall c : C, F c = G c & *)
+                (*           forall c d f, *)
+                (* transport (fun GO => forall c d, morphism C c d -> morphism D (GO c) (GO d)) *)
+                (*           (path_forall _ _ p0) *)
+                (*           (morphism_of F) *)
+                (*           c d f *)
+                (* = morphism_of G  f} *).
   Proof.
-    intros [].
+    intro p. destruct p.
     exists (fun _ => idpath).
-    intros. refine (right_identity _ _ _ _ @ _).
+    intros c d f .
+    refine (right_identity _ _ _ _ @ _).
     refine (left_identity _ _ _ _ ).
   Defined.
+    
 
+  (* Definition equiv_path_functor {C D : PreCategory} (F G : Functor C D) *)
+  (*   : {p0 : forall c : C, F c = G c & *)
+  (*                         forall c d f, *)
+  (*               transport (fun GO => forall c d, morphism C c d -> morphism D (GO c) (GO d)) *)
+  (*                         (path_forall _ _ p0) *)
+  (*                         (morphism_of F) *)
+  (*                         c d f *)
+  (*               = morphism_of G  f}. *)
 
   Definition equiv_path_functor {C D : PreCategory} (F G : Functor C D)
     : {p0 : forall c : C, F c = G c &
@@ -106,15 +123,44 @@ Section Path_Functor.
     refine (equiv_path_sigma_hprop _ _ oE _).
     refine (equiv_path_sigma _ _ _ oE _).
     simpl.
+    (* transitivity *)
+    (*   {p : object_of F = object_of G & forall (c d : C) (f : morphism C c d), *)
+    (*        (idtohom (ap10 p d) o F _1 f o idtohom (ap10 p c)^)%morphism = (G _1 f)%morphism}. *)
+    (* { *)
     srapply @equiv_functor_sigma'.
     - apply equiv_path_forall.
-    - intro p0.  simpl.
-      refine (equiv_path_forall _ _ oE _).
+    - intro p0.  simpl. 
+        (*     repeat (apply (equiv_functor_forall' equiv_idmap); intros). simpl. *)
+        (*     srefine (equiv_transport *)
+        (*                (fun p0 => *)
+        (*                   (idtohom (p0 b0) o F _1 b1 o idtohom (p0 b)^)%morphism = (G _1 b1)%morphism) *)
+        (*                _ _ _). *)
+        (*     apply inverse. srefine (eissect (equiv_path_forall _ _) p0). } *)
+        (* apply equiv_functor_sigma_id. *)
+        (* intro p. destruct G as [G0 G1 comp id]. simpl in *. destruct p. simpl. *)
+        (* intros. *)
+        
+        
+        (*     simpl. intro c. *)
+        
+        (*     srapply @ *)
+        
+        (* - intro p0. simpl. *)
+        (*   refine (_ oE equiv_path_forall_3 _ _). *)
+        (*   apply equiv_concat_l. *)
+        
+        
+        (*   apply equiv_path_forall_3. *)
+
+
+
+        (*   intro p0.  simpl. *)
+      refine (equiv_path_forall _ _ oE _).  
       apply (equiv_functor_forall' equiv_idmap). simpl. intro s.
-      refine (equiv_path_forall _ _ oE _).
+      refine (equiv_path_forall _ _ oE _).  
       apply (equiv_functor_forall' equiv_idmap). simpl. intro d.
-      refine (equiv_path_forall _ _ oE _).
-      apply (equiv_functor_forall' equiv_idmap). simpl. intro f. 
+      refine (equiv_path_forall _ _ oE _).  
+      apply (equiv_functor_forall' equiv_idmap). simpl. intro f.
       apply equiv_concat_l.
       transitivity (idtohom ((ap10 (path_forall _ _ p0)) d) o (morphism_of F) s d f o
                             idtohom ((ap10 (path_forall _ _ p0)) s)^)%morphism.
@@ -124,8 +170,7 @@ Section Path_Functor.
         refine (left_identity _ _ _ _ ). }
       apply (ap (fun x => (idtohom (x d) o (morphism_of F) s d f o idtohom (x s)^)%morphism)).
       refine (eissect (equiv_path_forall _ _) p0).
-  Defined.
-    
+  Defined.    
 
   Definition path_functor' {C D : PreCategory} (F G : Functor C D)
              (p0 : forall c : C, F c = G c)
@@ -133,6 +178,25 @@ Section Path_Functor.
                  (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
                   morphism_of G f )%morphism)
   : F = G := equiv_path_functor F G (p0; p1).
+
+  Definition path_functor_id {C D : PreCategory} (F : Functor C D)
+    : equiv_inverse (equiv_path_functor F F) (idpath F) = inv_path_functor F F (idpath F).
+  Proof.
+    apply path_sigma_hprop.
+    simpl. reflexivity.
+  Defined.
+
+  Lemma isequiv_inv_path_functor {C D : PreCategory} (F G: Functor C D)
+    : IsEquiv (inv_path_functor F G).
+  Proof.
+    cut (inv_path_functor F G = equiv_inverse (equiv_path_functor F G)).
+    { intro p. rewrite p.
+      apply equiv_isequiv. }
+    apply path_arrow. intro p. destruct p.
+    apply inverse. apply path_functor_id.
+  Defined.
+    
+             
 End Path_Functor.
 
 

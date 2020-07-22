@@ -94,14 +94,6 @@ Proof.
   intro F.
   apply (univ_N1 _ _)^-1.
   refine (include_in_N1 _ o F)%functor.
-  (* srapply @N1_rec. *)
-  (* - intro c. apply ccl. exact (F c). *)
-  (* - intros c1 c2 f. simpl. *)
-  (*   apply ccleq. apply (morphism_of F). exact f. *)
-  (* - intro c. simpl. *)
-  (*   rewrite identity_of. apply ce. *)
-  (* - intros c1 c2 c3 f g. simpl. *)
-  (*   rewrite composition_of. apply cconcat. *)
 Defined.
 
 (** Computational rules  *)

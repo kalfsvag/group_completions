@@ -87,14 +87,7 @@ Section Path_Functor.
     : F = G -> {p0 : forall c : C, F c = G c &
                           forall (c d : C) (f : morphism C c d),
                             (idtohom (p0 d) o morphism_of F f  o (idtohom (p0 c))^-1=
-                             morphism_of G f )%morphism }
-                 (* {p0 : forall c : C, F c = G c & *)
-                (*           forall c d f, *)
-                (* transport (fun GO => forall c d, morphism C c d -> morphism D (GO c) (GO d)) *)
-                (*           (path_forall _ _ p0) *)
-                (*           (morphism_of F) *)
-                (*           c d f *)
-                (* = morphism_of G  f} *).
+                             morphism_of G f )%morphism }.
   Proof.
     intro p. destruct p.
     exists (fun _ => idpath).
@@ -103,15 +96,6 @@ Section Path_Functor.
     refine (left_identity _ _ _ _ ).
   Defined.
     
-
-  (* Definition equiv_path_functor {C D : PreCategory} (F G : Functor C D) *)
-  (*   : {p0 : forall c : C, F c = G c & *)
-  (*                         forall c d f, *)
-  (*               transport (fun GO => forall c d, morphism C c d -> morphism D (GO c) (GO d)) *)
-  (*                         (path_forall _ _ p0) *)
-  (*                         (morphism_of F) *)
-  (*                         c d f *)
-  (*               = morphism_of G  f}. *)
 
   Definition equiv_path_functor {C D : PreCategory} (F G : Functor C D)
     : {p0 : forall c : C, F c = G c &
@@ -123,38 +107,9 @@ Section Path_Functor.
     refine (equiv_path_sigma_hprop _ _ oE _).
     refine (equiv_path_sigma _ _ _ oE _).
     simpl.
-    (* transitivity *)
-    (*   {p : object_of F = object_of G & forall (c d : C) (f : morphism C c d), *)
-    (*        (idtohom (ap10 p d) o F _1 f o idtohom (ap10 p c)^)%morphism = (G _1 f)%morphism}. *)
-    (* { *)
     srapply @equiv_functor_sigma'.
     - apply equiv_path_forall.
     - intro p0.  simpl. 
-        (*     repeat (apply (equiv_functor_forall' equiv_idmap); intros). simpl. *)
-        (*     srefine (equiv_transport *)
-        (*                (fun p0 => *)
-        (*                   (idtohom (p0 b0) o F _1 b1 o idtohom (p0 b)^)%morphism = (G _1 b1)%morphism) *)
-        (*                _ _ _). *)
-        (*     apply inverse. srefine (eissect (equiv_path_forall _ _) p0). } *)
-        (* apply equiv_functor_sigma_id. *)
-        (* intro p. destruct G as [G0 G1 comp id]. simpl in *. destruct p. simpl. *)
-        (* intros. *)
-        
-        
-        (*     simpl. intro c. *)
-        
-        (*     srapply @ *)
-        
-        (* - intro p0. simpl. *)
-        (*   refine (_ oE equiv_path_forall_3 _ _). *)
-        (*   apply equiv_concat_l. *)
-        
-        
-        (*   apply equiv_path_forall_3. *)
-
-
-
-        (*   intro p0.  simpl. *)
       refine (equiv_path_forall _ _ oE _).  
       apply (equiv_functor_forall' equiv_idmap). simpl. intro s.
       refine (equiv_path_forall _ _ oE _).  
@@ -216,7 +171,7 @@ Section Pi_0.
 End Pi_0.
 
 Section Cat_sum.
-  (** Given a family of categories C : X -> Cat, we can define the sum of C over X *)
+  (** Given a family of categories [C : X -> Cat], we define the sum of [C] over [X] *)
   Definition cat_sum_obj (X : Type) (C : X -> PreCategory) :=
     {x : X & object (C x)}.
 
@@ -279,8 +234,6 @@ Section Cat_sum.
       apply right_identity.
   Defined.
 
-
-
   Definition include_summand (X : Type) {istrunc_X : IsTrunc 1 X}
              (C : X -> PreCategory) (x : X)
     : Functor (C x) (cat_sum X C).
@@ -293,14 +246,11 @@ Section Cat_sum.
     - reflexivity.
   Defined.
 
-  Definition univ_cat_sum (X : Type) {istrunc_X : IsTrunc 1 X}
+  Definition isequiv_restrict_to_comp_catsum (X : Type) {istrunc_X : IsTrunc 1 X}
              (C : X -> PreCategory) (D : PreCategory)
-    :  Functor (cat_sum X C) D <~> (forall x : X, Functor (C x) D).
+    : IsEquiv (fun F : Functor (cat_sum X C) D => (fun x : X => (F o include_summand X C x)%functor)).
   Proof.
-    srapply @equiv_adjointify.
-    - intro F. intro x.
-      refine (F o _)%functor.
-      apply include_summand.
+    srapply @isequiv_adjointify.
     - intro F.
       srapply @Build_Functor.
       + intros [x c]. exact (F x c).
@@ -327,6 +277,12 @@ Section Cat_sum.
         rewrite left_identity. rewrite right_identity.
         reflexivity.
   Defined.
+    
+
+  Definition univ_cat_sum (X : Type) {istrunc_X : IsTrunc 1 X}
+             (C : X -> PreCategory) (D : PreCategory)
+    :  Functor (cat_sum X C) D <~> (forall x : X, Functor (C x) D)
+    := BuildEquiv _ _ _ (isequiv_restrict_to_comp_catsum X C D).
 
   Definition cat_sum_to_groupoid (X : Type) (Y : X -> Type)
              {istrunc_X : IsTrunc 1 X} {istrunc_Y : forall x : X, IsTrunc 1 (Y x)}
@@ -344,33 +300,42 @@ Section Cat_sum.
   Defined.
 
   (** The sum commutes with the path groupoid *)
+  Definition sum_to_catsum (X : Type) (Y : X -> Type)
+             {istrunc_X : IsTrunc 1 X} {istrunc_Y : forall x : X, IsTrunc 1 (Y x)}
+    : Functor (Core.groupoid_category {x : X & Y x})
+              (cat_sum X (fun x => Core.groupoid_category (Y x))).
+  Proof.
+    srapply @Build_Functor.
+    - simpl. exact idmap.
+    - simpl. intros a b p.
+      unfold cat_sum_morph. destruct p.
+      exists idpath. reflexivity.
+    - simpl. intros a b c p q. destruct q. destruct p. simpl.
+      reflexivity.
+    - simpl. reflexivity.
+  Defined.
+
+  Definition isiso_sum_to_catsum (X : Type) (Y : X -> Type)
+             {istrunc_X : IsTrunc 1 X} {istrunc_Y : forall x : X, IsTrunc 1 (Y x)}
+    : IsIso_Functor (sum_to_catsum X Y).
+  Proof.
+    apply Datatypes.pair.
+    - simpl. exact _.
+    - intros a b. simpl.
+      srapply @isequiv_adjointify.
+      + intros [p f]. destruct a as [x1 y1]. destruct b as [x2 y2].
+        destruct p. simpl in f. destruct f. reflexivity.
+      + intros [p f].
+        destruct a as [x1 y1]. destruct b as [x2 y2].
+        destruct p. simpl in f. destruct f. reflexivity.
+      + simpl. intro p. destruct p. reflexivity.      
+  Defined.
+  
   Definition iso_path_groupoid_cat_sum (X : Type) (Y : X -> Type)
              {istrunc_X : IsTrunc 1 X} {istrunc_Y : forall x : X, IsTrunc 1 (Y x)}
     : Cat_Isomorphic (Core.groupoid_category {x : X & Y x})
-                     (cat_sum X (fun x => Core.groupoid_category (Y x))).
-  Proof.
-    unfold Cat_Isomorphic.
-    srapply @exist.
-    - srapply @Build_Functor.
-      + simpl. exact idmap.
-      + simpl. intros a b p.
-        unfold cat_sum_morph. destruct p.
-        exists idpath. reflexivity.
-      + simpl. intros a b c p q. destruct q. destruct p. simpl.
-        reflexivity.
-      + simpl. reflexivity.
-    - simpl.
-      apply Datatypes.pair.
-      + simpl. exact _.
-      + intros a b. simpl.
-        srapply @isequiv_adjointify.
-        * intros [p f]. destruct a as [x1 y1]. destruct b as [x2 y2].
-          destruct p. simpl in f. destruct f. reflexivity.
-        * intros [p f].
-          destruct a as [x1 y1]. destruct b as [x2 y2].
-          destruct p. simpl in f. destruct f. reflexivity.
-        * simpl. intro p. destruct p. reflexivity.      
-  Defined.
+                     (cat_sum X (fun x => Core.groupoid_category (Y x)))
+    := (sum_to_catsum X Y; isiso_sum_to_catsum X Y).
 End Cat_sum.    
 
 Section Component.
@@ -462,8 +427,7 @@ Section Decompose_cat.
       morphism_over_decomp p1 p3 (q1 @ q2) (f o g)%morphism.
   Proof.
     destruct q2. destruct q1. reflexivity.
-  Defined.    
-
+  Defined.
 
   Definition decompose_cat (C : PreCategory)
     : Cat_Isomorphic C (cat_sum (pi0_cat C) (component_cat C)).

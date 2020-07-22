@@ -954,7 +954,7 @@ Section IsEquiv_GrpCompl_To_Fin2.
       apply equiv_iff_hprop.
       + apply (ap (fun x => s +' x)).
       + intro p.
-        apply (nat_plus_cancelL s).
+        apply (nat_plus_cancel s).
         refine (_ @ p @ _);
           apply nat_plus_comm.
   Defined.

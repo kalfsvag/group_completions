@@ -13,7 +13,7 @@ Section Monoids_and_Groups.
     forall a : A, m (inv a) a = e.
   Definition right_inverse {A : Type} (m : A -> A -> A) (e : A) (inv : A -> A) :=
     forall a : A, m a (inv a) = e.
-
+  
   Record Monoid : Type := { mon_set :> hSet;
                             (* mon_isset : IsHSet mon_set; *)
                             mon_mult  : mon_set->mon_set->mon_set;
@@ -95,7 +95,7 @@ Section nat_monoid.
     Build_Monoid
       (BuildhSet nat) Peano.plus O
       nat_plus_assoc (fun _ => idpath) (fun n => (nat_plus_n_O n)^).
-
+  
   Definition nat_symm_monoid : Symmetric_Monoid := Build_Symmetric_Monoid nat_monoid nat_plus_comm.    
 
   (** We prove that nat has cancellation *)
@@ -128,7 +128,7 @@ Section nat_monoid.
     - exact IHm.
   Defined.
 
-  Definition nat_plus_cancelL (l m n : nat) : l + m = l + n -> m = n.
+  Definition nat_plus_cancel (l m n : nat) : l + m = l + n -> m = n.
   Proof.
     intro p.
     refine ((nat_plus_minus l m)^ @ _ @ nat_plus_minus l n).
@@ -585,6 +585,17 @@ Definition homcompose_f_ff {K L M N : Monoid}
 Proof.
   apply path_hom. reflexivity.
 Defined.
+
+Definition functor_loop {X Y : pType} {istrunc_X : IsTrunc 1 X} {istrunc_Y : IsTrunc 1 Y}
+  : pMap X Y -> Homomorphism (loopGroup X (point X)) (loopGroup Y (point Y)).
+Proof.
+  intro f.
+  srapply @Build_GrpHom.
+  - apply (loops_functor f).
+  - simpl. destruct (point_eq f).
+    intros. destruct g2. destruct g1. reflexivity.
+Defined.
+
 
 
 Section Isomorphism.

@@ -103,7 +103,41 @@ Section rec.
     - intro a. simpl. apply (dequiv1 _ _ _ Hx).
     - intros. apply path_ishprop.
   Defined.
+
+
 End rec.
+
+
+  (* Double induction on two different quotients *)
+  Definition set_quotient_rec2' `{Univalence} {A B : Type} (R : relation A) (S : relation B)
+           {C : hSet} {dclass : (A -> B -> C)} : 
+             (forall x x' y, R x x' -> dclass x y = dclass x' y) ->
+             (forall x y y', S y y' -> dclass x y = dclass x y') -> 
+      set_quotient R -> set_quotient S -> C.
+  Proof.
+    intros dequiv1 dequiv0.
+    (* assert (dequiv0 : forall x x0 y : A, R x0 y -> dclass x x0 = dclass x y) *)
+    (*   by (intros ? ? ? Hx; apply dequiv;[apply Hrefl|done]). *)
+    (* srapply @set_quotient_rec. *)
+    (* - intro x. *)
+    (*   srapply @set_quotient_rec. *)
+    (*   + exact (dclass x). *)
+    refine (set_quotient_rec _
+              (fun x => set_quotient_rec _ (dclass x) (dequiv0 x)) _).
+    intros x x' Hx.
+    assert (h : dclass x = dclass x').
+    { exact (path_arrow (dclass x) (dclass x') (fun y => dequiv1 x x' y Hx)). }
+        
+    apply path_forall. red.
+    (* assert (dequiv1 : forall y : A, *)
+    (*                     set_quotient_rec (dclass x) (dequiv0 x) (class_of _ y) = *)
+    (*                     set_quotient_rec (dclass x') (dequiv0 x') (class_of _ y)) *)
+    (*   by (intros; by apply dequiv). *)
+    srapply (set_quotient_ind S).
+    - intro a. simpl. apply (dequiv1 _ _ _ Hx).
+    - intros. apply path_ishprop.
+  Defined.
+
 
 
 Section Equiv.

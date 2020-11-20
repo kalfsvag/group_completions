@@ -156,14 +156,37 @@ Record Monoidal_Action (S : Symmetric_Monoidal_Category) (X : PreCategory) :=
 
 
 
-Definition uncurry_action {S : Symmetric_Monoidal_Category} {X : PreCategory}
-           (a : Monoidal_Action S X)
-  : S -> X -> X.
-Proof.
-  intros s x.
-  exact (a (s,x)).
-Defined.
+(* Definition uncurry_action {S : Symmetric_Monoidal_Category} {X : PreCategory} *)
+(*            (a : Monoidal_Action S X) *)
+(*   : S -> X -> X. *)
+(* Proof. *)
+(*   intros s x. *)
+(*   exact (a (s,x)). *)
+(* Defined. *)
 
-Local Notation "a +'' x" := (uncurry_action a x) (at level 40).
-Local Notation "g +^^ h" := (mon_action _1 (pair_1 g h)) (at level 40).
+
+(* Local Notation "g +^^ h" := (mon_action _1 (pair_1 g h)) (at level 40). *)
+
+Record Monoidal_Functor (S T : Symmetric_Monoidal_Category) : Type
+  := {
+      mon_fun :> Functor S T ;
+      mon_fun_sum : forall (a b : S), mon_fun (a +' b) --> (mon_fun a) +' (mon_fun b) ;
+      iso_mon_fun_sum : forall (a b : S), IsIsomorphism (mon_fun_sum a b) ;
+      natl_mon_fun_sum : forall (a b a' b' : S) (f : a --> a') (g : b --> b'),
+          mon_fun_sum a' b' o mon_fun _1 (f +^ g) =
+          mon_fun _1 (f) +^ mon_fun _1 (g) o mon_fun_sum a b ;
+      mon_fun_id : mon_fun (moncat_id _) --> moncat_id _ ;
+      iso_mon_fun_id : IsIsomorphism mon_fun_id ;
+      mon_fun_assoc : forall (a b c : S),
+          moncat_assoc T (mon_fun a) (mon_fun b) (mon_fun c)
+                       o ((mon_fun_sum a b) +^ 1)
+                       o mon_fun_sum (a +' b) c
+          = (1 +^ mon_fun_sum b c) o mon_fun_sum a (b +' c) o mon_fun _1 (moncat_assoc S a b c) ;
+      mon_fun_lid : forall a : S,
+          mon_fun _1 (lid S a)
+          = lid T (mon_fun a) o (mon_fun_id +^ 1) o mon_fun_sum (moncat_id _) a ;
+      mon_fun_rid : forall a : S,
+          mon_fun _1 (rid S a)
+          = rid T (mon_fun a) o (1 +^ mon_fun_id) o mon_fun_sum a (moncat_id _)
+     }.
 

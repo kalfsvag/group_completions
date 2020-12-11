@@ -5,7 +5,7 @@ Require Import UnivalenceAxiom.
 
 
 (** Reverse the notation of plus so that n.+1 = n+1 by definition. *)
-Notation "a +' b" := (Peano.plus b a) (at level 50).
+Notation "a +' b" := (Peano.plus b a) (at level 40) : nat_scope. (* should declare scope... *)
 (** Change notation since "Fin" is something else in the thesis. *)
 Notation "'fintype'" := Fin. 
 

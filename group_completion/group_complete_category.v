@@ -1,9 +1,16 @@
 Require Import HoTT.
 Require Import HoTT.Categories Category.
-From A_BPQ Require Import categories sigma_lemmas path_lemmas quotients.
+From A_BPQ Require Import categories sigma_lemmas path_lemmas quotients monoidal_category.
 (* From A_BPQ Require Export monoidal_1type. *)
 (* Change this once monoidal_category is in _CoqProject *)
-Load monoidal_category.
+
+(*These notations are defined elsewhere, but I do not know how to import it.*)
+Local Notation "x --> y" := (morphism _ x y) (at level 99, right associativity, y at level 200) : type_scope.
+Notation "F '_0' x" := (Functor.Core.object_of F x) (at level 10, no associativity, only parsing) : object_scope.
+Notation "F '_1' m" := (Functor.Core.morphism_of F m) (at level 10, no associativity) : morphism_scope.
+Open Scope category_scope.
+Open Scope morphism_scope.
+
 
 
 Section Localize.
@@ -223,7 +230,7 @@ Section Localize.
              (act : Monoidal_Action S X)
              (s : S) (x : X)
     : morphism (monoidal_action_cat S X act) x (act (s,x))
-    := class_of _ (s ; (identity (act (s, x)))). 
+    := class_of (monact_relation act _ _) (s ; (Category.identity (act (s, x)))). 
 
   Lemma decompose_actcat {S : Symmetric_Monoidal_Category} {X : PreCategory}
              (act : Monoidal_Action S X)
@@ -422,7 +429,7 @@ Section Group_Completion.
 
   (* move *)
   (* Sum of iso is iso *)
-  Definition sum_iso {M : Magma} {a b c d : M}
+  Definition sum_iso {M : Cat_Magma} {a b c d : M}
              (f : Isomorphic a b) (g : Isomorphic c d)
     : Isomorphic (a +' c) (b +' d).
   Proof.
@@ -612,61 +619,61 @@ Section Group_Completion.
       refine ((composition_of _ _ _ _ _ _)^ ).
   Qed.
 
-  (* probably needs left cancellation *)
-  Definition sum_group_completion (S : Symmetric_Monoidal_Category)
-    : Functor ((group_completion_moncat S) * (group_completion_moncat S))
-              (group_completion_moncat S).
-  Proof.
-    srapply @Build_Functor.
-    - simpl. intros [[x1  x2] [y1 y2]].
-      exact (x1 +' y1, x2 +' y2).
-    - simpl. intros [[x1 x2] [y1 y2]] [[z1 z2] [w1 w2]]. simpl.
-      intros [f g].
-      revert f g.
-      srapply @set_quotient_rec2'.
-      + intros f g. apply class_of. simpl.
-        apply (sum_group_completion_1' S f g).
-      + simpl. intros f f' g H.
-        apply related_classes_eq. 
-        apply (welldef_sum_group_completion_1 S f f' g g H).
-        apply refl_monact_relation.
-      + simpl. intros f g g' H.
-        apply related_classes_eq. 
-        srefine (welldef_sum_group_completion_1 S f f g g' _ H).
-        apply refl_monact_relation.
-    - simpl. intros [[a1 a2] [b1 b2]] [[c1 c2] [d1 d2]] [[e1 e2] [f1 f2]].
-      simpl. intros [alpha betta] [gamma dela]. simpl.
-      revert alpha. 
-      apply set_quotient_ind_prop.
-      { intro alpha. exact _. }
-      intro alpha. revert betta.
-      apply set_quotient_ind_prop.
-      { intro betta. exact _. }
-      intro betta. revert gamma.
-      apply set_quotient_ind_prop.
-      { intro gamma. exact _. }
-      intro gamma. revert dela.
-      apply set_quotient_ind_prop.
-      { intro dela. exact _. }
-      intro dela. simpl.
-      apply related_classes_eq.
-      destruct alpha as [s alpha].
-      destruct betta as [t betta].
-      destruct gamma as [u gamma].
-      destruct dela as [v dela].
-      srapply @exist.
-      { simpl. apply (Build_Isomorphic (isiso_twist_middle S _ _ _ _ )). }
-      cbn.
-      destruct alpha as [alpha1 alpha2]. destruct betta as [betta1 betta2].
-      destruct gamma as [gamma1 gamma2]. destruct dela as [delta1 delta2]. simpl in *.
-      rewrite compose_sum_r. rewrite compose_sum_r.
-      rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (gamma1, delta1)) .
-      rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (gamma2, delta2)) .
-      rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (_, _)).
-      rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (_, _)).
-      admit.
-    - admit.
-  Abort.
+  (* (* probably needs left cancellation *) *)
+  (* Definition sum_group_completion (S : Symmetric_Monoidal_Category) *)
+  (*   : Functor ((group_completion_moncat S) * (group_completion_moncat S)) *)
+  (*             (group_completion_moncat S). *)
+  (* Proof. *)
+  (*   srapply @Build_Functor. *)
+  (*   - simpl. intros [[x1  x2] [y1 y2]]. *)
+  (*     exact (x1 +' y1, x2 +' y2). *)
+  (*   - simpl. intros [[x1 x2] [y1 y2]] [[z1 z2] [w1 w2]]. simpl. *)
+  (*     intros [f g]. *)
+  (*     revert f g. *)
+  (*     srapply @set_quotient_rec2'. *)
+  (*     + intros f g. apply class_of. simpl. *)
+  (*       apply (sum_group_completion_1' S f g). *)
+      (* + simpl. intros f f' g H. *)
+      (*   apply related_classes_eq. *)
+      (*   apply (welldef_sum_group_completion_1 S f f' g g H). *)
+      (*   apply refl_monact_relation. *)
+      (* + simpl. intros f g g' H. *)
+      (*   apply related_classes_eq. *)
+      (*   srefine (welldef_sum_group_completion_1 S f f g g' _ H). *)
+      (*   apply refl_monact_relation. *)
+  (*   - simpl. intros [[a1 a2] [b1 b2]] [[c1 c2] [d1 d2]] [[e1 e2] [f1 f2]]. *)
+  (*     simpl. intros [alpha betta] [gamma dela]. simpl. *)
+  (*     revert alpha.  *)
+  (*     apply set_quotient_ind_prop. *)
+  (*     { intro alpha. exact _. } *)
+  (*     intro alpha. revert betta. *)
+  (*     apply set_quotient_ind_prop. *)
+  (*     { intro betta. exact _. } *)
+  (*     intro betta. revert gamma. *)
+  (*     apply set_quotient_ind_prop. *)
+  (*     { intro gamma. exact _. } *)
+  (*     intro gamma. revert dela. *)
+  (*     apply set_quotient_ind_prop. *)
+  (*     { intro dela. exact _. } *)
+  (*     intro dela. simpl. *)
+  (*     apply related_classes_eq. *)
+  (*     destruct alpha as [s alpha]. *)
+  (*     destruct betta as [t betta]. *)
+  (*     destruct gamma as [u gamma]. *)
+  (*     destruct dela as [v dela]. *)
+  (*     srapply @exist. *)
+  (*     { simpl. apply (Build_Isomorphic (isiso_twist_middle S _ _ _ _ )). } *)
+  (*     cbn. *)
+  (*     destruct alpha as [alpha1 alpha2]. destruct betta as [betta1 betta2]. *)
+  (*     destruct gamma as [gamma1 gamma2]. destruct dela as [delta1 delta2]. simpl in *. *)
+  (*     rewrite compose_sum_r. rewrite compose_sum_r. *)
+  (*     rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (gamma1, delta1)) . *)
+  (*     rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (gamma2, delta2)) . *)
+  (*     rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (_, _)). *)
+  (*     rewrite (composition_of binary_op (_,_) (_,_) (_,_) (_,_) (_, _)). *)
+  (*     admit. *)
+  (*   - admit. *)
+  (* Abort. *)
       
         
 
@@ -677,378 +684,387 @@ Section Group_Completion.
 End Group_Completion.
     
 
-Definition functor_monoidal_action_cat (M N : Monoidal_1Type) (X Y : 1-Type)
-             (act1 : monoidal_action M X) (left_cancel1 : left_faithful act1)
-             (act2 : monoidal_action N Y) (left_cancel2 : left_faithful act2)
-             (f : Monoidal_Map M N)
-             (g : X -> Y)
-             (act_mult : forall (a : M) (x : X),
-                 g (act1 a x) = act2 (f a) (g x))
-             (act_mult_assoc : forall (a b : M) (x : X),
-                 ap g (montype_act_mult act1 a b x) =
-                 act_mult _ x @ ap011 act2 (montype_map_mult f a b) idpath
-                          @ montype_act_mult act2 (f a) (f b) (g x)
-                          @ (ap011 act2 idpath (act_mult b x))^
-                          @ (act_mult a _)^)
-             (act_mult_lid : forall (x : X),
-                 ap g (montype_act_id act1 x) =
-                 act_mult montype_id x
-                          @ ap011 act2 (montype_map_id f) idpath
-                          @ montype_act_id act2 (g x))
-    : Functor (monoidal_action_cat M X act1 left_cancel1)
-              (monoidal_action_cat N Y act2 left_cancel2).
-  Proof.
-    srapply @Build_Functor.
-    - exact g.
-    - simpl. intros x y.
-      intros [s p].
-      exists (f s).
-      refine (_ @ ap g p).
-      apply inverse. apply act_mult.
-    - intros x y z.
-      intros [s p] [t q]. simpl.
-      destruct q. destruct p. simpl.
-      repeat rewrite concat_p1.
-      apply (path_sigma _ (_;_) (_;_) (montype_map_mult f t s)).
-      simpl.
-      refine (transport_paths_Fl (montype_map_mult f t s) _ @ _).
-      rewrite act_mult_assoc.
-      repeat rewrite concat_p_pp. apply whiskerR.
-      rewrite ap_V. apply whiskerR.
-      apply moveR_pM. rewrite concat_pV.
-      apply moveR_pM. rewrite concat_1p.
-      apply moveR_pM. apply whiskerR. destruct (montype_map_mult f t s).
-      reflexivity.
-    - simpl. intro x.
-      apply (path_sigma _ (_;_) (_;_) (montype_map_id f)).
-      refine (transport_paths_Fl (montype_map_id f) _ @ _).
-      rewrite act_mult_lid. simpl.
-      repeat rewrite concat_pp_p. apply moveR_Vp. apply moveR_Vp.
-      apply whiskerL. apply whiskerR.
-      generalize (montype_map_id f). intro p. destruct p.
-      reflexivity.
-  Defined.
+(* Definition functor_monoidal_action_cat (M N : Monoidal_1Type) (X Y : 1-Type) *)
+(*              (act1 : monoidal_action M X) (left_cancel1 : left_faithful act1) *)
+(*              (act2 : monoidal_action N Y) (left_cancel2 : left_faithful act2) *)
+(*              (f : Monoidal_Map M N) *)
+(*              (g : X -> Y) *)
+(*              (act_mult : forall (a : M) (x : X), *)
+(*                  g (act1 a x) = act2 (f a) (g x)) *)
+(*              (act_mult_assoc : forall (a b : M) (x : X), *)
+(*                  ap g (montype_act_mult act1 a b x) = *)
+(*                  act_mult _ x @ ap011 act2 (montype_map_mult f a b) idpath *)
+(*                           @ montype_act_mult act2 (f a) (f b) (g x) *)
+(*                           @ (ap011 act2 idpath (act_mult b x))^ *)
+(*                           @ (act_mult a _)^) *)
+(*              (act_mult_lid : forall (x : X), *)
+(*                  ap g (montype_act_id act1 x) = *)
+(*                  act_mult montype_id x *)
+(*                           @ ap011 act2 (montype_map_id f) idpath *)
+(*                           @ montype_act_id act2 (g x)) *)
+(*     : Functor (monoidal_action_cat M X act1 left_cancel1) *)
+(*               (monoidal_action_cat N Y act2 left_cancel2). *)
+(*   Proof. *)
+(*     srapply @Build_Functor. *)
+(*     - exact g. *)
+(*     - simpl. intros x y. *)
+(*       intros [s p]. *)
+(*       exists (f s). *)
+(*       refine (_ @ ap g p). *)
+(*       apply inverse. apply act_mult. *)
+(*     - intros x y z. *)
+(*       intros [s p] [t q]. simpl. *)
+(*       destruct q. destruct p. simpl. *)
+(*       repeat rewrite concat_p1. *)
+(*       apply (path_sigma _ (_;_) (_;_) (montype_map_mult f t s)). *)
+(*       simpl. *)
+(*       refine (transport_paths_Fl (montype_map_mult f t s) _ @ _). *)
+(*       rewrite act_mult_assoc. *)
+(*       repeat rewrite concat_p_pp. apply whiskerR. *)
+(*       rewrite ap_V. apply whiskerR. *)
+(*       apply moveR_pM. rewrite concat_pV. *)
+(*       apply moveR_pM. rewrite concat_1p. *)
+(*       apply moveR_pM. apply whiskerR. destruct (montype_map_mult f t s). *)
+(*       reflexivity. *)
+(*     - simpl. intro x. *)
+(*       apply (path_sigma _ (_;_) (_;_) (montype_map_id f)). *)
+(*       refine (transport_paths_Fl (montype_map_id f) _ @ _). *)
+(*       rewrite act_mult_lid. simpl. *)
+(*       repeat rewrite concat_pp_p. apply moveR_Vp. apply moveR_Vp. *)
+(*       apply whiskerL. apply whiskerR. *)
+(*       generalize (montype_map_id f). intro p. destruct p. *)
+(*       reflexivity. *)
+(*   Defined. *)
               
 
-  Definition left_cancel_localize (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X)
-             (left_cancel : left_faithful (@montype_mult M))
-    : left_faithful (act_on_prod M M X (act_on_self M) act).
-  Proof.
-    unfold left_faithful.
-    intros s t p q [a x].
-    intro H. apply (left_cancel s t p q a). 
-    refine ((ap_fst_path_prod (z := (s ⊗ a, act s x )) (z' := (t ⊗ a, act t x ))
-                (ap (fun m : M => m ⊗ a) p) (ap (fun m : M => act m x) p))^ @ _ @
-             ap_fst_path_prod (z := (s ⊗ a, act s x )) (z' := (t ⊗ a, act t x ))
-                (ap (fun m : M => m ⊗ a) q) (ap (fun m : M => act m x) q)). 
-    apply (ap (ap fst)).
-    refine (_ @ H @ _).
-    - destruct p. reflexivity.
-    - destruct q. reflexivity.
-  Defined.
+(*   Definition left_cancel_localize (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*     : left_faithful (act_on_prod M M X (act_on_self M) act). *)
+(*   Proof. *)
+(*     unfold left_faithful. *)
+(*     intros s t p q [a x]. *)
+(*     intro H. apply (left_cancel s t p q a).  *)
+(*     refine ((ap_fst_path_prod (z := (s ⊗ a, act s x )) (z' := (t ⊗ a, act t x )) *)
+(*                 (ap (fun m : M => m ⊗ a) p) (ap (fun m : M => act m x) p))^ @ _ @ *)
+(*              ap_fst_path_prod (z := (s ⊗ a, act s x )) (z' := (t ⊗ a, act t x )) *)
+(*                 (ap (fun m : M => m ⊗ a) q) (ap (fun m : M => act m x) q)).  *)
+(*     apply (ap (ap fst)). *)
+(*     refine (_ @ H @ _). *)
+(*     - destruct p. reflexivity. *)
+(*     - destruct q. reflexivity. *)
+(*   Defined. *)
     
 
-  Definition localize_action (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X)
-             (left_cancel : left_faithful (@montype_mult M))
-    : PreCategory.
-  Proof.
-    apply (monoidal_action_cat M (BuildTruncType 1 (M*X)) (act_on_prod M M X (act_on_self M) act)).
-    apply left_cancel_localize. apply left_cancel.
-  Defined.
+(*   Definition localize_action (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*     : PreCategory. *)
+(*   Proof. *)
+(*     apply (monoidal_action_cat M (BuildTruncType 1 (M*X)) (act_on_prod M M X (act_on_self M) act)). *)
+(*     apply left_cancel_localize. apply left_cancel. *)
+(*   Defined. *)
 
   
 
-  Definition include_in_localize_action (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X)
-             (left_cancel : left_faithful (@montype_mult M))
-             (x0 : X)
-    : Functor (groupoid_category M) (localize_action M X act left_cancel).
-  Proof.
-    apply include_in_monoidal_action_cat.
-    intro a. exact (a,x0).
-  Defined.
+(*   Definition include_in_localize_action (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*              (x0 : X) *)
+(*     : Functor (groupoid_category M) (localize_action M X act left_cancel). *)
+(*   Proof. *)
+(*     apply include_in_monoidal_action_cat. *)
+(*     intro a. exact (a,x0). *)
+(*   Defined. *)
 
-  (** The group completion of a monoidal category. *)
-  Definition group_completion_moncat (M : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M))
-    : PreCategory :=
-    localize_action M M (act_on_self M) left_cancel.
+(*   (** The group completion of a monoidal category. *) *)
+(*   Definition group_completion_moncat (M : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*     : PreCategory := *)
+(*     localize_action M M (act_on_self M) left_cancel. *)
 
-  Definition contr_self_category (M : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M))
-             (* (left_cancel : forall (s t : M) (p q : s = t) (a : M), *)
-             (*     ap (fun x => x ⊗ a) p = ap (fun x => x ⊗ a) q -> p = q) *)
-    : forall x : object (monoidal_action_cat M M (act_on_self M) left_cancel),
-      Contr (morphism (monoidal_action_cat M M (act_on_self M) left_cancel) montype_id x).
-  Proof.
-    simpl. intro a. unfold monoidal_action_morphism. unfold act_on_self. simpl.
-    apply (contr_equiv' {s : M & s = a}).
-    - srapply @equiv_functor_sigma'.
-      { exact equiv_idmap. }
-      intro m. simpl.
-      apply equiv_concat_l. apply montype_moncat_rid.
-    - apply contr_basedpaths'.
-  Defined.
-
-
-  (** Given a : M, get an endofunctor +a on the group completion  *)
-  Definition act_on_grp_compl (M : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M))
-    : M -> Functor (group_completion_moncat M left_cancel) (group_completion_moncat M left_cancel).
-  Proof.
-    intro a.
-    srapply @Build_Functor.
-    - intros [x1 x2]. exact (montype_mult x1 a, x2).
-    - intros [x1 x2] y.
-      intros [s p].
-      exists s.
-      apply (path_prod); simpl.
-      + refine (_ @ ap (fun m => montype_mult m a) (ap fst p)).
-        apply inverse. apply montype_assoc.
-      + apply (ap snd p).
-    - intros [x1 x2] y z.
-      intros [s p]. intros [t q]. destruct q. destruct p.
-      simpl. repeat rewrite concat_p1.
-      srapply @path_sigma.
-      { reflexivity. }
-      simpl.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod.
-      rewrite ap_functor_prod.
-      rewrite <- path_prod_pp. rewrite <- path_prod_pp.
-      rewrite concat_p1. simpl. rewrite concat_p1.
-      apply (ap (fun p => path_prod _ _ p _)).
-      rewrite montype_pentagon.
-      repeat rewrite concat_p_pp.
-      apply whiskerR. rewrite ap_V. apply whiskerR. rewrite concat_Vp.
-      apply concat_1p.
-    - intros [x1 x2]. simpl.
-      srapply @path_sigma.
-      { reflexivity. } simpl.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod.
-      apply (ap (fun p => path_prod _ _ p _)).
-      rewrite montype_triangle1.
-      destruct (montype_lid (x1 ⊗ a)). rewrite concat_p1.
-      apply concat_Vp.
-  Defined.
-
-  (** The action preserves the monoid multiplication.  *)
-  Definition act_on_grp_compl_mult (M : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M))
-             (a b : M) (x : M * M)
-    : act_on_grp_compl M left_cancel (montype_mult a b) x =
-      ((act_on_grp_compl M left_cancel b) ((act_on_grp_compl M left_cancel a) x)).
-  Proof.
-    destruct x as [x1 x2]. simpl.
-    apply path_prod; simpl.
-    + apply inverse. apply montype_assoc.
-    + reflexivity.
-  Defined.
-
-  (** The following results implies that the action is an equivalence after taking the 1-type completion.  *)
-  Definition act_on_grp_compl_inv (M : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M))
-    : M -> Functor (group_completion_moncat M left_cancel) (group_completion_moncat M left_cancel).
-  Proof.
-    intro a.
-    srapply @Build_Functor.
-    - intros [x1 x2]. exact (x1, montype_mult x2 a).
-    - intros [x1 x2] y.
-      intros [s p].
-      exists s.
-      apply (path_prod); simpl.
-      + apply (ap fst p).
-      + refine (_ @ ap (fun m => montype_mult m a) (ap snd p)).
-        apply inverse. apply montype_assoc.
-    - intros [x1 x2] y z.
-      intros [s p]. intros [t q]. destruct q. destruct p.
-      simpl. repeat rewrite concat_p1.
-      srapply @path_sigma.
-      { reflexivity. }
-      simpl.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod.
-      rewrite ap_functor_prod.
-      rewrite <- path_prod_pp. rewrite <- path_prod_pp.
-      rewrite concat_p1. simpl. rewrite concat_p1.
-      apply (ap (fun p => path_prod _ _ _ p)).
-      rewrite montype_pentagon.
-      repeat rewrite concat_p_pp.
-      apply whiskerR. rewrite ap_V. apply whiskerR. rewrite concat_Vp.
-      apply concat_1p.
-    - intros [x1 x2]. simpl.
-      srapply @path_sigma.
-      { reflexivity. } simpl.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod.
-      apply (ap (fun p => path_prod _ _ _ p)).
-      rewrite montype_triangle1.
-      destruct (montype_lid (x2 ⊗ a)). rewrite concat_p1.
-      apply concat_Vp.
-  Defined.
+(*   Definition contr_self_category (M : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*              (* (left_cancel : forall (s t : M) (p q : s = t) (a : M), *) *)
+(*              (*     ap (fun x => x ⊗ a) p = ap (fun x => x ⊗ a) q -> p = q) *) *)
+(*     : forall x : object (monoidal_action_cat M M (act_on_self M) left_cancel), *)
+(*       Contr (morphism (monoidal_action_cat M M (act_on_self M) left_cancel) montype_id x). *)
+(*   Proof. *)
+(*     simpl. intro a. unfold monoidal_action_morphism. unfold act_on_self. simpl. *)
+(*     apply (contr_equiv' {s : M & s = a}). *)
+(*     - srapply @equiv_functor_sigma'. *)
+(*       { exact equiv_idmap. } *)
+(*       intro m. simpl. *)
+(*       apply equiv_concat_l. apply montype_moncat_rid. *)
+(*     - apply contr_basedpaths'. *)
+(*   Defined. *)
 
 
-  Definition act_on_grp_compl_is_sect (M : Symmetric_Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M)) (a : M):
-    NaturalTransformation
-      1%functor
-      ((act_on_grp_compl_inv M left_cancel a) o (act_on_grp_compl M left_cancel a))%functor.
-  Proof.
-    srapply @Build_NaturalTransformation.
-    - intros [x1 x2]. simpl.
-      exists a.
-      apply path_prod;
-        apply smontype_sym.
-    - intros [x1 x2] y. intros [s p].
-      simpl. destruct p. simpl.
-      rewrite concat_p1. rewrite concat_p1.
-      srapply @path_sigma.
-      { apply smontype_sym. }
-      refine (transport_paths_Fl (smontype_sym a s) _ @ _). simpl.
-      rewrite ap_functor_prod.
-      rewrite <- path_prod_pp.
-      rewrite <- path_prod_pp.
-      rewrite <- path_prod_pp.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. simpl. rewrite concat_p1.
-      apply moveR_pM.
-      rewrite <- path_prod_VV.
-      rewrite <- path_prod_pp. unfold functor_prod. simpl.
-      transitivity (path_prod (_,_) (_,_)
-                              (ap (fun x : M => smontype_mult x x1) (smontype_sym a s))
-                              (ap (fun x : M => smontype_mult x x2) (smontype_sym a s)))^.
-      { destruct (smontype_sym a s). reflexivity. }
-      apply (equiv_inj inverse). rewrite inv_V.
-      rewrite <- path_prod_VV.
-      rewrite inv_pV. rewrite inv_pV.
-      rewrite inv_pV. rewrite inv_pV.
-      rewrite smontype_hexagon. rewrite smontype_hexagon.
-      rewrite inv_pp. rewrite inv_pp.
-      repeat rewrite concat_p_pp.
-      reflexivity.
-  Defined.
+(*   (** Given a : M, get an endofunctor +a on the group completion  *) *)
+(*   Definition act_on_grp_compl (M : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*     : M -> Functor (group_completion_moncat M left_cancel) (group_completion_moncat M left_cancel). *)
+(*   Proof. *)
+(*     intro a. *)
+(*     srapply @Build_Functor. *)
+(*     - intros [x1 x2]. exact (montype_mult x1 a, x2). *)
+(*     - intros [x1 x2] y. *)
+(*       intros [s p]. *)
+(*       exists s. *)
+(*       apply (path_prod); simpl. *)
+(*       + refine (_ @ ap (fun m => montype_mult m a) (ap fst p)). *)
+(*         apply inverse. apply montype_assoc. *)
+(*       + apply (ap snd p). *)
+(*     - intros [x1 x2] y z. *)
+(*       intros [s p]. intros [t q]. destruct q. destruct p. *)
+(*       simpl. repeat rewrite concat_p1. *)
+(*       srapply @path_sigma. *)
+(*       { reflexivity. } *)
+(*       simpl. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. *)
+(*       rewrite ap_functor_prod. *)
+(*       rewrite <- path_prod_pp. rewrite <- path_prod_pp. *)
+(*       rewrite concat_p1. simpl. rewrite concat_p1. *)
+(*       apply (ap (fun p => path_prod _ _ p _)). *)
+(*       rewrite montype_pentagon. *)
+(*       repeat rewrite concat_p_pp. *)
+(*       apply whiskerR. rewrite ap_V. apply whiskerR. rewrite concat_Vp. *)
+(*       apply concat_1p. *)
+(*     - intros [x1 x2]. simpl. *)
+(*       srapply @path_sigma. *)
+(*       { reflexivity. } simpl. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. *)
+(*       apply (ap (fun p => path_prod _ _ p _)). *)
+(*       rewrite montype_triangle1. *)
+(*       destruct (montype_lid (x1 ⊗ a)). rewrite concat_p1. *)
+(*       apply concat_Vp. *)
+(*   Defined. *)
 
-  Definition act_on_grp_compl_is_retr (M : Symmetric_Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult M)) (a : M):
-    NaturalTransformation
-      1%functor
-      ((act_on_grp_compl M left_cancel a) o (act_on_grp_compl_inv M left_cancel a))%functor.
-  Proof.
-    srapply @Build_NaturalTransformation.
-    - intros [x1 x2]. simpl.
-      exists a.
-      apply path_prod;
-        apply smontype_sym.
-    - intros [x1 x2] y. intros [s p].
-      simpl. destruct p. simpl.
-      rewrite concat_p1. rewrite concat_p1.
-      srapply @path_sigma.
-      { apply smontype_sym. }
-      refine (transport_paths_Fl (smontype_sym a s) _ @ _). simpl.
-      rewrite ap_functor_prod.
-      rewrite <- path_prod_pp.
-      rewrite <- path_prod_pp.
-      rewrite <- path_prod_pp.
-      rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. simpl. rewrite concat_p1.
-      apply moveR_pM.
-      rewrite <- path_prod_VV.
-      rewrite <- path_prod_pp. unfold functor_prod. simpl.
-      transitivity (path_prod (_,_) (_,_)
-                              (ap (fun x : M => smontype_mult x x1) (smontype_sym a s))
-                              (ap (fun x : M => smontype_mult x x2) (smontype_sym a s)))^.
-      { destruct (smontype_sym a s). reflexivity. }
-      apply (equiv_inj inverse). rewrite inv_V.
-      rewrite <- path_prod_VV.
-      rewrite inv_pV. rewrite inv_pV.
-      rewrite inv_pV. rewrite inv_pV.
-      rewrite smontype_hexagon. rewrite smontype_hexagon.
-      rewrite inv_pp. rewrite inv_pp.
-      repeat rewrite concat_p_pp.
-      reflexivity.
-  Defined.
+(*   (** The action preserves the monoid multiplication.  *) *)
+(*   Definition act_on_grp_compl_mult (M : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*              (a b : M) (x : M * M) *)
+(*     : act_on_grp_compl M left_cancel (montype_mult a b) x = *)
+(*       ((act_on_grp_compl M left_cancel b) ((act_on_grp_compl M left_cancel a) x)). *)
+(*   Proof. *)
+(*     destruct x as [x1 x2]. simpl. *)
+(*     apply path_prod; simpl. *)
+(*     + apply inverse. apply montype_assoc. *)
+(*     + reflexivity. *)
+(*   Defined. *)
+
+(*   (** The following results implies that the action is an equivalence after taking the 1-type completion.  *) *)
+(*   Definition act_on_grp_compl_inv (M : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) *)
+(*     : M -> Functor (group_completion_moncat M left_cancel) (group_completion_moncat M left_cancel). *)
+(*   Proof. *)
+(*     intro a. *)
+(*     srapply @Build_Functor. *)
+(*     - intros [x1 x2]. exact (x1, montype_mult x2 a). *)
+(*     - intros [x1 x2] y. *)
+(*       intros [s p]. *)
+(*       exists s. *)
+(*       apply (path_prod); simpl. *)
+(*       + apply (ap fst p). *)
+(*       + refine (_ @ ap (fun m => montype_mult m a) (ap snd p)). *)
+(*         apply inverse. apply montype_assoc. *)
+(*     - intros [x1 x2] y z. *)
+(*       intros [s p]. intros [t q]. destruct q. destruct p. *)
+(*       simpl. repeat rewrite concat_p1. *)
+(*       srapply @path_sigma. *)
+(*       { reflexivity. } *)
+(*       simpl. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. *)
+(*       rewrite ap_functor_prod. *)
+(*       rewrite <- path_prod_pp. rewrite <- path_prod_pp. *)
+(*       rewrite concat_p1. simpl. rewrite concat_p1. *)
+(*       apply (ap (fun p => path_prod _ _ _ p)). *)
+(*       rewrite montype_pentagon. *)
+(*       repeat rewrite concat_p_pp. *)
+(*       apply whiskerR. rewrite ap_V. apply whiskerR. rewrite concat_Vp. *)
+(*       apply concat_1p. *)
+(*     - intros [x1 x2]. simpl. *)
+(*       srapply @path_sigma. *)
+(*       { reflexivity. } simpl. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. *)
+(*       apply (ap (fun p => path_prod _ _ _ p)). *)
+(*       rewrite montype_triangle1. *)
+(*       destruct (montype_lid (x2 ⊗ a)). rewrite concat_p1. *)
+(*       apply concat_Vp. *)
+(*   Defined. *)
+
+
+(*   Definition act_on_grp_compl_is_sect (M : Symmetric_Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) (a : M): *)
+(*     NaturalTransformation *)
+(*       1%functor *)
+(*       ((act_on_grp_compl_inv M left_cancel a) o (act_on_grp_compl M left_cancel a))%functor. *)
+(*   Proof. *)
+(*     srapply @Build_NaturalTransformation. *)
+(*     - intros [x1 x2]. simpl. *)
+(*       exists a. *)
+(*       apply path_prod; *)
+(*         apply smontype_sym. *)
+(*     - intros [x1 x2] y. intros [s p]. *)
+(*       simpl. destruct p. simpl. *)
+(*       rewrite concat_p1. rewrite concat_p1. *)
+(*       srapply @path_sigma. *)
+(*       { apply smontype_sym. } *)
+(*       refine (transport_paths_Fl (smontype_sym a s) _ @ _). simpl. *)
+(*       rewrite ap_functor_prod. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. simpl. rewrite concat_p1. *)
+(*       apply moveR_pM. *)
+(*       rewrite <- path_prod_VV. *)
+(*       rewrite <- path_prod_pp. unfold functor_prod. simpl. *)
+(*       transitivity (path_prod (_,_) (_,_) *)
+(*                               (ap (fun x : M => smontype_mult x x1) (smontype_sym a s)) *)
+(*                               (ap (fun x : M => smontype_mult x x2) (smontype_sym a s)))^. *)
+(*       { destruct (smontype_sym a s). reflexivity. } *)
+(*       apply (equiv_inj inverse). rewrite inv_V. *)
+(*       rewrite <- path_prod_VV. *)
+(*       rewrite inv_pV. rewrite inv_pV. *)
+(*       rewrite inv_pV. rewrite inv_pV. *)
+(*       rewrite smontype_hexagon. rewrite smontype_hexagon. *)
+(*       rewrite inv_pp. rewrite inv_pp. *)
+(*       repeat rewrite concat_p_pp. *)
+(*       reflexivity. *)
+(*   Defined. *)
+
+(*   Definition act_on_grp_compl_is_retr (M : Symmetric_Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult M)) (a : M): *)
+(*     NaturalTransformation *)
+(*       1%functor *)
+(*       ((act_on_grp_compl M left_cancel a) o (act_on_grp_compl_inv M left_cancel a))%functor. *)
+(*   Proof. *)
+(*     srapply @Build_NaturalTransformation. *)
+(*     - intros [x1 x2]. simpl. *)
+(*       exists a. *)
+(*       apply path_prod; *)
+(*         apply smontype_sym. *)
+(*     - intros [x1 x2] y. intros [s p]. *)
+(*       simpl. destruct p. simpl. *)
+(*       rewrite concat_p1. rewrite concat_p1. *)
+(*       srapply @path_sigma. *)
+(*       { apply smontype_sym. } *)
+(*       refine (transport_paths_Fl (smontype_sym a s) _ @ _). simpl. *)
+(*       rewrite ap_functor_prod. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite <- path_prod_pp. *)
+(*       rewrite ap_fst_path_prod. rewrite ap_snd_path_prod. simpl. rewrite concat_p1. *)
+(*       apply moveR_pM. *)
+(*       rewrite <- path_prod_VV. *)
+(*       rewrite <- path_prod_pp. unfold functor_prod. simpl. *)
+(*       transitivity (path_prod (_,_) (_,_) *)
+(*                               (ap (fun x : M => smontype_mult x x1) (smontype_sym a s)) *)
+(*                               (ap (fun x : M => smontype_mult x x2) (smontype_sym a s)))^. *)
+(*       { destruct (smontype_sym a s). reflexivity. } *)
+(*       apply (equiv_inj inverse). rewrite inv_V. *)
+(*       rewrite <- path_prod_VV. *)
+(*       rewrite inv_pV. rewrite inv_pV. *)
+(*       rewrite inv_pV. rewrite inv_pV. *)
+(*       rewrite smontype_hexagon. rewrite smontype_hexagon. *)
+(*       rewrite inv_pp. rewrite inv_pp. *)
+(*       repeat rewrite concat_p_pp. *)
+(*       reflexivity. *)
+(*   Defined. *)
 
   
-  Definition to_groupcompletion (S : Monoidal_1Type)
-             (left_cancel : left_faithful (@montype_mult S))
-             : Functor (groupoid_category S) (group_completion_moncat S left_cancel).
-  Proof.
-    apply include_in_monoidal_action_cat.
-    simpl. intro a. exact (a, montype_id).
-  Defined.
+(*   Definition to_groupcompletion (S : Monoidal_1Type) *)
+(*              (left_cancel : left_faithful (@montype_mult S)) *)
+(*              : Functor (groupoid_category S) (group_completion_moncat S left_cancel). *)
+(*   Proof. *)
+(*     apply include_in_monoidal_action_cat. *)
+(*     simpl. intro a. exact (a, montype_id). *)
+(*   Defined. *)
 
-End Localize.
+(* End Localize. *)
   
-Section Univalent_GroupGompletion.
-  (** We show when the group completion is a univalent category.  *)
-  Context (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X)
-          (left_cancel_act : left_faithful act).
+(* Section Univalent_GroupGompletion. *)
+(*   (** We show when the group completion is a univalent category.  *) *)
+(*   Context (M : Monoidal_1Type) (X : 1-Type) (act : monoidal_action M X) *)
+(*           (left_cancel_act : left_faithful act). *)
 
 
-  Lemma idtoiso_is_concat (x y : monoidal_action_cat M X act left_cancel_act) :
-    forall (p : x = y),
-      (@idtoiso _ x y p) =
-      (montype_id; montype_act_id _ x @ p) :> morphism _ x y.
-  Proof.
-    intros []. simpl.
-    srapply @path_sigma. { reflexivity. }
-    simpl. apply (concat_p1 _)^.
-  Defined.
+(*   Lemma idtoiso_is_concat (x y : monoidal_action_cat M X act left_cancel_act) : *)
+(*     forall (p : x = y), *)
+(*       (@idtoiso _ x y p) = *)
+(*       (montype_id; montype_act_id _ x @ p) :> morphism _ x y. *)
+(*   Proof. *)
+(*     intros []. simpl. *)
+(*     srapply @path_sigma. { reflexivity. } *)
+(*     simpl. apply (concat_p1 _)^. *)
+(*   Defined. *)
 
-  Definition equiv_path_isomorphic {C : PreCategory} (x y : C) (f g : (x <~=~> y)%category) :
-    (f = g :> morphism C x y) <~> f = g
-    := BuildEquiv _ _ (path_isomorphic f g) _.
+(*   Definition equiv_path_isomorphic {C : PreCategory} (x y : C) (f g : (x <~=~> y)%category) : *)
+(*     (f = g :> morphism C x y) <~> f = g *)
+(*     := BuildEquiv _ _ (path_isomorphic f g) _. *)
 
-  Lemma fiber_idtoiso (x y : monoidal_action_cat M X act left_cancel_act) (f : (x <~=~> y) %category) :
-    hfiber (@idtoiso _ x y) f <~>
-           ((morphism_isomorphic (Isomorphic := f)).1 = montype_id).
-  Proof.
-    unfold hfiber.
-    transitivity {p : x = y & (montype_id; montype_act_id _ x @ p) = f :> morphism _ x y}.
-    - apply equiv_functor_sigma_id.
-      intro p.
-      refine (_ oE (equiv_path_isomorphic
-                      x y
-                      _
-                      f)^-1).      
-      apply equiv_concat_l.
-      apply inverse. apply idtoiso_is_concat.
-    - destruct f as [[s q] isiso]. simpl.
-      transitivity {p : x = y &
-                        {r : montype_id = s &
-                             (montype_act_id act x)^ @ ap (fun a : M => act a x) r @ q = p}}.
-      { apply equiv_functor_sigma_id. intro p.
-        refine (_ oE (equiv_path_sigma _ _ _ )). simpl.
-        apply equiv_functor_sigma_id. intro r.
-        destruct r. simpl. destruct p. 
-        refine (_ oE equiv_moveL_Vp _ _ _).
-        refine (equiv_path_inverse _ _ oE _).
-        apply equiv_concat_r. apply whiskerR. apply inverse. apply concat_p1. }
-      transitivity {r : montype_id = s &
-                        {p : x = y &
-                             ((montype_act_id act x)^ @ ap (fun a : M => act a x) r) @ q = p}}.
-      { srapply @equiv_adjointify.
-        - intros [p [r h]]. exact (r; (p; h)).
-        - intros [r [p h]]. exact (p; (r; h)).
-        - intros [r [p h]]. reflexivity.
-        - intros [p [r h]]. reflexivity. }
-      refine (equiv_path_inverse _ _ oE _).
-      apply equiv_sigma_contr. intro r.
-      apply contr_basedpaths.
-  Defined.
+(*   Lemma fiber_idtoiso (x y : monoidal_action_cat M X act left_cancel_act) (f : (x <~=~> y) %category) : *)
+(*     hfiber (@idtoiso _ x y) f <~> *)
+(*            ((morphism_isomorphic (Isomorphic := f)).1 = montype_id). *)
+(*   Proof. *)
+(*     unfold hfiber. *)
+(*     transitivity {p : x = y & (montype_id; montype_act_id _ x @ p) = f :> morphism _ x y}. *)
+(*     - apply equiv_functor_sigma_id. *)
+(*       intro p. *)
+(*       refine (_ oE (equiv_path_isomorphic *)
+(*                       x y *)
+(*                       _ *)
+(*                       f)^-1).       *)
+(*       apply equiv_concat_l. *)
+(*       apply inverse. apply idtoiso_is_concat. *)
+(*     - destruct f as [[s q] isiso]. simpl. *)
+(*       transitivity {p : x = y & *)
+(*                         {r : montype_id = s & *)
+(*                              (montype_act_id act x)^ @ ap (fun a : M => act a x) r @ q = p}}. *)
+(*       { apply equiv_functor_sigma_id. intro p. *)
+(*         refine (_ oE (equiv_path_sigma _ _ _ )). simpl. *)
+(*         apply equiv_functor_sigma_id. intro r. *)
+(*         destruct r. simpl. destruct p.  *)
+(*         refine (_ oE equiv_moveL_Vp _ _ _). *)
+(*         refine (equiv_path_inverse _ _ oE _). *)
+(*         apply equiv_concat_r. apply whiskerR. apply inverse. apply concat_p1. } *)
+(*       transitivity {r : montype_id = s & *)
+(*                         {p : x = y & *)
+(*                              ((montype_act_id act x)^ @ ap (fun a : M => act a x) r) @ q = p}}. *)
+(*       { srapply @equiv_adjointify. *)
+(*         - intros [p [r h]]. exact (r; (p; h)). *)
+(*         - intros [r [p h]]. exact (p; (r; h)). *)
+(*         - intros [r [p h]]. reflexivity. *)
+(*         - intros [p [r h]]. reflexivity. } *)
+(*       refine (equiv_path_inverse _ _ oE _). *)
+(*       apply equiv_sigma_contr. intro r. *)
+(*       apply contr_basedpaths. *)
+(*   Defined. *)
     
 
-  Context (unit_is_id : forall s t: M, montype_mult s t = montype_id -> s = montype_id)
-          (contr_component_id : forall (a : M), IsHProp (montype_id = a)).
+(*   Context (unit_is_id : forall s t: M, montype_mult s t = montype_id -> s = montype_id) *)
+(*           (contr_component_id : forall (a : M), IsHProp (montype_id = a)). *)
 
-  Definition univalent_monactcat (x y : monoidal_action_cat M X act left_cancel_act) :
-    IsEquiv (@Category.idtoiso _ x y).
-  Proof.
-    apply isequiv_fcontr. intro f.
-    srefine (contr_equiv' _ (equiv_inverse (fiber_idtoiso x y f))).
-    destruct f as [[s p] isiso]. simpl.
-    apply (contr_equiv' (montype_id = s)).
-    { apply equiv_path_inverse. }
-    apply contr_inhabited_hprop.
-    { apply contr_component_id. }
-    apply inverse.
-    destruct isiso as [[t q] ]. simpl in *.
-    apply (unit_is_id s t).
-    apply ((equiv_path_sigma _ _ _) right_inverse).
-  Defined.
-End Univalent_GroupGompletion.
+(*   Definition univalent_monactcat (x y : monoidal_action_cat M X act left_cancel_act) : *)
+(*     IsEquiv (@Category.idtoiso _ x y). *)
+(*   Proof. *)
+(*     apply isequiv_fcontr. intro f. *)
+(*     srefine (contr_equiv' _ (equiv_inverse (fiber_idtoiso x y f))). *)
+(*     destruct f as [[s p] isiso]. simpl. *)
+(*     apply (contr_equiv' (montype_id = s)). *)
+(*     { apply equiv_path_inverse. } *)
+(*     apply contr_inhabited_hprop. *)
+(*     { apply contr_component_id. } *)
+(*     apply inverse. *)
+(*     destruct isiso as [[t q] ]. simpl in *. *)
+(*     apply (unit_is_id s t). *)
+(*     apply ((equiv_path_sigma _ _ _) right_inverse). *)
+(*   Defined. *)
+(* End Univalent_GroupGompletion. *)
      
+
+
+
+
+
+
+
+
+

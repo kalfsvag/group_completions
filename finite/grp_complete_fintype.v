@@ -2,8 +2,9 @@ Require Import HoTT.
 
 From A_BPQ Require Import 
      conn_ptype path_lemmas finite_types delooping permutations fintype_monoidal
-     group_complete_1type onetype_completion.
+     group_complete_1type onetype_completion monoidal_category.
 
+Close Scope functor. Close Scope category. Open Scope type.
 (** The group completion of the monoidal category [FinType]  *)
 Definition group_completion_FinType := group_completion_moncat FinType_smoncat FinType_lcancel.
 Section Univalent_Group_Completion_FinType.
@@ -12,7 +13,7 @@ Section Univalent_Group_Completion_FinType.
     A + B <~> Empty -> A <~> Empty.
   Proof.
     intro e.
-    apply (BuildEquiv A Empty (fun a => e (inl a)) ). apply all_to_empty_isequiv.
+    apply (BuildEquiv A Empty (fun a => e (Datatypes.inl a)) ). apply all_to_empty_isequiv.
   Defined.    
 
   Definition univalent_group_completion_FinType :
@@ -23,7 +24,7 @@ Section Univalent_Group_Completion_FinType.
       intro p.
       apply path_FinType. simpl.
       apply (sum_empty_is_empty A B).
-      apply ((path_FinType _ _)^-1 p).
+      apply ((path_FinType _ _)^-1 p)%function.
     - intro A.
       apply (trunc_equiv' (Empty <~> A)).
       + apply (equiv_path_FinType (canon_FinType 0)).
@@ -32,6 +33,7 @@ Section Univalent_Group_Completion_FinType.
         * exact _.
   Qed.
 End Univalent_Group_Completion_FinType.
+
 
 (** Define a shorthand for the 1-type completion of the group completion of FinType  *)
 Definition Z := N1 (group_completion_FinType).
@@ -362,24 +364,28 @@ Section N1_FinType_set_ind.
     rewrite <- path_FinType_compose.
     rewrite <- path_FinType_compose. rewrite <- path_FinType_compose.
     assert (finsum_inv_l : forall (m n : nat),
-               finsum_inv m n o (finl m n) == inl).
+               finsum_inv m n o (finl m n) == Datatypes.inl).
     { intros m n. intro x.
-      exact (eissect (equiv_finsum m n) (inl x)). }
+      exact (eissect (equiv_finsum m n) (Datatypes.inl x)). }
     assert (finsum_inv_r : forall (m n : nat),
-               finsum_inv m n o (finr m n) == inr).
+               finsum_inv m n o (finr m n) == Datatypes.inr).
     { intros m n. intro x.
-      exact (eissect (equiv_finsum m n) (inr x)). }
+      exact (eissect (equiv_finsum m n) (Datatypes.inr x)). }
     apply (ap011 (path_Z_fr _)); (apply (ap (path_FinType _ _)));
       apply path_equiv; apply path_arrow; intro x; 
         repeat destruct x as [x | x]; simpl.
-    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (inl ?y)) with (inl B (f y)).
+    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (Datatypes.inl ?y)) with
+                            (Datatypes.inl B (f y)).
       rewrite finsum_inv_l. reflexivity.
-    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (inl ?y)) with (inl B (f y)).
+    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (Datatypes.inl ?y)) with
+                            (Datatypes.inl B (f y)).
       rewrite finsum_inv_r. reflexivity.
     - rewrite finsum_inv_r. reflexivity.
-    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (inl ?y)) with (inl B (f y)).
+    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (Datatypes.inl ?y)) with
+                            (Datatypes.inl B (f y)).
       rewrite finsum_inv_l. reflexivity.
-    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (inl ?y)) with (inl B (f y)).
+    - rewrite finsum_inv_l. change (functor_sum (B' := ?B) ?f ?g (Datatypes.inl ?y)) with
+                            (Datatypes.inl B (f y)).
       rewrite finsum_inv_r. reflexivity.
     - rewrite finsum_inv_r. reflexivity.
   Defined.

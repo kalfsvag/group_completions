@@ -32,14 +32,13 @@
 Reverse the notation of plus so that n.+1 = n+1 by definition. 
 </div>
 <div class="code">
-<span class="id" type="keyword">Notation</span> <a name=":210"><span class="id" type="notation">"</span></a>a +' b" := (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Peano.html#plus"><span class="id" type="definition">Peano.plus</span></a> <span class="id" type="var">b</span> <span class="id" type="var">a</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 50).<br/>
-</div>
+<span class="id" type="keyword">Notation</span> <a name=":210"><span class="id" type="notation">"</span></a>a +' b" := (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Peano.html#plus"><span class="id" type="definition">Peano.plus</span></a> <span class="id" type="var">b</span> <span class="id" type="var">a</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 40) : <span class="id" type="var">nat_scope</span>. </div>
 
 <div class="doc">
 Change notation since "Fin" is something else in the thesis. 
 </div>
 <div class="code">
-<span class="id" type="keyword">Notation</span> <a name=":331"><span class="id" type="notation">"</span></a>'fintype'" := <span class="id" type="definition">Fin</span>.<br/>
+<span class="id" type="keyword">Notation</span> <a name=":373"><span class="id" type="notation">"</span></a>'fintype'" := <span class="id" type="definition">Fin</span>.<br/>
 
 <br/>
 <span class="id" type="keyword">Definition</span> <a name="equiv_fin2_bool"><span class="id" type="definition">equiv_fin2_bool</span></a> : <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">fintype</span></a> <a class="idref" href="A_BPQ.finite.finite_types.html#:::'fintype'"><span class="id" type="notation">2</span></a> <span class="id" type="notation">&lt;~&gt;</span> <span class="id" type="inductive">Bool</span>.<br/>

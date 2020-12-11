@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
 
-Require Import Functor Category.
+Require Export Functor Category.
 (* From A_BPQ Require Import path_lemmas. *)
 (*These notations are defined elsewhere, but I do not know how to import it.*)
 Local Notation "x --> y" := (morphism _ x y) (at level 99, right associativity, y at level 200) : type_scope.
@@ -10,18 +10,20 @@ Notation "F '_1' m" := (Functor.Core.morphism_of F m) (at level 10, no associati
 Open Scope category_scope.
 Open Scope morphism_scope.
 
-Record Magma : Type :=
+Record Cat_Magma : Type :=
   { magma_cat :> PreCategory; binary_op : Functor (magma_cat*magma_cat) magma_cat }.
-Arguments binary_op {m}.
+Arguments binary_op {c}.
 
-Definition binary_op_0 {M : Magma} : ((object M) * (object M) -> object M )%type :=
+Definition binary_op_0 {M : Cat_Magma} : ((object M) * (object M) -> object M )%type :=
   object_of binary_op.
 
 
+Declare Scope monoidal_scope.
 (* Local Notation "a + b" := (Core.object_of binary_op (a, b)). (* Just for printing. *) *)
-Local Notation "a +' b" := (binary_op (a, b)) (at level 40).
+Notation "a +' b" := (binary_op (a, b)) (at level 40) : monoidal_scope.
 
-(* Definition binary_op_1 {M : Magma} {s1 s2 d1 d2 : object M} : *)
+
+(* Definition binary_op_1 {M : Cat_Magma} {s1 s2 d1 d2 : object M} : *)
 (*   ((s1 --> d1) * (s2 --> d2))%type -> ((s1 + s2) --> (d1 + d2)). *)
 (* Proof. *)
 (*   intro m. apply (morphism_of binary_op). exact m. *)
@@ -31,22 +33,23 @@ Definition pair_1 {C D : PreCategory} {c c' : C} {d d' : D} (f : c --> c') (g : 
   morphism (C*D) (c, d) (c', d') := (f,g).
 
 (* Local Notation "f +^ g" := (binary_op _1 (f, g)) (at level 40). (* This is just for printing *) *)
-Local Notation "f +^ g" := (binary_op _1 (pair_1 f g)) (at level 40).
+Notation "f +^ g" := (binary_op _1 (pair_1 f g)) (at level 40) : monoidal_scope.
 
+Open Scope monoidal_scope.
 
 
 (* Sum of idmaps is the idmap *)
-Definition sum_idmap {M : Magma} {m n : M} : (identity m +^ identity n) = identity (m +' n) :=
+Definition sum_idmap {M : Cat_Magma} {m n : M} : (identity m +^ identity n) = identity (m +' n) :=
   identity_of binary_op (m, n).
 
-Lemma compose_sum_l {M: Magma} {a1 a2 a3 b : M} (f1 : a1 --> a2) (f2 : a2 --> a3)
+Lemma compose_sum_l {M: Cat_Magma} {a1 a2 a3 b : M} (f1 : a1 --> a2) (f2 : a2 --> a3)
   : (f2 o f1) +^ (identity b) = (f2 +^ 1) o (f1 +^ 1).
 Proof.
   rewrite <- composition_of. simpl.
   rewrite left_identity. reflexivity.
 Qed.
 
-Lemma compose_sum_r {M: Magma} {a b1 b2 b3 : M} (f1 : b1 --> b2) (f2 : b2 --> b3)
+Lemma compose_sum_r {M: Cat_Magma} {a b1 b2 b3 : M} (f1 : b1 --> b2) (f2 : b2 --> b3)
   : (identity a) +^ (f2 o f1) = (1 +^ f2) o (1 +^ f1).
 Proof.
   rewrite <- composition_of. simpl.
@@ -55,7 +58,7 @@ Qed.
 
 
 (* Translation from right *)
-Definition translate_fr {M : Magma} (a : M) : Functor M M.
+Definition translate_fr {M : Cat_Magma} (a : M) : Functor M M.
 Proof.
   refine (Functor.compose (D := M*M) binary_op _).
   srapply @Build_Functor.
@@ -74,7 +77,7 @@ Proof.
 Defined.
 
 (* Translation from left *)
-Definition translate_fl {M : Magma} (a : M) : Functor M M.
+Definition translate_fl {M : Cat_Magma} (a : M) : Functor M M.
 Proof.
   refine (Functor.compose (D := M*M) binary_op _).
   srapply @Build_Functor.
@@ -93,7 +96,7 @@ Proof.
   - exact (fun _ => idpath).
 Defined.
 
-(* Check (forall (A : Magma) (a b : A), a + b). *)
+(* Check (forall (A : Cat_Magma) (a b : A), a + b). *)
 
 (* Record Monoidal_Category : Type := *)
 (*   {moncat_cat : PreCategory ; *)
@@ -103,7 +106,7 @@ Defined.
 (*        moncat_prod ((moncat_prod (a, b)), c) --> moncat_prod (a, (moncat_prod (b, c))) ; *)
 
 Record Symmetric_Monoidal_Category : Type :=
-  {smon_magma :> Magma ;
+  {smon_magma :> Cat_Magma ;
    (* isgroupoid_smon_magma : forall (a b : smon_magma) (f : a --> b), IsIsomorphism f; *)
    moncat_id : smon_magma ;
    moncat_assoc : forall a b c : smon_magma, (a +' b) +' c --> a +' (b +' c);

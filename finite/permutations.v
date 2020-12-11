@@ -284,6 +284,7 @@ Proof.
   refine (unfunctor_sum_l_beta _ _ a ).
 Qed.
 
+
 Definition inj_equiv_plus1 {n : nat} {A : Type} (e1 e2 : A <~> fintype n) :
   (e1 +E (equiv_idmap Unit)) == (e2 +E (equiv_idmap Unit)) -> e1 == e2.
 Proof.
@@ -310,18 +311,18 @@ Defined.
 Section Transpose_and_restrict.
   (** Given a permutation [fintype n.+1 <~> fintype n.+1], we compose it with a transposition so that it fixes [n+1] and restricts it to a permutation [fintype n <~> fintype n]  *)
   
-  Definition transpose_and_restrict {n : nat} (e : fintype n.+1 <~> fintype n.+1)  :
-    fintype n <~> fintype n :=
+  Definition transpose_and_restrict {n n': nat} (e : fintype n.+1 <~> fintype n'.+1)  :
+    fintype n <~> fintype n' :=
     (equiv_restrict (swap_last e oE e) (swap_fix_last e)).
 
-  Definition transpose_and_restrict_eta {n : nat} (e : fintype n.+1 <~> fintype n.+1) :
+  Definition transpose_and_restrict_eta {n n': nat} (e : fintype n.+1 <~> fintype n'.+1) :
     (transpose_and_restrict e) +E 1 == (swap_last e) oE e.
   Proof.
     apply equiv_restrict_eta.
   Defined.
 
   (** A reformulation: *)
-  Definition factorize_permutation {a : nat} (alpha : fintype a.+1 <~> fintype a.+1)
+  Definition factorize_permutation {a a': nat} (alpha : fintype a.+1 <~> fintype a'.+1)
     : alpha = swap_last alpha oE (transpose_and_restrict alpha +E 1).
   Proof.
     apply emoveL_Me.
@@ -334,7 +335,7 @@ Section Transpose_and_restrict.
   Defined.
 
   Definition transpose_and_restrict_id {n : nat} :
-    @transpose_and_restrict n equiv_idmap == equiv_idmap.
+    @transpose_and_restrict n n equiv_idmap == equiv_idmap.
   Proof.
     intro x. simpl.
     destruct n; reflexivity.
@@ -387,14 +388,20 @@ Section Block_Sum.
     ev_equiv.
     rewrite (eissect (equiv_finsum c d)).
     reflexivity.
-  Defined.                            
+  Defined.
 
-  Definition block_sum {m n: nat} (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n) :
-    fintype (n+m)%nat <~> fintype (n+m)%nat :=
-    fin_equiv_sum (e1 +E e2).
+  Definition block_sum {a a' b b' : nat}
+             (alpha : fintype a <~> fintype a') (betta : fintype b <~> fintype b')
+    : fintype (a +' b)%nat <~> fintype (a' +' b')
+    := fin_equiv_sum (alpha +E betta).
+             
 
-  Definition block_sum_beta_finl {m n : nat}
-             (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n)
+  (* Definition block_sum {m n: nat} (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n) : *)
+  (*   fintype (n+m)%nat <~> fintype (n+m)%nat := *)
+  (*   fin_equiv_sum (e1 +E e2). *)
+
+  Definition block_sum_beta_finl {m m' n n': nat}
+             (e1 : fintype m <~> fintype m') (e2 : fintype n <~> fintype n')
              (i : fintype m) :
     block_sum e1 e2 (finl _ _ i) = finl _ _ (e1 i).
   Proof.
@@ -402,7 +409,8 @@ Section Block_Sum.
     rewrite (eissect (equiv_finsum m n) (inl i)). reflexivity.
   Qed.
 
-  Definition block_sum_beta_finr {m n : nat} (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n)
+  Definition block_sum_beta_finr {m m' n n' : nat}
+             (e1 : fintype m <~> fintype m') (e2 : fintype n <~> fintype n')
              (i : fintype n) :
     block_sum e1 e2 (finr _ _ i) = finr _ _ (e2 i).
   Proof.
@@ -410,9 +418,9 @@ Section Block_Sum.
     rewrite (eissect (equiv_finsum m n) (inr i)). reflexivity.
   Qed.
 
-  Definition block_sum_eta {m n : nat} 
-             (e1 : fintype m <~> fintype m) (e2 : fintype n <~> fintype n)
-             (g : fintype (n + m) <~> fintype (n + m))
+  Definition block_sum_eta {m m' n n' : nat} 
+             (e1 : fintype m <~> fintype m') (e2 : fintype n <~> fintype n')
+             (g : fintype (n + m) <~> fintype (n' + m'))
              (eq_l : forall i : fintype m,
                  finl _ _(e1 i)
                  = g (finl _ _ i))
@@ -429,9 +437,11 @@ Section Block_Sum.
       apply eq_r.
   Qed.
 
-  Definition block_sum_compose {m n : nat}
-             (e1 g1 : fintype m <~> fintype m)
-             (e2 g2 : fintype n <~> fintype n) :
+  Definition block_sum_compose {m m' m'' n n' n'': nat}
+             (e1 : fintype m' <~> fintype m'')
+             (g1 : fintype m <~> fintype m')
+             (e2 : fintype n' <~> fintype n'')
+             (g2 : fintype n <~> fintype n') :
     block_sum (e1 oE g1) (e2 oE g2) =
     (block_sum e1 e2) oE (block_sum g1 g2).
   Proof.
@@ -442,9 +452,11 @@ Section Block_Sum.
   Defined.
     
 
-  Definition block_sum_compose' {m n : nat}
-             (e1 g1 : fintype m <~> fintype m)
-             (e2 g2 : fintype n <~> fintype n) :
+  Definition block_sum_compose' {m m' m'' n n' n'': nat}
+             (e1 : fintype m' <~> fintype m'')
+             (g1 : fintype m <~> fintype m')
+             (e2 : fintype n' <~> fintype n'')
+             (g2 : fintype n <~> fintype n') :
     block_sum (e1 oE g1) (e2 oE g2) ==
     (block_sum e1 e2) oE (block_sum g1 g2).
   Proof.
@@ -459,12 +471,12 @@ Section Block_Sum.
       reflexivity.
   Qed.
 
-  Definition block_sum_plus1 {m n : nat}
-             (e1 : fintype m <~> fintype m)
-             (e2 : fintype n <~> fintype n) :
-    block_sum (n := n.+1) e1 (e2 +E (equiv_idmap Unit)) == (block_sum e1 e2) +E (equiv_idmap Unit).
-  Proof.
-    
+  Definition block_sum_plus1 {m m' n n' : nat}
+             (e1 : fintype m <~> fintype m')
+             (e2 : fintype n <~> fintype n') :
+    block_sum (b := n.+1) (b' := n'.+1) e1 (e2 +E (equiv_idmap Unit))
+    == (block_sum e1 e2) +E (equiv_idmap Unit).
+  Proof.    
     apply block_sum_eta.
     - intro i. simpl. 
       apply (ap inl).
@@ -487,7 +499,7 @@ Section Block_Sum.
   Definition blocksum_transpose {m n : nat}
              (x y : fintype n) :
     fin_transpose (finr _ _ x) (finr _ _ y) ==
-    @block_sum m n equiv_idmap (fin_transpose x y).    
+    @block_sum m m n n equiv_idmap (fin_transpose x y).    
   Proof.
     apply fin_transpose_eta.
     - rewrite block_sum_beta_finr.
@@ -507,21 +519,21 @@ Section Block_Sum.
         { apply (functor_not (ap (finr m n)) neqy). }
   Qed.
   
-  Definition swap_last_blocksum {m n : nat}
-             (e1 : fintype m <~> fintype m)
-             (e2 : fintype n.+1 <~> fintype n.+1) :
+  Definition swap_last_blocksum {m m' n n' : nat}
+             (e1 : fintype m <~> fintype m')
+             (e2 : fintype n.+1 <~> fintype n'.+1) :
     swap_last (block_sum e1 e2) ==
     block_sum equiv_idmap (swap_last e2) .
   Proof.
     unfold swap_last.
     rewrite (block_sum_beta_finr (n := n.+1) e1 e2 (inr tt)).
-    apply (@blocksum_transpose m n.+1 (e2 (inr tt)) ((inr (fintype n) tt))).
+    apply (@blocksum_transpose m' n'.+1 (e2 (inr tt)) ((inr (fintype n') tt))).
   Qed.
 
   
-  Definition transpose_and_restrict_block_sum {m n : nat}
-             (e1 : fintype m <~> fintype m)
-             (e2 : fintype n.+1 <~> fintype n.+1) :
+  Definition transpose_and_restrict_block_sum {m m' n n' : nat}
+             (e1 : fintype m <~> fintype m')
+             (e2 : fintype n.+1 <~> fintype n'.+1) :
     transpose_and_restrict (block_sum e1 e2) == block_sum e1 (transpose_and_restrict e2).
   Proof.
     apply inj_equiv_plus1.
@@ -531,7 +543,7 @@ Section Block_Sum.
     refine ((block_sum_compose' equiv_idmap e1 (swap_last e2) e2 x)^ @ _).
     rewrite (ecompose_1e).
     refine (_ @ (block_sum_plus1 _ _ x)).
-    apply (ap (fun g => ((block_sum (n:=n.+1) e1 g) x))).
+    apply (ap (fun g => ((block_sum (b:=n.+1) e1 g) x))).
     apply path_equiv. apply path_arrow.
     intro y.
     apply inverse.

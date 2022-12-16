@@ -1,6 +1,6 @@
 Require Import HoTT.
 
-From A_BPQ Require Import sigma_lemmas equiv_lemmas conn_ptype categories.
+From GCTT Require Import sigma_lemmas equiv_lemmas conn_ptype categories.
 Require Import UnivalenceAxiom.
 
 

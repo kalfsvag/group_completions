@@ -3,7 +3,7 @@ Require Import FunextAxiom.
 
 Require Import Functor Categories Category Morphisms.
 
-From A_BPQ Require Import path_over categories.
+From GCTT Require Import path_over categories.
 
 (** Making an induction principle for pointed connected 1-types, based on notes by Thierry Coquand *)
 (** This is a more general version of deloop.v  *)

@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import HoTT.Categories Category.
-From A_BPQ Require Import categories sigma_lemmas path_lemmas quotients monoidal_category.
-(* From A_BPQ Require Export monoidal_1type. *)
+From GCTT Require Import categories sigma_lemmas path_lemmas quotients monoidal_category.
+(* From GCTT Require Export monoidal_1type. *)
 (* Change this once monoidal_category is in _CoqProject *)
 
 (*These notations are defined elsewhere, but I do not know how to import it.*)

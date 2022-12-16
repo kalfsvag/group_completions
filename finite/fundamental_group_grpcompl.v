@@ -1,6 +1,6 @@
 Require Import HoTT.
 
-From A_BPQ  Require Import
+From GCTT  Require Import
      path_lemmas finite_types conn_ptype delooping monoids_and_groups onetype_completion
      group_completion_monoid fintype_monoidal permutations sign Bsgn path_over
      grp_complete_fintype .

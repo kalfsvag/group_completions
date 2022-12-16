@@ -4,7 +4,7 @@ Require Import Categories.Functor Category.Morphisms.
 Require Import Category.Core.
 Require Import FunextAxiom.
 
-From A_BPQ Require Import quotients.
+From GCTT Require Import quotients.
 (* Require Import finite_lemmas. *)
 
 (** Easier to redefine isomorphisms of categories than to using the library *)

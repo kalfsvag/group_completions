@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import HoTT.Categories Category.
-From A_BPQ Require Import categories sigma_lemmas path_lemmas.
-From A_BPQ Require Export monoidal_1type.
+From GCTT Require Import categories sigma_lemmas path_lemmas.
+From GCTT Require Export monoidal_1type.
 
 
 Section Localize.

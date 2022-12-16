@@ -2,9 +2,9 @@
  This file was originally written by Niels van der Weide and Dan Frumin, with only minor changes here. Namely, that we generalize the construction cquot for all categories, and not only for groupoids.*)
 
 Require Import HoTT.
-From A_BPQ Require Import
+From GCTT Require Import
      general.
-From A_BPQ.cquot.basics Require Export
+From GCTT.cquot.basics Require Export
      globe_over path_over square.
 
 From HoTT.Categories Require Import

@@ -2,7 +2,7 @@ Require Import HoTT.
 Require Import UnivalenceAxiom.
 
 Require Export Functor Category.
-(* From A_BPQ Require Import path_lemmas. *)
+(* From GCTT Require Import path_lemmas. *)
 (*These notations are defined elsewhere, but I do not know how to import it.*)
 Local Notation "x --> y" := (morphism _ x y) (at level 99, right associativity, y at level 200) : type_scope.
 Notation "F '_0' x" := (Functor.Core.object_of F x) (at level 10, no associativity, only parsing) : object_scope.

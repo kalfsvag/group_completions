@@ -1,9 +1,9 @@
 Require Import HoTT.
 
 (* perhaps too much is imported here *)
-From A_BPQ
+From GCTT
      Require Import equiv_lemmas sigma_lemmas quotients finite_types finite.permutations monoidal_1type.
-From A_BPQ Require Import fintype_monoidal group_complete_category.
+From GCTT Require Import fintype_monoidal group_complete_category.
 
 (** Would have been better to define this stuff before fintype_monoidal, but but.*)
 Require Import monoidal_category.

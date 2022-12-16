@@ -1,5 +1,5 @@
 Require Import HoTT.
-From A_BPQ Require Import finite_types permutations.
+From GCTT Require Import finite_types permutations.
 
 Section Sign.
   Lemma swap_fix_last {n : nat} (e : fintype n.+1 <~> fintype n.+1) :

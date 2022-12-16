@@ -1,6 +1,6 @@
 (** This file was originally written by Niels van der Weide and Dan Frumin.  *)
 Require Import HoTT.
-From A_BPQ Require Import heterogeneous_equality.
+From GCTT Require Import heterogeneous_equality.
 
 (** The type of paths over path defined as an inductive type.
     The goal is to represent paths in dependent families.

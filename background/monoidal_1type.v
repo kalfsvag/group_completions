@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
 
-From A_BPQ Require Import path_lemmas.
+From GCTT Require Import path_lemmas.
 
 (** We definine the type of monoidal 1-Types (this corresponds to a monoidal category)*)
 Definition associative {A : Type}  (m : A-> A -> A) := forall (a b c: A),  m (m a b) c = m a (m b c).

@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
 
-From A_BPQ Require Import sigma_lemmas monoids_and_groups quotients.
+From GCTT Require Import sigma_lemmas monoids_and_groups quotients.
 
 
 Section Monoid_action.

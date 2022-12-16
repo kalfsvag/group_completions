@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import FunextAxiom.
 
-From A_BPQ Require Import conn_ptype.
+From GCTT Require Import conn_ptype.
 
 (* Making an induction principle for pointed connected 1-types, based on notes by Thierry Coquand *)
 

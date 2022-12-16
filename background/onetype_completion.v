@@ -1,8 +1,8 @@
 Require Import HoTT.
 Require Import Categories.Functor Category.Morphisms.
 Require Import Category.Core.
-From A_BPQ Require Import quotients categories.
-From A_BPQ Require Export cquot cquot_principles.
+From GCTT Require Import quotients categories.
+From GCTT Require Export cquot cquot_principles.
 
 (** The definition of the 1type-completion is in the folder cquot. We change the notation here so that it matches the thesis. *)
 Notation "'N1'" := cquot.

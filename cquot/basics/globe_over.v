@@ -1,6 +1,6 @@
 (** This file was originally written by Niels van der Weide and Dan Frumin.  *)
 Require Import HoTT.
-From A_BPQ Require Export path_over.
+From GCTT Require Export path_over.
 
 (** A globe represents an equality between two paths. *)
 Inductive globe

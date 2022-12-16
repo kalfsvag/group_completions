@@ -1,6 +1,6 @@
 (** This file was originally written by Niels van der Weide and Dan Frumin.  *)
 Require Import HoTT.
-From A_BPQ Require Export basics.heterogeneous_equality basics.path_over.
+From GCTT Require Export basics.heterogeneous_equality basics.path_over.
 
 (** Squares represents heterogeneous equalities between paths.
     A square has 4 sides `t`, `l`, `r`, `d` and it represents `l^ @ t @ r = d`.

@@ -1,4 +1,4 @@
-From A_BPQ Require Import quotients.
+From GCTT Require Import quotients.
 Require Import HoTT.Basics.
 Require Import Types.Universe Types.Arrow Types.Sigma.
 Require Import HSet HProp UnivalenceImpliesFunext TruncType.

@@ -1,7 +1,7 @@
 Require Import HoTT.
 Require Import UnivalenceAxiom.
 
-From A_BPQ Require Import finite_types.
+From GCTT Require Import finite_types.
 
 Section Fin_Transpose.
   (** Defining transpositions. [fin_transpose x y] is the permutation that swaps x and y  *)

@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>GCTT.background.rezk_groupoid</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library GCTT.background.rezk_groupoid</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">HoTT</span>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">FunextAxiom</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">Functor</span> <span class="id" type="var">Categories</span> <span class="id" type="var">Category</span> <span class="id" type="var">Morphisms</span>.<br/>
+
+<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">path_over</span> <span class="id" type="var">categories</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Making an induction principle for pointed connected 1-types, based on notes by Thierry Coquand  This is a more general version of deloop.v  
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">rezk_rec</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">X</span> : <span class="id" type="keyword">Type</span>) .<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">C</span> : <span class="id" type="var">PreCategory</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_0</span> : <span class="id" type="var">C</span> -&gt; <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">merely_surj_H</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">merely</span> {<span class="id" type="var">c</span> : <span class="id" type="var">C</span> &amp; <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>}}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_1</span> : <span class="id" type="keyword">forall</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>},<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span> -&gt; <span class="id" type="var">H_0</span> <span class="id" type="var">c1</span> = <span class="id" type="var">H_0</span> <span class="id" type="var">c2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">isequiv_H1</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>), <span class="id" type="var">IsEquiv</span> (@<span class="id" type="var">H_1</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>)}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_2</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">H_1</span> (<span class="id" type="var">h</span> <span class="id" type="var">o</span> <span class="id" type="var">g</span>)%<span class="id" type="var">morphism</span> = <span class="id" type="var">H_1</span> <span class="id" type="var">g</span> @ <span class="id" type="var">H_1</span> <span class="id" type="var">h</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_idhom</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>), <span class="id" type="var">H_1</span> (<span class="id" type="var">identity</span> <span class="id" type="var">c</span>) = <span class="id" type="var">idpath</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">H_1</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span>}.<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">H_2</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">istrunc_Y</span> : <span class="id" type="var">IsTrunc</span> 1 (<span class="id" type="var">Y</span>)}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f0</span> : <span class="id" type="var">C</span> -&gt; <span class="id" type="var">Y</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> : <span class="id" type="keyword">forall</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>} (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f0</span> <span class="id" type="var">c1</span>) =  (<span class="id" type="var">f0</span> <span class="id" type="var">c2</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f2</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> (<span class="id" type="var">h</span> <span class="id" type="var">o</span> <span class="id" type="var">g</span>)%<span class="id" type="var">morphism</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">f1</span> <span class="id" type="var">g</span>) @ (<span class="id" type="var">f1</span> <span class="id" type="var">h</span>))).<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">f1</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span>} <span class="id" type="var">g</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">f2</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>} <span class="id" type="var">g</span> <span class="id" type="var">h</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">f1_idhom</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) : <span class="id" type="var">f1</span> (<span class="id" type="var">identity</span> <span class="id" type="var">c</span>) = <span class="id" type="var">idpath</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_inj</span> (<span class="id" type="var">concat</span> (<span class="id" type="var">f1</span> 1))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">concat_p1</span> <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">f2</span> 1 1).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> <span class="id" type="var">f1</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">left_identity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">B</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>) (<span class="id" type="var">y</span> : <span class="id" type="var">Y</span>) :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">q</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>), (<span class="id" type="var">f0</span> <span class="id" type="var">c</span>) = <span class="id" type="var">y</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c2</span> = <span class="id" type="var">x</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">q</span> <span class="id" type="var">c1</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">g</span> @ <span class="id" type="var">p</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> <span class="id" type="var">g</span>) @ (<span class="id" type="var">q</span> <span class="id" type="var">c2</span> <span class="id" type="var">p</span>)}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">q_is_f1</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">y</span> : <span class="id" type="var">Y</span>) (<span class="id" type="var">q</span> : <span class="id" type="var">B</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c2</span>) <span class="id" type="var">y</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">q</span>.1 <span class="id" type="var">c1</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">h</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> <span class="id" type="var">h</span>) @ (<span class="id" type="var">q</span>.1 <span class="id" type="var">c2</span> <span class="id" type="var">idpath</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">q</span> <span class="id" type="var">b</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">q</span> <span class="id" type="var">c1</span>) (<span class="id" type="var">concat_p1</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">h</span>))^ @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">b</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">B_base</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">y</span> : <span class="id" type="var">Y</span>), (<span class="id" type="var">B</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>) <span class="id" type="var">y</span>) &lt;~&gt; (<span class="id" type="var">f0</span> <span class="id" type="var">c</span> = <span class="id" type="var">y</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">y</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">B</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">q</span> : <span class="id" type="keyword">forall</span> <span class="id" type="var">c0</span> : <span class="id" type="var">C</span>, <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c0</span> <span class="id" type="var">c</span> -&gt; <span class="id" type="var">f0</span> <span class="id" type="var">c0</span> = <span class="id" type="var">y</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c2</span> <span class="id" type="var">c</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">q</span> <span class="id" type="var">c1</span> (<span class="id" type="var">h</span> <span class="id" type="var">o</span> <span class="id" type="var">g</span>)%<span class="id" type="var">morphism</span> = <span class="id" type="var">f1</span> <span class="id" type="var">g</span> @ <span class="id" type="var">q</span> <span class="id" type="var">c2</span> <span class="id" type="var">h</span>}.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_functor_sigma'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_forall_id</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">c1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_precompose'</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exact</span> (<span class="id" type="var">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">H_1</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_forall_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_forall_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_forall_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">g</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_functor_forall'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">exact</span> (<span class="id" type="var">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">H_1</span> <span class="id" type="var">_</span>). }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">functor_forall</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_concat_l</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">q</span> <span class="id" type="var">c1</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">H_2</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_adjointify</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">q</span> <span class="id" type="var">b</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">q</span> <span class="id" type="var">c</span>). <span class="id" type="tactic">apply</span> <span class="id" type="var">identity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">exist</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span> <span class="id" type="var">c1</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">f1</span>. <span class="id" type="tactic">exact</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">hnf</span>. <span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">concat_pp_p</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> ). <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">f2</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">whiskerR</span> (<span class="id" type="var">f1_idhom</span> <span class="id" type="var">_</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>). <span class="id" type="tactic">apply</span> <span class="id" type="var">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">q</span> <span class="id" type="var">b</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_sigma_hprop</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_forall</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_forall</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">g</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> (<span class="id" type="var">q</span> <span class="id" type="var">c1</span>) (<span class="id" type="var">left_identity</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">b</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Instance</span> <span class="id" type="var">contr_B</span> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">Contr</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> &amp; <span class="id" type="var">B</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">cut</span> (<span class="id" type="var">merely</span> ({<span class="id" type="var">c</span> : <span class="id" type="var">C</span> &amp; <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>}) -&gt; <span class="id" type="var">Contr</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> &amp; <span class="id" type="var">B</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">intro</span> <span class="id" type="var">hyp</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">hyp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">merely_surj_H</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">Trunc_rec</span>. <span class="id" type="tactic">intros</span> [<span class="id" type="var">c</span> []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">contr_equiv'</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> &amp; (<span class="id" type="var">f0</span> <span class="id" type="var">c</span> = <span class="id" type="var">y</span>)}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">B_base</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">contr_basedpaths</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_rec</span> : <span class="id" type="var">X</span> -&gt; <span class="id" type="var">Y</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> =&gt; (<span class="id" type="var">center</span> <span class="id" type="var">_</span> (<span class="id" type="var">contr_B</span> <span class="id" type="var">x</span>)).1 .<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_rec_q</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>) (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>), <span class="id" type="var">f0</span> <span class="id" type="var">c</span> = <span class="id" type="var">rezk_rec</span> <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= ((<span class="id" type="var">center</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> &amp; <span class="id" type="var">B</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}).2.1 <span class="id" type="var">c</span>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">q_is_ap_rezk_rec</span> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> <span class="id" type="var">x'</span>: <span class="id" type="var">X</span>) (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>) (<span class="id" type="var">q</span> : <span class="id" type="var">x</span> = <span class="id" type="var">x'</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rezk_rec_q</span> <span class="id" type="var">x'</span> <span class="id" type="var">c</span> (<span class="id" type="var">p</span> @ <span class="id" type="var">q</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">rezk_rec_q</span> <span class="id" type="var">x</span> <span class="id" type="var">c</span> <span class="id" type="var">p</span> @ <span class="id" type="var">ap</span> <span class="id" type="var">rezk_rec</span> <span class="id" type="var">q</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_rec_beta_obj</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) : <span class="id" type="var">rezk_rec</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>) = <span class="id" type="var">f0</span> <span class="id" type="var">c</span>:=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">rezk_rec_q</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>) <span class="id" type="var">c</span> <span class="id" type="var">idpath</span>)^.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_rec_beta_morphism</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> :  <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ap</span> <span class="id" type="var">rezk_rec</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">g</span>) = (<span class="id" type="var">rezk_rec_beta_obj</span> <span class="id" type="var">c1</span>) @ (<span class="id" type="var">f1</span> <span class="id" type="var">g</span>) @ (<span class="id" type="var">rezk_rec_beta_obj</span> <span class="id" type="var">c2</span>)^.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">rezk_rec_beta_obj</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_V</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">concat_p_pp</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>). <span class="id" type="tactic">apply</span> <span class="id" type="var">moveL_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">q_is_ap_rezk_rec</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">q_is_f1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">rezk_rec</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">rezk_ind_set</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">X</span> : <span class="id" type="keyword">Type</span>) . 
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">C</span> : <span class="id" type="var">PreCategory</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_0</span> : <span class="id" type="var">C</span> -&gt; <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">merely_surj_H</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">merely</span> {<span class="id" type="var">c</span> : <span class="id" type="var">C</span> &amp; <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>}}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_1</span> : <span class="id" type="keyword">forall</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>},<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span> -&gt; <span class="id" type="var">H_0</span> <span class="id" type="var">c1</span> = <span class="id" type="var">H_0</span> <span class="id" type="var">c2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">isequiv_H1</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>), <span class="id" type="var">IsEquiv</span> (@<span class="id" type="var">H_1</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>)}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_idhom</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>), <span class="id" type="var">H_1</span> (<span class="id" type="var">identity</span> <span class="id" type="var">c</span>) = <span class="id" type="var">idpath</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_2</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">H_1</span> (<span class="id" type="var">h</span> <span class="id" type="var">o</span> <span class="id" type="var">g</span>)%<span class="id" type="var">morphism</span> = <span class="id" type="var">H_1</span> <span class="id" type="var">g</span> @ <span class="id" type="var">H_1</span> <span class="id" type="var">h</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">H_1</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span>}.<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">H_2</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>}.<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">Y</span> : <span class="id" type="var">X</span> -&gt; <span class="id" type="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">istrunc_Y</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">IsHSet</span> (<span class="id" type="var">Y</span> <span class="id" type="var">x</span>)}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f0</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>), <span class="id" type="var">Y</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> : <span class="id" type="keyword">forall</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>} (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">path_over</span> <span class="id" type="var">Y</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">g</span>) (<span class="id" type="var">f0</span> <span class="id" type="var">c1</span>) (<span class="id" type="var">f0</span> <span class="id" type="var">c2</span>)).<br/>
+&nbsp;&nbsp;<span class="id" type="var">Arguments</span> <span class="id" type="var">f1</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span>} <span class="id" type="var">g</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">B_set</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>) (<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> <span class="id" type="var">x</span>) :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>), <span class="id" type="var">path_over</span> <span class="id" type="var">Y</span> <span class="id" type="var">p</span> (<span class="id" type="var">f0</span> <span class="id" type="var">c</span>) <span class="id" type="var">y</span>).<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">B_set_base</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>)),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">B_set</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>) <span class="id" type="var">y</span>) &lt;~&gt; (<span class="id" type="var">f0</span> <span class="id" type="var">c</span> = <span class="id" type="var">y</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">y</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">B_set</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">forall</span> (<span class="id" type="var">c0</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c0</span> <span class="id" type="var">c</span>), <span class="id" type="var">path_over</span> <span class="id" type="var">Y</span> (<span class="id" type="var">H_1</span> <span class="id" type="var">g</span>) (<span class="id" type="var">f0</span> <span class="id" type="var">c0</span>) <span class="id" type="var">y</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_forall_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">equiv_functor_forall_pb</span> (<span class="id" type="var">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (@<span class="id" type="var">H_1</span> <span class="id" type="var">c1</span> <span class="id" type="var">c</span>) <span class="id" type="var">_</span>)). }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_iff_hprop</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">q</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">path_over_to_path</span> (<span class="id" type="var">q</span> <span class="id" type="var">c</span> (<span class="id" type="var">identity</span> <span class="id" type="var">c</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">p</span> =&gt; <span class="id" type="var">transport</span> <span class="id" type="var">Y</span> <span class="id" type="var">p</span> (<span class="id" type="var">f0</span> <span class="id" type="var">c</span>)) (<span class="id" type="var">H_idhom</span> <span class="id" type="var">c</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">c1</span> <span class="id" type="var">g</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">f1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Instance</span> <span class="id" type="var">contr_B_set</span> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">Contr</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> <span class="id" type="var">x</span> &amp; <span class="id" type="var">B_set</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">cut</span> (<span class="id" type="var">merely</span> ({<span class="id" type="var">c</span> : <span class="id" type="var">C</span> &amp; <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>}) -&gt; <span class="id" type="var">Contr</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> <span class="id" type="var">x</span> &amp; <span class="id" type="var">B_set</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">intro</span> <span class="id" type="var">hyp</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">hyp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">merely_surj_H</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">Trunc_rec</span>. <span class="id" type="tactic">intros</span> [<span class="id" type="var">c</span> []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">contr_equiv'</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>) &amp; (<span class="id" type="var">f0</span> <span class="id" type="var">c</span> = <span class="id" type="var">y</span>)}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">B_set_base</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">contr_basedpaths</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_ind_set</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">Y</span> <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> =&gt; (<span class="id" type="var">center</span> <span class="id" type="var">_</span> (<span class="id" type="var">contr_B_set</span> <span class="id" type="var">x</span>)).1 .<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_ind_set_q</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>) (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">p</span> : <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>), <span class="id" type="var">path_over</span> <span class="id" type="var">Y</span> <span class="id" type="var">p</span> (<span class="id" type="var">f0</span> <span class="id" type="var">c</span>) (<span class="id" type="var">rezk_ind_set</span> <span class="id" type="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= ((<span class="id" type="var">center</span> {<span class="id" type="var">y</span> : <span class="id" type="var">Y</span> <span class="id" type="var">x</span> &amp; <span class="id" type="var">B_set</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}).2 <span class="id" type="var">c</span>).<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">equiv_path_over_id</span> {<span class="id" type="var">A</span> : <span class="id" type="keyword">Type</span>} {<span class="id" type="var">B</span> : <span class="id" type="var">A</span> -&gt; <span class="id" type="keyword">Type</span>} (<span class="id" type="var">a</span> : <span class="id" type="var">A</span>) (<span class="id" type="var">b1</span> <span class="id" type="var">b2</span> : <span class="id" type="var">B</span> <span class="id" type="var">a</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">path_over</span> <span class="id" type="var">B</span> (<span class="id" type="var">idpath</span> <span class="id" type="var">a</span>) <span class="id" type="var">b1</span> <span class="id" type="var">b2</span> &lt;~&gt; <span class="id" type="var">b1</span> = <span class="id" type="var">b2</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_adjointify</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<span class="id" type="var">path_over_to_path</span> (<span class="id" type="var">p</span> := <span class="id" type="var">idpath</span> <span class="id" type="var">a</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<span class="id" type="var">path_to_path_over</span> (<span class="id" type="var">p</span> := <span class="id" type="var">idpath</span> <span class="id" type="var">a</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span> []. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_ind_set_beta_obj</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>) : (<span class="id" type="var">rezk_ind_set</span> (<span class="id" type="var">H_0</span> <span class="id" type="var">c</span>)) = <span class="id" type="var">f0</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_path_over_id</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">rezk_ind_set_q</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">rezk_ind_set</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">Universal_principle</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">X</span> : <span class="id" type="keyword">Type</span>) `{<span class="id" type="var">istrunc_X</span> : <span class="id" type="var">IsTrunc</span> 1 (<span class="id" type="var">X</span>)}.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">C</span> : <span class="id" type="var">PreCategory</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_0</span> : <span class="id" type="var">C</span> -&gt; <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">merely_surj_H</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>), <span class="id" type="var">merely</span> {<span class="id" type="var">c</span> : <span class="id" type="var">C</span> &amp; <span class="id" type="var">H_0</span> <span class="id" type="var">c</span> = <span class="id" type="var">x</span>}}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_1</span> : <span class="id" type="keyword">forall</span> {<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>},<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span> -&gt; <span class="id" type="var">H_0</span> <span class="id" type="var">c1</span> = <span class="id" type="var">H_0</span> <span class="id" type="var">c2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{<span class="id" type="var">isequiv_H1</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <span class="id" type="var">C</span>), <span class="id" type="var">IsEquiv</span> (@<span class="id" type="var">H_1</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>)}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_2</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">g</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span>) (<span class="id" type="var">h</span> : <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">c2</span> <span class="id" type="var">c3</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">H_1</span> (<span class="id" type="var">h</span> <span class="id" type="var">o</span> <span class="id" type="var">g</span>)%<span class="id" type="var">morphism</span> = <span class="id" type="var">H_1</span> <span class="id" type="var">g</span> @ <span class="id" type="var">H_1</span> <span class="id" type="var">h</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">H_idhom</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">c</span> : <span class="id" type="var">C</span>), <span class="id" type="var">H_1</span> (<span class="id" type="var">identity</span> <span class="id" type="var">c</span>) = <span class="id" type="var">idpath</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>) `{<span class="id" type="var">istrunc_Y</span> : <span class="id" type="var">IsTrunc</span> 1 (<span class="id" type="var">Y</span>)}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">pg_functor</span> (<span class="id" type="var">f</span> : <span class="id" type="var">X</span> -&gt; <span class="id" type="var">Y</span>) : <span class="id" type="var">Functor</span> (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">X</span>) (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">Y</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>; <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="var">ap</span> <span class="id" type="var">f</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">z</span> <span class="id" type="var">p</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">ap_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">rezk_restrict</span> : (<span class="id" type="var">X</span> -&gt; <span class="id" type="var">Y</span>) -&gt; <span class="id" type="var">Functor</span> <span class="id" type="var">C</span> (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">Y</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">Functor.compose</span> (<span class="id" type="var">D</span> := (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">X</span>)) <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> (<span class="id" type="var">pg_functor</span> <span class="id" type="var">f</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>; <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">exact</span> <span class="id" type="var">H_0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">exact</span> <span class="id" type="var">H_1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">H_2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">H_idhom</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">isequiv_rezk_restrict</span> : <span class="id" type="var">IsEquiv</span> (<span class="id" type="var">rezk_restrict</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">isequiv_adjointify</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="var">rezk_rec</span> <span class="id" type="var">X</span> <span class="id" type="var">C</span> <span class="id" type="var">H_0</span> <span class="id" type="var">H_1</span> <span class="id" type="var">H_2</span> <span class="id" type="var">Y</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> ).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> (<span class="id" type="var">merely_surj_H</span>). }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="var">F</span> <span class="id" type="var">c</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">morphism_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="var">composition_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_functor'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">rezk_rec_beta_obj</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> :<span class="id" type="keyword">forall</span> (<span class="id" type="var">y1</span> <span class="id" type="var">y2</span> : <span class="id" type="var">Y</span>) (<span class="id" type="var">p</span> : <span class="id" type="var">y1</span> = <span class="id" type="var">y2</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">idtohom</span> (<span class="id" type="var">C</span> := <span class="id" type="var">Core.groupoid_category</span> <span class="id" type="var">Y</span>) <span class="id" type="var">p</span> = <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">intros</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">rezk_rec_beta_morphism</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_pp_p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_Vp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_arrow</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">revert</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="var">rezk_ind_set</span> <span class="id" type="var">X</span> <span class="id" type="var">C</span> <span class="id" type="var">H_0</span> <span class="id" type="var">H_1</span>  <span class="id" type="var">H_idhom</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> =&gt; <span class="id" type="var">rezk_rec</span> <span class="id" type="var">X</span> <span class="id" type="var">C</span> <span class="id" type="var">H_0</span> <span class="id" type="var">H_1</span> <span class="id" type="var">H_2</span> <span class="id" type="var">Y</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">fun</span> <span class="id" type="var">c</span> : <span class="id" type="var">C</span> =&gt; ((<span class="id" type="var">rezk_restrict</span> <span class="id" type="var">f</span>) <span class="id" type="var">_0</span> <span class="id" type="var">c</span>)%<span class="id" type="var">object</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">morphism_of</span> (<span class="id" type="var">rezk_restrict</span> <span class="id" type="var">f</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">composition_of</span> (<span class="id" type="var">rezk_restrict</span> <span class="id" type="var">f</span>)) <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span class="id" type="var">f</span> <span class="id" type="var">x</span>) <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">merely_surj_H</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">rezk_rec_beta_obj</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_to_path_over</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_FlFr</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">rezk_rec_beta_morphism</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_pp_p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_1p</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">Universal_principle</span>.<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>GCTT.finite.Bsgn</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library GCTT.finite.Bsgn</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">HoTT</span>.<br/>
+
+<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">conn_ptype</span> <span class="id" type="var">finite_types</span> <span class="id" type="var">monoids_and_groups</span> <span class="id" type="var">delooping</span> <span class="id" type="var">permutations</span> <span class="id" type="var">sign</span> <span class="id" type="var">fintype_monoidal</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Here we define the function <span class="inlinecode"><span class="id" type="var">Bsign</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">FinType</span></span> <span class="inlinecode"><span class="id" type="var">m</span></span> <span class="inlinecode">-&gt;</span> <span class="inlinecode"><span class="id" type="var">FinType</span></span> <span class="inlinecode">2</span> induces by the homomorphism <span class="inlinecode"><span class="id" type="var">sign</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">Hom</span></span> <span class="inlinecode">(<span class="id" type="var">SymGrp</span></span> <span class="inlinecode"><span class="id" type="var">m</span>)</span> <span class="inlinecode">(<span class="id" type="var">SymGrp</span></span> <span class="inlinecode">2)</span>  
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">iso_path_finite_types</span> (<span class="id" type="var">m</span> : <span class="id" type="var">nat</span>)<br/>
+&nbsp;&nbsp;: <span class="id" type="var">Isomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">loopGroup</span> (<span class="id" type="var">Finite_Types</span> <span class="id" type="var">m</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>)).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> <span class="id" type="var">Build_Grp_Iso'</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_path_finite_types</span> <span class="id" type="var">m</span> (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>)).<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">alpha</span> <span class="id" type="keyword">beta</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">path_finite_types_compose</span> <span class="id" type="var">m</span> (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>) <span class="id" type="var">alpha</span> <span class="id" type="keyword">beta</span>).<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">equiv_functor_hom_fin</span> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <span class="id" type="var">nat</span>)<br/>
+&nbsp;&nbsp;: <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">SymGrp</span> <span class="id" type="var">n</span>) &lt;~&gt; <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">loopGroup</span> (<span class="id" type="var">pFin</span> <span class="id" type="var">m</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">loopGroup</span> (<span class="id" type="var">pFin</span> <span class="id" type="var">n</span>) (<span class="id" type="var">canon</span> <span class="id" type="var">n</span>)).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_hom'</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">iso_path_finite_types</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">deloop_fin</span> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <span class="id" type="var">nat</span>)<br/>
+&nbsp;&nbsp;: <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">SymGrp</span> <span class="id" type="var">n</span>) -&gt; <span class="id" type="var">pMap</span>(<span class="id" type="var">pFin</span> <span class="id" type="var">m</span>) (<span class="id" type="var">pFin</span> <span class="id" type="var">n</span>).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_deloop</span> (<span class="id" type="var">pFin</span> <span class="id" type="var">m</span>) (<span class="id" type="var">pFin</span> <span class="id" type="var">n</span>)).<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_functor_hom_fin</span> <span class="id" type="var">m</span> <span class="id" type="var">n</span>). <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">deloop_fin_canon</span> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <span class="id" type="var">nat</span>) (<span class="id" type="var">f</span> : <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">SymGrp</span> <span class="id" type="var">n</span>))<br/>
+&nbsp;&nbsp;: <span class="id" type="var">deloop_fin</span> <span class="id" type="var">m</span> <span class="id" type="var">n</span> <span class="id" type="var">f</span> (<span class="id" type="var">canon</span> <span class="id" type="var">m</span>) = <span class="id" type="var">canon</span> <span class="id" type="var">n</span>.<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">point_eq</span> (<span class="id" type="var">deloop_fin</span> <span class="id" type="var">m</span> <span class="id" type="var">n</span> <span class="id" type="var">f</span>)).<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">deloop_fin_loop</span> (<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <span class="id" type="var">nat</span>) (<span class="id" type="var">f</span> : <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">SymGrp</span> <span class="id" type="var">n</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ω : <span class="id" type="var">canon</span> <span class="id" type="var">m</span> = <span class="id" type="var">canon</span> <span class="id" type="var">m</span>)<br/>
+&nbsp;&nbsp;: <span class="id" type="var">loops_functor</span> (<span class="id" type="var">deloop_fin</span> <span class="id" type="var">m</span> <span class="id" type="var">n</span> <span class="id" type="var">f</span>) ω<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;= (<span class="id" type="var">functor_hom</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">iso_inv</span> (<span class="id" type="var">iso_path_finite_types</span> <span class="id" type="var">m</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">iso_path_finite_types</span> <span class="id" type="var">n</span>) <span class="id" type="var">f</span>) ω.<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">functor_deloop_loop</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgnhom</span> (<span class="id" type="var">m</span> : <span class="id" type="var">nat</span>) : <span class="id" type="var">Homomorphism</span> (<span class="id" type="var">SymGrp</span> <span class="id" type="var">m</span>) (<span class="id" type="var">SymGrp</span> 2).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_GrpHom</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">sign</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">sgn_compose</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">Bsign</span> (<span class="id" type="var">m</span> : <span class="id" type="var">nat</span>) :=<br/>
+&nbsp;&nbsp;<span class="id" type="var">deloop_fin</span> <span class="id" type="var">m</span> 2 (<span class="id" type="var">sgnhom</span> <span class="id" type="var">m</span>).<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <span class="id" type="var">Bsign_uncurry</span> : <span class="id" type="var">FinType</span> -&gt; <span class="id" type="var">Finite_Types</span> 2.<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">a</span> <span class="id" type="var">A</span>]. <span class="id" type="tactic">exact</span> (<span class="id" type="var">Bsign</span> <span class="id" type="var">a</span> <span class="id" type="var">A</span>).<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

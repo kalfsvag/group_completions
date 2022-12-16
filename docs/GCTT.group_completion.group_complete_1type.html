@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>GCTT.group_completion.group_complete_1type</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library GCTT.group_completion.group_complete_1type</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">HoTT</span>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">HoTT.Categories</span> <span class="id" type="var">Category</span>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">categories</span> <span class="id" type="var">sigma_lemmas</span> <span class="id" type="var">path_lemmas</span>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <span class="id" type="var">monoidal_1type</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">Localize</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+if we have a monoidal action with left_cancellation, we can build a category with objects X and
+       arrows  <span class="inlinecode">{<span class="id" type="var">m</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" type="var">M</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" type="var">m</span></span> <span class="inlinecode">⊗</span> <span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" type="var">m</span></span> <span class="inlinecode">⊗</span> <span class="inlinecode"><span class="id" type="var">y</span>}</span> 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">monoidal_action_morphism</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">X</span> -&gt; <span class="id" type="var">X</span> -&gt; <span class="id" type="keyword">Type</span>) := <span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> =&gt; {<span class="id" type="var">s</span> : <span class="id" type="var">M</span> &amp; <span class="id" type="var">a</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> = <span class="id" type="var">y</span>}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Instance</span> <span class="id" type="var">isset_mon_morphism</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>) (<span class="id" type="var">x1</span> <span class="id" type="var">x2</span> : <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">a</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">IsHSet</span> (<span class="id" type="var">monoidal_action_morphism</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">a</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">monoidal_action_morphism</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s1</span> <span class="id" type="var">p1</span>] [<span class="id" type="var">s2</span> <span class="id" type="var">p2</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">trunc_equiv'</span> {<span class="id" type="var">q</span> : <span class="id" type="var">s1</span> = <span class="id" type="var">s2</span> &amp; <span class="id" type="var">transport</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">s</span> =&gt; <span class="id" type="var">a</span> <span class="id" type="var">s</span> <span class="id" type="var">x1</span> = <span class="id" type="var">x2</span>) <span class="id" type="var">q</span> <span class="id" type="var">p1</span> = <span class="id" type="var">p2</span>}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_path_sigma</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">s</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">a</span> <span class="id" type="var">s</span> <span class="id" type="var">x1</span> = <span class="id" type="var">x2</span>) (<span class="id" type="var">s1</span>; <span class="id" type="var">p1</span>) (<span class="id" type="var">s2</span>; <span class="id" type="var">p2</span>) ). }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">trunc_equiv'</span> {<span class="id" type="var">q</span> : <span class="id" type="var">s1</span> = <span class="id" type="var">s2</span> &amp; <span class="id" type="var">p1</span> = <span class="id" type="var">action_on_path</span> <span class="id" type="var">a</span> <span class="id" type="var">x1</span> <span class="id" type="var">q</span> @ <span class="id" type="var">p2</span>}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p2</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_idmap</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">trunc_sigma'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">exact</span> <span class="id" type="var">_</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">q1</span> <span class="id" type="var">r1</span>] [<span class="id" type="var">q2</span> <span class="id" type="var">r2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">contr_inhabited_hprop</span>. { <span class="id" type="tactic">exact</span> <span class="id" type="var">_</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">left_cancel</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">q1</span> <span class="id" type="var">q2</span> <span class="id" type="var">x1</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> (<span class="id" type="var">p1</span> @ <span class="id" type="var">p2</span>^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">moveL_pV</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">r1</span>^. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pV</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">r2</span>. }<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">monoidal_action_cat</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">a</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">a</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">PreCategory</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="var">Build_PreCategory</span> (<span class="id" type="var">monoidal_action_morphism</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">a</span>) <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> =&gt; <span class="id" type="var">isset_mon_morphism</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">a</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> <span class="id" type="var">left_cancel</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>. <span class="id" type="tactic">exists</span> <span class="id" type="var">montype_id</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_act_id</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">z</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s1</span> <span class="id" type="var">p1</span>] [<span class="id" type="var">s2</span> <span class="id" type="var">p2</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> (<span class="id" type="var">s1</span> ⊗ <span class="id" type="var">s2</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exact</span> (<span class="id" type="var">montype_act_mult</span> <span class="id" type="var">a</span> <span class="id" type="var">s1</span> <span class="id" type="var">s2</span> <span class="id" type="var">x</span> @ <span class="id" type="var">ap</span> (<span class="id" type="var">a</span> <span class="id" type="var">s1</span>) <span class="id" type="var">p2</span> @ <span class="id" type="var">p1</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> <span class="id" type="var">x3</span> <span class="id" type="var">x4</span> [<span class="id" type="var">s1</span> []] [<span class="id" type="var">s2</span> []] [<span class="id" type="var">s3</span> []]. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_1</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_assoc</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">cbn</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">montype_assoc</span> <span class="id" type="var">s3</span> <span class="id" type="var">s2</span> <span class="id" type="var">s1</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">montype_act_pentagon</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_V</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_pp_p</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerL</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerL</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">inv_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> [<span class="id" type="var">s</span> []]. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_lid</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">montype_lid</span> <span class="id" type="var">s</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">concat_p1</span> <span class="id" type="var">_</span>)^). <span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">montype_act_triangle1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> [<span class="id" type="var">s</span> []]. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_rid</span>. } <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">montype_rid</span> <span class="id" type="var">s</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">concat_p1</span> <span class="id" type="var">_</span>)^). <span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">montype_act_triangle2</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">include_in_monoidal_action_cat</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">act</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f</span> : <span class="id" type="var">M</span> -&gt; <span class="id" type="var">X</span>)<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">Functor</span> (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">M</span>) (<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> []. <span class="id" type="tactic">apply</span> (<span class="id" type="var">identity</span> (<span class="id" type="var">C</span> := <span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">p</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">identity_identity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">functor_monoidal_action_cat</span> (<span class="id" type="var">M</span> <span class="id" type="var">N</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> <span class="id" type="var">Y</span> : 1-<span class="id" type="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act1</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>) (<span class="id" type="var">left_cancel1</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">act1</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act2</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">N</span> <span class="id" type="var">Y</span>) (<span class="id" type="var">left_cancel2</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">act2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f</span> : <span class="id" type="var">Monoidal_Map</span> <span class="id" type="var">M</span> <span class="id" type="var">N</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">g</span> : <span class="id" type="var">X</span> -&gt; <span class="id" type="var">Y</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act_mult</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">a</span> : <span class="id" type="var">M</span>) (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">g</span> (<span class="id" type="var">act1</span> <span class="id" type="var">a</span> <span class="id" type="var">x</span>) = <span class="id" type="var">act2</span> (<span class="id" type="var">f</span> <span class="id" type="var">a</span>) (<span class="id" type="var">g</span> <span class="id" type="var">x</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act_mult_assoc</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">a</span> <span class="id" type="var">b</span> : <span class="id" type="var">M</span>) (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ap</span> <span class="id" type="var">g</span> (<span class="id" type="var">montype_act_mult</span> <span class="id" type="var">act1</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span> <span class="id" type="var">x</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">act_mult</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> @ <span class="id" type="var">ap011</span> <span class="id" type="var">act2</span> (<span class="id" type="var">montype_map_mult</span> <span class="id" type="var">f</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span>) <span class="id" type="var">idpath</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@ <span class="id" type="var">montype_act_mult</span> <span class="id" type="var">act2</span> (<span class="id" type="var">f</span> <span class="id" type="var">a</span>) (<span class="id" type="var">f</span> <span class="id" type="var">b</span>) (<span class="id" type="var">g</span> <span class="id" type="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@ (<span class="id" type="var">ap011</span> <span class="id" type="var">act2</span> <span class="id" type="var">idpath</span> (<span class="id" type="var">act_mult</span> <span class="id" type="var">b</span> <span class="id" type="var">x</span>))^<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@ (<span class="id" type="var">act_mult</span> <span class="id" type="var">a</span> <span class="id" type="var">_</span>)^)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">act_mult_lid</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">x</span> : <span class="id" type="var">X</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ap</span> <span class="id" type="var">g</span> (<span class="id" type="var">montype_act_id</span> <span class="id" type="var">act1</span> <span class="id" type="var">x</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">act_mult</span> <span class="id" type="var">montype_id</span> <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@ <span class="id" type="var">ap011</span> <span class="id" type="var">act2</span> (<span class="id" type="var">montype_map_id</span> <span class="id" type="var">f</span>) <span class="id" type="var">idpath</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@ <span class="id" type="var">montype_act_id</span> <span class="id" type="var">act2</span> (<span class="id" type="var">g</span> <span class="id" type="var">x</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">Functor</span> (<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act1</span> <span class="id" type="var">left_cancel1</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">N</span> <span class="id" type="var">Y</span> <span class="id" type="var">act2</span> <span class="id" type="var">left_cancel2</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> <span class="id" type="var">g</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> (<span class="id" type="var">f</span> <span class="id" type="var">s</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> <span class="id" type="var">g</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">act_mult</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">z</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>] [<span class="id" type="var">t</span> <span class="id" type="var">q</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">path_sigma</span> <span class="id" type="var">_</span> (<span class="id" type="var">_</span>;<span class="id" type="var">_</span>) (<span class="id" type="var">_</span>;<span class="id" type="var">_</span>) (<span class="id" type="var">montype_map_mult</span> <span class="id" type="var">f</span> <span class="id" type="var">t</span> <span class="id" type="var">s</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">montype_map_mult</span> <span class="id" type="var">f</span> <span class="id" type="var">t</span> <span class="id" type="var">s</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">act_mult_assoc</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_V</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_pV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">destruct</span> (<span class="id" type="var">montype_map_mult</span> <span class="id" type="var">f</span> <span class="id" type="var">t</span> <span class="id" type="var">s</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">path_sigma</span> <span class="id" type="var">_</span> (<span class="id" type="var">_</span>;<span class="id" type="var">_</span>) (<span class="id" type="var">_</span>;<span class="id" type="var">_</span>) (<span class="id" type="var">montype_map_id</span> <span class="id" type="var">f</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">montype_map_id</span> <span class="id" type="var">f</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">act_mult_lid</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_pp_p</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerL</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">generalize</span> (<span class="id" type="var">montype_map_id</span> <span class="id" type="var">f</span>). <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">left_cancel_localize</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">left_faithful</span> (<span class="id" type="var">act_on_prod</span> <span class="id" type="var">M</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> (<span class="id" type="var">act_on_self</span> <span class="id" type="var">M</span>) <span class="id" type="var">act</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">left_faithful</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span> <span class="id" type="var">t</span> <span class="id" type="var">p</span> <span class="id" type="var">q</span> [<span class="id" type="var">a</span> <span class="id" type="var">x</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="var">left_cancel</span> <span class="id" type="var">s</span> <span class="id" type="var">t</span> <span class="id" type="var">p</span> <span class="id" type="var">q</span> <span class="id" type="var">a</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> ((<span class="id" type="var">ap_fst_path_prod</span> (<span class="id" type="var">z</span> := (<span class="id" type="var">s</span> ⊗ <span class="id" type="var">a</span>, <span class="id" type="var">act</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> )) (<span class="id" type="var">z'</span> := (<span class="id" type="var">t</span> ⊗ <span class="id" type="var">a</span>, <span class="id" type="var">act</span> <span class="id" type="var">t</span> <span class="id" type="var">x</span> ))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">m</span> ⊗ <span class="id" type="var">a</span>) <span class="id" type="var">p</span>) (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">act</span> <span class="id" type="var">m</span> <span class="id" type="var">x</span>) <span class="id" type="var">p</span>))^ @ <span class="id" type="var">_</span> @<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ap_fst_path_prod</span> (<span class="id" type="var">z</span> := (<span class="id" type="var">s</span> ⊗ <span class="id" type="var">a</span>, <span class="id" type="var">act</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> )) (<span class="id" type="var">z'</span> := (<span class="id" type="var">t</span> ⊗ <span class="id" type="var">a</span>, <span class="id" type="var">act</span> <span class="id" type="var">t</span> <span class="id" type="var">x</span> ))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">m</span> ⊗ <span class="id" type="var">a</span>) <span class="id" type="var">q</span>) (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">act</span> <span class="id" type="var">m</span> <span class="id" type="var">x</span>) <span class="id" type="var">q</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">ap</span> <span class="id" type="var">fst</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">H</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">localize_action</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">PreCategory</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> (<span class="id" type="var">BuildTruncType</span> 1 (<span class="id" type="var">M</span>*<span class="id" type="var">X</span>)) (<span class="id" type="var">act_on_prod</span> <span class="id" type="var">M</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> (<span class="id" type="var">act_on_self</span> <span class="id" type="var">M</span>) <span class="id" type="var">act</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">left_cancel_localize</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">left_cancel</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">include_in_localize_action</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">x0</span> : <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">Functor</span> (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">M</span>) (<span class="id" type="var">localize_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">include_in_monoidal_action_cat</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="var">a</span>,<span class="id" type="var">x0</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The group completion of a monoidal category. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">group_completion_moncat</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">PreCategory</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">localize_action</span> <span class="id" type="var">M</span> <span class="id" type="var">M</span> (<span class="id" type="var">act_on_self</span> <span class="id" type="var">M</span>) <span class="id" type="var">left_cancel</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">contr_self_category</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="keyword">forall</span> <span class="id" type="var">x</span> : <span class="id" type="var">object</span> (<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">M</span> (<span class="id" type="var">act_on_self</span> <span class="id" type="var">M</span>) <span class="id" type="var">left_cancel</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">Contr</span> (<span class="id" type="var">morphism</span> (<span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">M</span> (<span class="id" type="var">act_on_self</span> <span class="id" type="var">M</span>) <span class="id" type="var">left_cancel</span>) <span class="id" type="var">montype_id</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">monoidal_action_morphism</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">act_on_self</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">contr_equiv'</span> {<span class="id" type="var">s</span> : <span class="id" type="var">M</span> &amp; <span class="id" type="var">s</span> = <span class="id" type="var">a</span>}).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_functor_sigma'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">exact</span> <span class="id" type="var">equiv_idmap</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">m</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_concat_l</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_rid</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">contr_basedpaths'</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Given a : M, get an endofunctor +a on the group completion  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">act_on_grp_compl</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">M</span> -&gt; <span class="id" type="var">Functor</span> (<span class="id" type="var">group_completion_moncat</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span>) (<span class="id" type="var">group_completion_moncat</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">exact</span> (<span class="id" type="var">montype_mult</span> <span class="id" type="var">x1</span> <span class="id" type="var">a</span>, <span class="id" type="var">x2</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> <span class="id" type="var">s</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">path_prod</span>); <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> =&gt; <span class="id" type="var">montype_mult</span> <span class="id" type="var">m</span> <span class="id" type="var">a</span>) (<span class="id" type="var">ap</span> <span class="id" type="var">fst</span> <span class="id" type="var">p</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_assoc</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> <span class="id" type="var">snd</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span> <span class="id" type="var">z</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>]. <span class="id" type="tactic">intros</span> [<span class="id" type="var">t</span> <span class="id" type="var">q</span>]. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_functor_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>. <span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">p</span> =&gt; <span class="id" type="var">path_prod</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">p</span> <span class="id" type="var">_</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">montype_pentagon</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_V</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">reflexivity</span>. } <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">p</span> =&gt; <span class="id" type="var">path_prod</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">p</span> <span class="id" type="var">_</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">montype_triangle1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">montype_lid</span> (<span class="id" type="var">x1</span> ⊗ <span class="id" type="var">a</span>)). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The action preserves the monoid multiplication.  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">act_on_grp_compl_mult</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">a</span> <span class="id" type="var">b</span> : <span class="id" type="var">M</span>) (<span class="id" type="var">x</span> : <span class="id" type="var">M</span> * <span class="id" type="var">M</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">act_on_grp_compl</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> (<span class="id" type="var">montype_mult</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span>) <span class="id" type="var">x</span> =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">act_on_grp_compl</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">b</span>) ((<span class="id" type="var">act_on_grp_compl</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">a</span>) <span class="id" type="var">x</span>)).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_prod</span>; <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_assoc</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The following results implies that the action is an equivalence after taking the 1-type completion.  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">act_on_grp_compl_inv</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">M</span> -&gt; <span class="id" type="var">Functor</span> (<span class="id" type="var">group_completion_moncat</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span>) (<span class="id" type="var">group_completion_moncat</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_Functor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">exact</span> (<span class="id" type="var">x1</span>, <span class="id" type="var">montype_mult</span> <span class="id" type="var">x2</span> <span class="id" type="var">a</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> <span class="id" type="var">s</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">path_prod</span>); <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> <span class="id" type="var">fst</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">m</span> =&gt; <span class="id" type="var">montype_mult</span> <span class="id" type="var">m</span> <span class="id" type="var">a</span>) (<span class="id" type="var">ap</span> <span class="id" type="var">snd</span> <span class="id" type="var">p</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">montype_assoc</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span> <span class="id" type="var">z</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>]. <span class="id" type="tactic">intros</span> [<span class="id" type="var">t</span> <span class="id" type="var">q</span>]. <span class="id" type="tactic">destruct</span> <span class="id" type="var">q</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_functor_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>. <span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">p</span> =&gt; <span class="id" type="var">path_prod</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">p</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">montype_pentagon</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_V</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">reflexivity</span>. } <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">p</span> =&gt; <span class="id" type="var">path_prod</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">p</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">montype_triangle1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">montype_lid</span> (<span class="id" type="var">x2</span> ⊗ <span class="id" type="var">a</span>)). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">concat_Vp</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">act_on_grp_compl_is_sect</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Symmetric_Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>)) (<span class="id" type="var">a</span> : <span class="id" type="var">M</span>):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">NaturalTransformation</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1%<span class="id" type="var">functor</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">act_on_grp_compl_inv</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">a</span>) <span class="id" type="var">o</span> (<span class="id" type="var">act_on_grp_compl</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">a</span>))%<span class="id" type="var">functor</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_NaturalTransformation</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> <span class="id" type="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_prod</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">smontype_sym</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span>. <span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">smontype_sym</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>). <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_functor_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_VV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">functor_prod</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> (<span class="id" type="var">path_prod</span> (<span class="id" type="var">_</span>,<span class="id" type="var">_</span>) (<span class="id" type="var">_</span>,<span class="id" type="var">_</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">smontype_mult</span> <span class="id" type="var">x</span> <span class="id" type="var">x1</span>) (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">smontype_mult</span> <span class="id" type="var">x</span> <span class="id" type="var">x2</span>) (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>)))^.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">destruct</span> (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>). <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_inj</span> <span class="id" type="var">inverse</span>). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_V</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_VV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">smontype_hexagon</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">smontype_hexagon</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">act_on_grp_compl_is_retr</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Symmetric_Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">M</span>)) (<span class="id" type="var">a</span> : <span class="id" type="var">M</span>):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">NaturalTransformation</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1%<span class="id" type="var">functor</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">act_on_grp_compl</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">a</span>) <span class="id" type="var">o</span> (<span class="id" type="var">act_on_grp_compl_inv</span> <span class="id" type="var">M</span> <span class="id" type="var">left_cancel</span> <span class="id" type="var">a</span>))%<span class="id" type="var">functor</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">Build_NaturalTransformation</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exists</span> <span class="id" type="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_prod</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">smontype_sym</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">x1</span> <span class="id" type="var">x2</span>] <span class="id" type="var">y</span>. <span class="id" type="tactic">intros</span> [<span class="id" type="var">s</span> <span class="id" type="var">p</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">smontype_sym</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transport_paths_Fl</span> (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>). <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_functor_prod</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_fst_path_prod</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ap_snd_path_prod</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">moveR_pM</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_VV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_pp</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">functor_prod</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> (<span class="id" type="var">path_prod</span> (<span class="id" type="var">_</span>,<span class="id" type="var">_</span>) (<span class="id" type="var">_</span>,<span class="id" type="var">_</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">smontype_mult</span> <span class="id" type="var">x</span> <span class="id" type="var">x1</span>) (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">smontype_mult</span> <span class="id" type="var">x</span> <span class="id" type="var">x2</span>) (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>)))^.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">destruct</span> (<span class="id" type="var">smontype_sym</span> <span class="id" type="var">a</span> <span class="id" type="var">s</span>). <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_inj</span> <span class="id" type="var">inverse</span>). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_V</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">path_prod_VV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pV</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">smontype_hexagon</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">smontype_hexagon</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">inv_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">concat_p_pp</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">to_groupcompletion</span> (<span class="id" type="var">S</span> : <span class="id" type="var">Monoidal_1Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel</span> : <span class="id" type="var">left_faithful</span> (@<span class="id" type="var">montype_mult</span> <span class="id" type="var">S</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="id" type="var">Functor</span> (<span class="id" type="var">groupoid_category</span> <span class="id" type="var">S</span>) (<span class="id" type="var">group_completion_moncat</span> <span class="id" type="var">S</span> <span class="id" type="var">left_cancel</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">include_in_monoidal_action_cat</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">a</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="var">a</span>, <span class="id" type="var">montype_id</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">Localize</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">Univalent_GroupGompletion</span>.<br/>
+</div>
+
+<div class="doc">
+We show when the group completion is a univalent category.  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">M</span> : <span class="id" type="var">Monoidal_1Type</span>) (<span class="id" type="var">X</span> : 1-<span class="id" type="keyword">Type</span>) (<span class="id" type="var">act</span> : <span class="id" type="var">monoidal_action</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">left_cancel_act</span> : <span class="id" type="var">left_faithful</span> <span class="id" type="var">act</span>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">idtoiso_is_concat</span> (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel_act</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> (<span class="id" type="var">p</span> : <span class="id" type="var">x</span> = <span class="id" type="var">y</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(@<span class="id" type="var">idtoiso</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">p</span>) =<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">montype_id</span>; <span class="id" type="var">montype_act_id</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> @ <span class="id" type="var">p</span>) :&gt; <span class="id" type="var">morphism</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> []. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="var">path_sigma</span>. { <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="var">concat_p1</span> <span class="id" type="var">_</span>)^.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">equiv_path_isomorphic</span> {<span class="id" type="var">C</span> : <span class="id" type="var">PreCategory</span>} (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">C</span>) (<span class="id" type="var">f</span> <span class="id" type="var">g</span> : (<span class="id" type="var">x</span> &lt;~=~&gt; <span class="id" type="var">y</span>)%<span class="id" type="var">category</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f</span> = <span class="id" type="var">g</span> :&gt; <span class="id" type="var">morphism</span> <span class="id" type="var">C</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>) &lt;~&gt; <span class="id" type="var">f</span> = <span class="id" type="var">g</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" type="var">BuildEquiv</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">path_isomorphic</span> <span class="id" type="var">f</span> <span class="id" type="var">g</span>) <span class="id" type="var">_</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">fiber_idtoiso</span> (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel_act</span>) (<span class="id" type="var">f</span> : (<span class="id" type="var">x</span> &lt;~=~&gt; <span class="id" type="var">y</span>) %<span class="id" type="var">category</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">hfiber</span> (@<span class="id" type="var">idtoiso</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>) <span class="id" type="var">f</span> &lt;~&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">morphism_isomorphic</span> (<span class="id" type="var">Isomorphic</span> := <span class="id" type="var">f</span>)).1 = <span class="id" type="var">montype_id</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">hfiber</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> {<span class="id" type="var">p</span> : <span class="id" type="var">x</span> = <span class="id" type="var">y</span> &amp; (<span class="id" type="var">montype_id</span>; <span class="id" type="var">montype_act_id</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> @ <span class="id" type="var">p</span>) = <span class="id" type="var">f</span> :&gt; <span class="id" type="var">morphism</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>}.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="var">oE</span> (<span class="id" type="var">equiv_path_isomorphic</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">x</span> <span class="id" type="var">y</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">f</span>)^-1).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_concat_l</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">idtoiso_is_concat</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> <span class="id" type="var">f</span> <span class="id" type="keyword">as</span> [[<span class="id" type="var">s</span> <span class="id" type="var">q</span>] <span class="id" type="var">isiso</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> {<span class="id" type="var">p</span> : <span class="id" type="var">x</span> = <span class="id" type="var">y</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">r</span> : <span class="id" type="var">montype_id</span> = <span class="id" type="var">s</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">montype_act_id</span> <span class="id" type="var">act</span> <span class="id" type="var">x</span>)^ @ <span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">a</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">act</span> <span class="id" type="var">a</span> <span class="id" type="var">x</span>) <span class="id" type="var">r</span> @ <span class="id" type="var">q</span> = <span class="id" type="var">p</span>}}.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="var">oE</span> (<span class="id" type="var">equiv_path_sigma</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> )). <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_functor_sigma_id</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">r</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">r</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="var">oE</span> <span class="id" type="var">equiv_moveL_Vp</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">equiv_path_inverse</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">oE</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_concat_r</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">whiskerR</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">concat_p1</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> {<span class="id" type="var">r</span> : <span class="id" type="var">montype_id</span> = <span class="id" type="var">s</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">p</span> : <span class="id" type="var">x</span> = <span class="id" type="var">y</span> &amp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((<span class="id" type="var">montype_act_id</span> <span class="id" type="var">act</span> <span class="id" type="var">x</span>)^ @ <span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">a</span> : <span class="id" type="var">M</span> =&gt; <span class="id" type="var">act</span> <span class="id" type="var">a</span> <span class="id" type="var">x</span>) <span class="id" type="var">r</span>) @ <span class="id" type="var">q</span> = <span class="id" type="var">p</span>}}.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="var">srapply</span> @<span class="id" type="var">equiv_adjointify</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">p</span> [<span class="id" type="var">r</span> <span class="id" type="var">h</span>]]. <span class="id" type="tactic">exact</span> (<span class="id" type="var">r</span>; (<span class="id" type="var">p</span>; <span class="id" type="var">h</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">r</span> [<span class="id" type="var">p</span> <span class="id" type="var">h</span>]]. <span class="id" type="tactic">exact</span> (<span class="id" type="var">p</span>; (<span class="id" type="var">r</span>; <span class="id" type="var">h</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">r</span> [<span class="id" type="var">p</span> <span class="id" type="var">h</span>]]. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">intros</span> [<span class="id" type="var">p</span> [<span class="id" type="var">r</span> <span class="id" type="var">h</span>]]. <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">equiv_path_inverse</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">oE</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_sigma_contr</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">r</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">contr_basedpaths</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Context</span> (<span class="id" type="var">unit_is_id</span> : <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">t</span>: <span class="id" type="var">M</span>, <span class="id" type="var">montype_mult</span> <span class="id" type="var">s</span> <span class="id" type="var">t</span> = <span class="id" type="var">montype_id</span> -&gt; <span class="id" type="var">s</span> = <span class="id" type="var">montype_id</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">contr_component_id</span> : <span class="id" type="keyword">forall</span> (<span class="id" type="var">a</span> : <span class="id" type="var">M</span>), <span class="id" type="var">IsHProp</span> (<span class="id" type="var">montype_id</span> = <span class="id" type="var">a</span>)).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">univalent_monactcat</span> (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">monoidal_action_cat</span> <span class="id" type="var">M</span> <span class="id" type="var">X</span> <span class="id" type="var">act</span> <span class="id" type="var">left_cancel_act</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">IsEquiv</span> (@<span class="id" type="var">Category.idtoiso</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">isequiv_fcontr</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="var">contr_equiv'</span> <span class="id" type="var">_</span> (<span class="id" type="var">equiv_inverse</span> (<span class="id" type="var">fiber_idtoiso</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">f</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">f</span> <span class="id" type="keyword">as</span> [[<span class="id" type="var">s</span> <span class="id" type="var">p</span>] <span class="id" type="var">isiso</span>]. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">contr_equiv'</span> (<span class="id" type="var">montype_id</span> = <span class="id" type="var">s</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">equiv_path_inverse</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">contr_inhabited_hprop</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">contr_component_id</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">isiso</span> <span class="id" type="keyword">as</span> [[<span class="id" type="var">t</span> <span class="id" type="var">q</span>] ]. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> *.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">unit_is_id</span> <span class="id" type="var">s</span> <span class="id" type="var">t</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> ((<span class="id" type="var">equiv_path_sigma</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>) <span class="id" type="var">right_inverse</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">Univalent_GroupGompletion</span>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

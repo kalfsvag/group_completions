@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>GCTT.background.onetype_completion</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library GCTT.background.onetype_completion</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">HoTT</span>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">Categories.Functor</span> <span class="id" type="library">Category.Morphisms</span>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="library">Category.Core</span>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="GCTT.background.quotients.html#"><span class="id" type="library">quotients</span></a> <a class="idref" href="GCTT.background.categories.html#"><span class="id" type="library">categories</span></a>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#"><span class="id" type="library">cquot</span></a> <a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#"><span class="id" type="library">cquot_principles</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The definition of the 1type-completion is in the folder cquot. We change the notation here so that it matches the thesis. 
+</div>
+<div class="code">
+<span class="id" type="keyword">Notation</span> <a name=":340"><span class="id" type="notation">"</span></a>'N1'" := <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.cquot"><span class="id" type="inductive">cquot</span></a>.<br/>
+<span class="id" type="keyword">Notation</span> <a name=":366"><span class="id" type="notation">"</span></a>'N1_rec'" := <a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec"><span class="id" type="definition">cquot_rec</span></a>.<br/>
+<span class="id" type="keyword">Notation</span> <a name=":400"><span class="id" type="notation">"</span></a>'N1_ind'" := <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.cquot_ind"><span class="id" type="definition">cquot_ind</span></a>.<br/>
+<span class="id" type="keyword">Notation</span> <a name=":434"><span class="id" type="notation">"</span></a>'N1_ind_set'" := <a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_ind_set"><span class="id" type="definition">cquot_ind_set</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+A simplified version of N1_rec where we don't need to specify that identities are preserved  
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="N1_rec'"><span class="id" type="definition">N1_rec'</span></a> {<span class="id" type="var">C</span> : <span class="id" type="record">PreCategory</span>} (<span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">cclY</span> : <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">ccleqY</span> : <span class="id" type="keyword">forall</span> <span class="id" type="notation">{</span><span class="id" type="var">a₁</span> <span class="id" type="var">a₂</span> : <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a><span class="id" type="notation">},</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₁"><span class="id" type="variable">a₁</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₂"><span class="id" type="variable">a₂</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#cclY"><span class="id" type="variable">cclY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₁"><span class="id" type="variable">a₁</span></a> <span class="id" type="notation">=</span> <a class="idref" href="GCTT.background.onetype_completion.html#cclY"><span class="id" type="variable">cclY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₂"><span class="id" type="variable">a₂</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">cconcatY</span> : <span class="id" type="keyword">forall</span> <span class="id" type="notation">(</span><span class="id" type="var">a₁</span> <span class="id" type="var">a₂</span> <span class="id" type="var">a₃</span>: <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a>) (<span class="id" type="var">c₁</span>: <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₁"><span class="id" type="variable">a₁</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₂"><span class="id" type="variable">a₂</span></a>) (<span class="id" type="var">c₂</span>: <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₂"><span class="id" type="variable">a₂</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#a₃"><span class="id" type="variable">a₃</span></a><span class="id" type="notation">),</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="GCTT.background.onetype_completion.html#ccleqY"><span class="id" type="variable">ccleqY</span></a> (<a class="idref" href="GCTT.background.onetype_completion.html#c₂"><span class="id" type="variable">c₂</span></a> <span class="id" type="notation">o</span> <a class="idref" href="GCTT.background.onetype_completion.html#c₁"><span class="id" type="variable">c₁</span></a>)%<span class="id" type="var">morphism</span> <span class="id" type="notation">=</span> <a class="idref" href="GCTT.background.onetype_completion.html#ccleqY"><span class="id" type="variable">ccleqY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c₁"><span class="id" type="variable">c₁</span></a> <span class="id" type="notation">@</span> <a class="idref" href="GCTT.background.onetype_completion.html#ccleqY"><span class="id" type="variable">ccleqY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c₂"><span class="id" type="variable">c₂</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">truncY</span> : <span class="id" type="class">IsTrunc</span> 1 <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>}<br/>
+&nbsp;&nbsp;: <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">C</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">N1_rec</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">Y</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">cclY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">ccleqY</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">_</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1_rec'"><span class="id" type="notation">cconcatY</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="definition">cancelL</span> (<span class="id" type="var">ccleqY</span> <span class="id" type="var">c</span> <span class="id" type="var">c</span> 1%<span class="id" type="var">morphism</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="notation">(</span><span class="id" type="var">cconcatY</span> <span class="id" type="var">c</span> <span class="id" type="var">c</span> <span class="id" type="var">c</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><span class="id" type="notation">)^</span> <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">ap</span> (<span class="id" type="var">ccleqY</span> <span class="id" type="var">c</span> <span class="id" type="var">c</span>) (<span class="id" type="projection">left_identity</span> <span class="id" type="var">C</span> <span class="id" type="var">c</span> <span class="id" type="var">c</span> <span class="id" type="var">_</span>) <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">inverse</span>. <span class="id" type="tactic">apply</span> <span class="id" type="definition">concat_p1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The functor given by the constructors of N1 
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="include_in_N1"><span class="id" type="definition">include_in_N1</span></a> (<span class="id" type="var">C</span> : <span class="id" type="record">PreCategory</span>)<br/>
+&nbsp;&nbsp;: <span class="id" type="record">Functor</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> (<span class="id" type="definition">Core.groupoid_category</span> (<a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">C</span></a>)).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="constructor">Build_Functor</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccl"><span class="id" type="constructor">ccl</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccleq"><span class="id" type="axiom">ccleq</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.cconcat"><span class="id" type="axiom">cconcat</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ce"><span class="id" type="axiom">ce</span></a>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+N1 is functorial 
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="functor_groupoid_category"><span class="id" type="definition">functor_groupoid_category</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">X</span> <span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>) {<span class="id" type="var">istrunc_X</span> : <span class="id" type="class">IsTrunc</span> 1 <a class="idref" href="GCTT.background.onetype_completion.html#X"><span class="id" type="variable">X</span></a>} {<span class="id" type="var">istrunc_Y</span> : <span class="id" type="class">IsTrunc</span> 1 <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>}<br/>
+&nbsp;&nbsp;: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">(</span></a><a class="idref" href="GCTT.background.onetype_completion.html#X"><span class="id" type="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="record">Functor</span> (<span class="id" type="definition">Core.groupoid_category</span> <a class="idref" href="GCTT.background.onetype_completion.html#X"><span class="id" type="variable">X</span></a>) (<span class="id" type="definition">Core.groupoid_category</span> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="constructor">Build_Functor</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="definition">ap</span> <span class="id" type="var">f</span>).<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span> <span class="id" type="var">x1</span> <span class="id" type="var">x2</span> <span class="id" type="var">x3</span> <span class="id" type="var">p1</span> <span class="id" type="var">p2</span>. <span class="id" type="tactic">simpl</span> <span class="id" type="keyword">in</span> *.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">ap_pp</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" type="tactic">reflexivity</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The universal principle of the 1-type completion 
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="univ_N1"><span class="id" type="definition">univ_N1</span></a> (<span class="id" type="var">C</span> : <span class="id" type="record">PreCategory</span>) (<span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>) {<span class="id" type="var">istrunc_Y</span> : <span class="id" type="class">IsTrunc</span> 1 <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>}<br/>
+&nbsp;&nbsp;: <span class="id" type="notation">(</span><a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">C</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a><span class="id" type="notation">)</span> <span class="id" type="notation">&lt;~&gt;</span> <span class="id" type="record">Functor</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> (<span class="id" type="definition">Core.groupoid_category</span> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="definition">equiv_adjointify</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> <span class="id" type="notation">o</span> <span class="id" type="notation">(</span><a class="idref" href="GCTT.background.onetype_completion.html#include_in_N1"><span class="id" type="definition">include_in_N1</span></a> <span class="id" type="var">C</span><span class="id" type="notation">)</span>)%<span class="id" type="var">functor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.onetype_completion.html#functor_groupoid_category"><span class="id" type="definition">functor_groupoid_category</span></a>. <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec"><span class="id" type="definition">cquot_rec</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">exact</span> (<span class="id" type="projection">object_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="projection">morphism_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="projection">identity_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> (<span class="id" type="projection">composition_of</span> <span class="id" type="var">F</span>).<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<a class="idref" href="GCTT.background.categories.html#path_functor'"><span class="id" type="definition">path_functor'</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="var">cbn</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">a</span> <span class="id" type="var">b</span> <span class="id" type="var">f</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_p1</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_1p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec_beta_ccleq"><span class="id" type="definition">cquot_rec_beta_ccleq</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>. <span class="id" type="tactic">apply</span> <span class="id" type="definition">path_arrow</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>. <span class="id" type="var">revert</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_ind_set"><span class="id" type="definition">cquot_ind_set</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span> <span class="id" type="var">c1</span> <span class="id" type="var">c2</span> <span class="id" type="var">f</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.basics.path_over.html#path_to_path_over"><span class="id" type="definition">path_to_path_over</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="definition">transport_paths_FlFr</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="notation">@</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">moveR_Vp</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="definition">concat_p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="definition">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec_beta_ccleq"><span class="id" type="definition">cquot_rec_beta_ccleq</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="functor_N1"><span class="id" type="definition">functor_N1</span></a> {<span class="id" type="var">C</span> <span class="id" type="var">D</span> : <span class="id" type="record">PreCategory</span>}<br/>
+&nbsp;&nbsp;: <span class="id" type="record">Functor</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#D"><span class="id" type="variable">D</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">(</span></a><a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">C</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">D</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">)</span></a>.<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">F</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="notation">(</span><a class="idref" href="GCTT.background.onetype_completion.html#univ_N1"><span class="id" type="definition">univ_N1</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span><span class="id" type="notation">)^-1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<a class="idref" href="GCTT.background.onetype_completion.html#include_in_N1"><span class="id" type="definition">include_in_N1</span></a> <span class="id" type="var">_</span> <span class="id" type="notation">o</span> <span class="id" type="var">F</span>)%<span class="id" type="var">functor</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Computational rules  
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="univ_N1_beta_ccleq"><span class="id" type="definition">univ_N1_beta_ccleq</span></a> {<span class="id" type="var">C</span> : <span class="id" type="record">PreCategory</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">Y</span> : <span class="id" type="keyword">Type</span>) {<span class="id" type="var">istrunc_Y</span> : <span class="id" type="class">IsTrunc</span> 1 <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">F</span> : <span class="id" type="record">Functor</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> (<span class="id" type="definition">Core.groupoid_category</span> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a>} (<span class="id" type="var">f</span> : <span class="id" type="projection">morphism</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c1"><span class="id" type="variable">c1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c2"><span class="id" type="variable">c2</span></a>)             <br/>
+&nbsp;&nbsp;: <span class="id" type="definition">ap</span> (<span class="id" type="notation">(</span><a class="idref" href="GCTT.background.onetype_completion.html#univ_N1"><span class="id" type="definition">univ_N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#Y"><span class="id" type="variable">Y</span></a><span class="id" type="notation">)^-1</span> <a class="idref" href="GCTT.background.onetype_completion.html#F"><span class="id" type="variable">F</span></a>) (<a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccleq"><span class="id" type="axiom">ccleq</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#f"><span class="id" type="variable">f</span></a>) <span class="id" type="notation">=</span> <span class="id" type="notation">(</span><span class="id" type="projection">morphism_of</span> <a class="idref" href="GCTT.background.onetype_completion.html#F"><span class="id" type="variable">F</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#f"><span class="id" type="variable">f</span></a><span class="id" type="notation">)</span>.<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <a class="idref" href="GCTT.background.onetype_completion.html#univ_N1"><span class="id" type="definition">univ_N1</span></a>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec_beta_ccleq"><span class="id" type="definition">cquot_rec_beta_ccleq</span></a>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="functor_N1_beta_ccleq"><span class="id" type="definition">functor_N1_beta_ccleq</span></a> {<span class="id" type="var">C</span> <span class="id" type="var">D</span> : <span class="id" type="record">PreCategory</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">F</span> : <span class="id" type="record">Functor</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#D"><span class="id" type="variable">D</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" type="var">c1</span> <span class="id" type="var">c2</span> : <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a>} (<span class="id" type="var">f</span> : <span class="id" type="projection">morphism</span> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c1"><span class="id" type="variable">c1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#c2"><span class="id" type="variable">c2</span></a>)<br/>
+&nbsp;&nbsp;: <span class="id" type="definition">ap</span> (<a class="idref" href="GCTT.background.onetype_completion.html#functor_N1"><span class="id" type="definition">functor_N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#F"><span class="id" type="variable">F</span></a>) (<a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccleq"><span class="id" type="axiom">ccleq</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#f"><span class="id" type="variable">f</span></a>) <span class="id" type="notation">=</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccleq"><span class="id" type="axiom">ccleq</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#D"><span class="id" type="variable">D</span></a> (<span class="id" type="projection">morphism_of</span> <a class="idref" href="GCTT.background.onetype_completion.html#F"><span class="id" type="variable">F</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#f"><span class="id" type="variable">f</span></a>).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <a class="idref" href="GCTT.background.onetype_completion.html#functor_N1"><span class="id" type="definition">functor_N1</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.onetype_completion.html#univ_N1_beta_ccleq"><span class="id" type="definition">univ_N1_beta_ccleq</span></a>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The 1-type completion preserves set truncation.  
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="pi0_cat_N1"><span class="id" type="definition">pi0_cat_N1</span></a> (<span class="id" type="var">C</span> : <span class="id" type="record">PreCategory</span>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="GCTT.background.categories.html#pi0_cat"><span class="id" type="definition">pi0_cat</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#C"><span class="id" type="variable">C</span></a> <span class="id" type="notation">&lt;~&gt;</span> <span class="id" type="inductive">Trunc</span> 0 (<a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">N1</span></a> <a class="idref" href="GCTT.background.onetype_completion.html#:::'N1'"><span class="id" type="notation">C</span></a>).<br/>
+<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<span class="id" type="definition">equiv_adjointify</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="var">srapply</span> @<a class="idref" href="GCTT.background.quotients.html#set_quotient_rec"><span class="id" type="definition">set_quotient_rec</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>. <span class="id" type="tactic">apply</span> <span class="id" type="constructor">tr</span>. <span class="id" type="tactic">apply</span> (<a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccl"><span class="id" type="constructor">ccl</span></a> <span class="id" type="var">C</span> <span class="id" type="var">c</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="definition">ap</span> <span class="id" type="constructor">tr</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.cquot.category_quotient.cquot.html#cquot.ccleq"><span class="id" type="axiom">ccleq</span></a>. <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="var">srapply</span> @<span class="id" type="definition">Trunc_rec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srapply</span> @<a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_rec"><span class="id" type="definition">cquot_rec</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.quotients.html#Set_Quotient.class_of"><span class="id" type="constructor">class_of</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">intros</span> <span class="id" type="var">c</span> <span class="id" type="var">d</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.quotients.html#Set_Quotient.related_classes_eq"><span class="id" type="axiom">related_classes_eq</span></a>. <span class="id" type="tactic">exact</span> <span class="id" type="var">f</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">c</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.quotients.html#Set_Quotient.set_quotient_set"><span class="id" type="axiom">set_quotient_set</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="GCTT.background.quotients.html#Set_Quotient.set_quotient_set"><span class="id" type="axiom">set_quotient_set</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>. <span class="id" type="var">revert</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<span class="id" type="definition">Trunc_ind</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<a class="idref" href="GCTT.cquot.category_quotient.cquot_principles.html#cquot_ind_prop"><span class="id" type="definition">cquot_ind_prop</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>. <span class="id" type="var">revert</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">srefine</span> (<a class="idref" href="GCTT.background.quotients.html#set_quotient_ind_prop"><span class="id" type="lemma">set_quotient_ind_prop</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+<span class="id" type="keyword">Defined</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

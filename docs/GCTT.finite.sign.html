@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>GCTT.finite.sign</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library GCTT.finite.sign</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">HoTT</span>.<br/>
+<span class="id" type="var">From</span> <span class="id" type="var">GCTT</span> <span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <span class="id" type="var">finite_types</span> <span class="id" type="var">permutations</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Section</span> <span class="id" type="var">Sign</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">swap_fix_last</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>} (<span class="id" type="var">e</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">swap_last</span> <span class="id" type="var">e</span> <span class="id" type="var">oE</span> <span class="id" type="var">e</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_last_with_with</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgn_transpose</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>} (<span class="id" type="var">i</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1) : (<span class="id" type="var">fintype</span> 2 &lt;~&gt; <span class="id" type="var">fintype</span> 2).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">i</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">i</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> <span class="id" type="var">twist2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> <span class="id" type="var">equiv_idmap</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The sign of a permutations counts (modulo 2) how many nontrivial transpositions a permutation
+   can be factorized into. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Fixpoint</span> <span class="id" type="var">sign</span> (<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fintype</span> <span class="id" type="var">n</span> &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>) -&gt; (<span class="id" type="var">fintype</span> 2 &lt;~&gt; <span class="id" type="var">fintype</span> 2).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>. { <span class="id" type="tactic">exact</span> <span class="id" type="var">equiv_idmap</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exact</span> (<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">e</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e</span>)).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">sgn_transpose_notlast</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>} (<span class="id" type="var">i</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">i</span> &lt;&gt; <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) -&gt; <span class="id" type="var">sgn_transpose</span> <span class="id" type="var">i</span> = <span class="id" type="var">twist2</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">nlast</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">i</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">i</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> (<span class="id" type="var">nlast</span> <span class="id" type="var">idpath</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgn_id</span> (<span class="id" type="var">m</span> : <span class="id" type="var">nat</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> <span class="id" type="var">m</span> (<span class="id" type="var">equiv_idmap</span>) = <span class="id" type="var">equiv_idmap</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">m</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">IHm</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ecompose_1e</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">sign</span> <span class="id" type="var">m</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_equiv</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">path_arrow</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">transpose_and_restrict_id</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">sgn2_is_id</span> : <span class="id" type="var">sign</span> 2 == <span class="id" type="var">idmap</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">sign</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> : (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="var">recall</span> ((<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [[] | []]; <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_e1</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">recall</span> (<span class="id" type="var">e</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [ [[] | []] | []]; <span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">path_equiv</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">path_arrow</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<span class="id" type="var">sym2_notfixlast</span> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> (<span class="id" type="var">sym2_fixlast</span> <span class="id" type="var">e</span> <span class="id" type="var">p</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgn_beta_transpose</span> (<span class="id" type="var">m</span> : <span class="id" type="var">nat</span>) (<span class="id" type="var">x</span> <span class="id" type="var">y</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">m</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">x</span> &lt;&gt; <span class="id" type="var">y</span>) -&gt; <span class="id" type="var">sign</span> <span class="id" type="var">m</span> (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>) = <span class="id" type="var">twist2</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">neq</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">m</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">change</span> (<span class="id" type="var">sign</span> <span class="id" type="var">m</span>.+1 (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="var">oE</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> <span class="id" type="var">m</span> (<span class="id" type="var">transpose_and_restrict</span> (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">y</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">y</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">rewrite</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">transpose_and_restrict_transpose_fixlast</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ecompose_1e</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">IHm</span>. <span class="id" type="var">revert</span> <span class="id" type="var">neq</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">functor_not</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> <span class="id" type="var">inl</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">rewrite</span> (<span class="id" type="var">fin_transpose_beta_l</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">change</span> (<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">inl</span> <span class="id" type="var">y</span>)) <span class="id" type="keyword">with</span> <span class="id" type="var">twist2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fin_transpose_sym</span> (<span class="id" type="var">n</span> := <span class="id" type="var">m</span>.+1) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">y</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_transpose_nfx</span> (<span class="id" type="var">inl</span> <span class="id" type="var">y</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">sgn_id</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">ecompose_e1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">rewrite</span> (<span class="id" type="var">fin_transpose_beta_r</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_transpose_nfx</span> <span class="id" type="var">x</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">sgn_id</span>). <span class="id" type="tactic">refine</span> (<span class="id" type="var">ecompose_e1</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">destruct</span> (<span class="id" type="var">neq</span> <span class="id" type="var">idpath</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The sign sends block sum to composition  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgn_block_sum</span> {<span class="id" type="var">m</span> <span class="id" type="var">n</span> : <span class="id" type="var">nat</span>} (<span class="id" type="var">e1</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">m</span> &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">m</span>) (<span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span> &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> (<span class="id" type="var">n</span>+<span class="id" type="var">m</span>) (<span class="id" type="var">block_sum</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span>) = <span class="id" type="var">sign</span> <span class="id" type="var">n</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">m</span> <span class="id" type="var">e1</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">ecompose_1e</span> <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">sign</span> <span class="id" type="var">m</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">path_equiv</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">path_arrow</span>. <span class="id" type="tactic">intro</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">block_sum_beta_finl</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_forall</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">transpose_and_restrict_block_sum</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">IHn</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ecompose_e_ee</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">g</span> <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> <span class="id" type="var">m</span> <span class="id" type="var">e1</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">cut</span> (<span class="id" type="keyword">forall</span> <span class="id" type="var">x</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">functor_sum</span> (<span class="id" type="var">finr</span> <span class="id" type="var">m</span> <span class="id" type="var">n</span>) <span class="id" type="var">idmap</span> <span class="id" type="var">x</span>) = <span class="id" type="var">sgn_transpose</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">intro</span> <span class="id" type="var">H</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">H</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">x</span> | <span class="id" type="var">x</span>]; <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">functor_sum_compose</span> {<span class="id" type="var">A1</span> <span class="id" type="var">A2</span> <span class="id" type="var">A3</span> <span class="id" type="var">B1</span> <span class="id" type="var">B2</span> <span class="id" type="var">B3</span> : <span class="id" type="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">f1</span> : <span class="id" type="var">A1</span> -&gt; <span class="id" type="var">A2</span>) (<span class="id" type="var">f2</span> : <span class="id" type="var">A2</span> -&gt; <span class="id" type="var">A3</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">g1</span> : <span class="id" type="var">B1</span> -&gt; <span class="id" type="var">B2</span>) (<span class="id" type="var">g2</span> : <span class="id" type="var">B2</span> -&gt; <span class="id" type="var">B3</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">functor_sum</span> (<span class="id" type="var">f2</span> <span class="id" type="var">o</span> <span class="id" type="var">f1</span>) (<span class="id" type="var">g2</span> <span class="id" type="var">o</span> <span class="id" type="var">g1</span>) == (<span class="id" type="var">functor_sum</span> <span class="id" type="var">f2</span> <span class="id" type="var">g2</span>) <span class="id" type="var">o</span> (<span class="id" type="var">functor_sum</span> <span class="id" type="var">f1</span> <span class="id" type="var">g1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">a</span> | <span class="id" type="var">a</span>]; <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">transpose_and_restrict_fixlast</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fixlast</span> : <span class="id" type="var">e</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e</span> == <span class="id" type="var">equiv_restrict</span> <span class="id" type="var">e</span> <span class="id" type="var">fixlast</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inj_equiv_plus1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> @ <span class="id" type="var">_</span> @ (<span class="id" type="var">equiv_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ev_equiv</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">fin_transpose_same_is_id</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) (<span class="id" type="var">e</span> <span class="id" type="var">x</span>)).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">transpose_and_restrict_fixlast1</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fixlast_1</span>: <span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">transpose_and_restrict</span> (<span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e1</span>) ==<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inj_equiv_plus1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="var">ev_equiv</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast_1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> (((<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> +<span class="id" type="var">E</span> 1) <span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span> +<span class="id" type="var">E</span> 1)) <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="var">ev_equiv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e2</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>). <span class="id" type="var">ev_equiv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="var">swap_last</span> <span class="id" type="var">e2</span>)). <span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> <span class="id" type="var">e2</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e1</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>). <span class="id" type="var">ev_equiv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast_1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">fin_transpose_same_is_id</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x</span> | []]; <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">transpose_and_restrict_fixlast2</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fixlast_2</span> : <span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">transpose_and_restrict</span> (<span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e1</span>) ==<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inj_equiv_plus1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">functor_sum_compose</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">idmap</span> <span class="id" type="var">idmap</span> <span class="id" type="var">x</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e2</span> <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">ap</span> ((<span class="id" type="var">swap_last</span> <span class="id" type="var">e2</span>) <span class="id" type="var">o</span> <span class="id" type="var">e2</span>) (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e1</span> <span class="id" type="var">x</span>)^)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="var">ev_equiv</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast_2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">fin_transpose_same_is_id</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) <span class="id" type="var">_</span> <span class="id" type="var">_</span> )^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">natural_fin_transpose</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) <span class="id" type="var">e2</span>  <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast_2</span>. <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">transpose_and_restrict_fixlast12</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fixlast_12</span> : <span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) = <span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">transpose_and_restrict</span> (<span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e1</span>) ==<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inj_equiv_plus1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">functor_sum_compose</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">idmap</span> <span class="id" type="var">idmap</span> <span class="id" type="var">x</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e2</span> <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">ap</span> (<span class="id" type="var">swap_last</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e2</span>) (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e1</span> <span class="id" type="var">x</span>)^)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ev_equiv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">ap</span> (<span class="id" type="var">swap_last</span> <span class="id" type="var">e2</span>) (<span class="id" type="var">natural_fin_transpose</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) <span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> <span class="id" type="var">x</span>))^)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="var">ev_equiv</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fixlast_12</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">fin_transpose_same_is_id</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">fin_transpose_sym</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> ((<span class="id" type="var">fin_transpose_invol</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <span class="id" type="var">transpose_and_restrict_nfx</span> {<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1 &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>.+1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">x2</span> <span class="id" type="var">x12</span>: <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">p2</span> : <span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) = <span class="id" type="var">inl</span> <span class="id" type="var">x2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">p12</span> : <span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) = <span class="id" type="var">inl</span> <span class="id" type="var">x12</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">transpose_and_restrict</span> (<span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e1</span>) ==<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inj_equiv_plus1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> @ <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ (<span class="id" type="var">functor_sum_compose</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">idmap</span> <span class="id" type="var">idmap</span> <span class="id" type="var">x</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">functor_sum_compose</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>) <span class="id" type="var">idmap</span> <span class="id" type="var">idmap</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> ((<span class="id" type="var">functor_sum</span> (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>) <span class="id" type="var">idmap</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">o</span> (<span class="id" type="var">functor_sum</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>) <span class="id" type="var">idmap</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e1</span> <span class="id" type="var">x</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">ap</span> (<span class="id" type="var">functor_sum</span> (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>) <span class="id" type="var">idmap</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_eta</span> <span class="id" type="var">e2</span> <span class="id" type="var">_</span>)^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">ev_equiv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> : <span class="id" type="var">fin_transpose</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) (<span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>))) ==<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">functor_sum</span> (<span class="id" type="var">B</span> := <span class="id" type="var">Unit</span>) (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>) <span class="id" type="var">idmap</span> ).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p2</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">i</span>. <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">_</span> @ <span class="id" type="var">h</span> <span class="id" type="var">_</span>). <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">unfold</span> <span class="id" type="var">swap_last</span>. <span class="id" type="var">ev_equiv</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">natural_fin_transpose</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) <span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> <span class="id" type="var">x</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">generalize</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> <span class="id" type="var">x</span>)). <span class="id" type="tactic">clear</span> <span class="id" type="var">x</span>. <span class="id" type="tactic">intro</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">decidablepaths_fin</span> <span class="id" type="var">n</span> <span class="id" type="var">x12</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">repeat</span> <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fin_transpose_beta_l</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>; <span class="id" type="tactic">apply</span> <span class="id" type="var">inr_ne_inl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">transitivity</span> (<span class="id" type="var">inl</span> <span class="id" type="var">Unit</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="var">revert</span> <span class="id" type="var">n0</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">functor_not</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">exact</span> (<span class="id" type="var">path_sum_inl</span> <span class="id" type="var">Unit</span> <span class="id" type="var">p</span>^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">apply</span> <span class="id" type="var">inl_ne_inr</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> (<span class="id" type="var">decidablepaths_fin</span> <span class="id" type="var">n</span> <span class="id" type="var">x2</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">fin_transpose_beta_r</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> : <span class="id" type="var">fin_transpose</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inl</span> <span class="id" type="var">x</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">x12</span>) = <span class="id" type="var">inl</span> <span class="id" type="var">x12</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>; <span class="id" type="tactic">try</span> (<span class="id" type="tactic">apply</span> <span class="id" type="var">inl_ne_inr</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">revert</span> <span class="id" type="var">n0</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">functor_not</span>. <span class="id" type="tactic">apply</span> <span class="id" type="var">path_sum_inl</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_beta_r</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> : <span class="id" type="var">fin_transpose</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inl</span> <span class="id" type="var">x12</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">x2</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">x</span>) = <span class="id" type="var">inl</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">path_sum_inl</span> <span class="id" type="var">Unit</span>));<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> <span class="id" type="var">inverse</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">exact</span> <span class="id" type="var">n0</span>. - <span class="id" type="tactic">exact</span> <span class="id" type="var">n1</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span> (<span class="id" type="var">h</span> : <span class="id" type="var">fin_transpose</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inl</span> <span class="id" type="var">x2</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">x</span>) = <span class="id" type="var">inl</span> <span class="id" type="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>; <span class="id" type="tactic">try</span> (<span class="id" type="tactic">apply</span> <span class="id" type="var">inl_ne_inr</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">path_sum_inl</span> <span class="id" type="var">Unit</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">inverse</span>) <span class="id" type="var">n1</span>). }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">h</span>. <span class="id" type="tactic">clear</span> <span class="id" type="var">h</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">fin_transpose_other</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">path_sum_inl</span> <span class="id" type="var">Unit</span>));<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> <span class="id" type="var">inverse</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">exact</span> <span class="id" type="var">n1</span>. } { <span class="id" type="tactic">exact</span> <span class="id" type="var">n0</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fin_transpose_beta_r</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">fin_transpose_other</span> (<span class="id" type="var">n</span> := <span class="id" type="var">n</span>.+1) (<span class="id" type="var">inl</span> <span class="id" type="var">x12</span>) (<span class="id" type="var">inl</span> <span class="id" type="var">x2</span>) (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">inr_ne_inl</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>) (<span class="id" type="var">inr_ne_inl</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">fin_transpose_beta_r</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">fin_transpose_beta_l</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The sign preserves composition  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <span class="id" type="var">sgn_compose</span> (<span class="id" type="var">n</span> : <span class="id" type="var">nat</span>) (<span class="id" type="var">e1</span> <span class="id" type="var">e2</span> : <span class="id" type="var">fintype</span> <span class="id" type="var">n</span> &lt;~&gt; <span class="id" type="var">fintype</span> <span class="id" type="var">n</span>) :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">e1</span>) = (<span class="id" type="var">sign</span> <span class="id" type="var">n</span> <span class="id" type="var">e2</span>) <span class="id" type="var">oE</span> (<span class="id" type="var">sign</span> <span class="id" type="var">n</span> <span class="id" type="var">e1</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">n</span>. { <span class="id" type="tactic">reflexivity</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ecompose_e_ee</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_ee_e</span> <span class="id" type="var">_</span> (<span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>)) <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">symm_sym2</span> (<span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>)) <span class="id" type="var">_</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_ee_e</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_ee_e</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_e_ee</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">sgn_transpose</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- (<span class="id" type="var">IHn</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>) (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">recall</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x1</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x1</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x1</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="var">recall</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">e1</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>))) <span class="id" type="keyword">as</span> <span class="id" type="var">x12</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p12</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x12</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x12</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+  <span class="id" type="var">recall</span> (<span class="id" type="var">e2</span> (<span class="id" type="var">inr</span> <span class="id" type="var">tt</span>)) <span class="id" type="keyword">as</span> <span class="id" type="var">x2</span> <span class="id" type="var">eqn</span>:<span class="id" type="var">p2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">x2</span> <span class="id" type="keyword">as</span> [<span class="id" type="var">x2</span> | []].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_forall</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_nfx</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span> <span class="id" type="var">p2</span> <span class="id" type="var">p12</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">ecompose_ee_e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">IHn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>) (<span class="id" type="var">fin_transpose</span> <span class="id" type="var">x2</span> <span class="id" type="var">x12</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> (<span class="id" type="var">ecompose_ee_e</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p2</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt; <span class="id" type="var">twist2</span> <span class="id" type="var">oE</span> <span class="id" type="var">g</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt; <span class="id" type="var">g</span> <span class="id" type="var">oE</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">sgn_beta_transpose</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">x</span> =&gt; (<span class="id" type="var">inl</span> <span class="id" type="var">Unit</span> <span class="id" type="var">x</span>)))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">p12</span>. <span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">p2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">equiv_inj</span> <span class="id" type="var">e2</span>)). <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inr_ne_inl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">transpose_and_restrict_fixlast2</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">p2</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">g</span> <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p2</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ecompose_1e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">sgn_transpose_notlast</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> &lt;- <span class="id" type="var">p2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">functor_not</span> (<span class="id" type="var">equiv_inj</span> <span class="id" type="var">e2</span>)).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inl_ne_inr</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">transpose_and_restrict_fixlast12</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">p12</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">g</span> <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">emoveL_eM</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">ecompose_1e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">inverse</span>. <span class="id" type="tactic">rewrite</span> <span class="id" type="var">twist2_inv</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="var">sgn_transpose_notlast</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">false</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span> <span class="id" type="keyword">in</span> <span class="id" type="var">p12</span>. <span class="id" type="tactic">apply</span> (<span class="id" type="var">inl_ne_inr</span>  <span class="id" type="var">x1</span> <span class="id" type="var">tt</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">equiv_inj</span> <span class="id" type="var">e2</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exact</span> (<span class="id" type="var">p12</span> @ <span class="id" type="var">false</span>^).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">rewrite</span> (<span class="id" type="var">path_equiv</span> (<span class="id" type="var">path_arrow</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> (<span class="id" type="var">transpose_and_restrict_fixlast1</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">p1</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> (<span class="id" type="var">ap</span> (<span class="id" type="keyword">fun</span> <span class="id" type="var">g</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">g</span> <span class="id" type="var">oE</span> <span class="id" type="var">sign</span> <span class="id" type="var">n</span> (<span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e2</span> <span class="id" type="var">oE</span> <span class="id" type="var">transpose_and_restrict</span> <span class="id" type="var">e1</span>))).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">p1</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="var">ecompose_e1</span> <span class="id" type="var">_</span>)^.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <span class="id" type="var">Sign</span>.<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+&nbsp;&nbsp;</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -139,7 +139,6 @@ End rec.
   Defined.
 
 
-
 Section Equiv.
 
   Context `{Univalence}.

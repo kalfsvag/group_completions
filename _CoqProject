@@ -11,6 +11,7 @@ cquot/basics/square.v
 cquot/category_quotient/cquot.v
 cquot/category_quotient/cquot_principles.v
 background/quotients.v
+background/quotient_univ.v
 background/categories.v
 background/onetype_completion.v
 background/monoids_and_groups.v

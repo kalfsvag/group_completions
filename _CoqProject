@@ -5,7 +5,7 @@ path_lemmas.v
 conn_ptype.v
 cquot/basics/general.v
 cquot/basics/heterogeneous_equality.v
-cquot/basics/path	_over.v
+cquot/basics/path_over.v
 cquot/basics/globe_over.v
 cquot/basics/square.v
 cquot/category_quotient/cquot.v

@@ -1,6 +1,6 @@
 Require Import HoTT.
 
-From A_BPQ
+From GCTT
      Require Import equiv_lemmas sigma_lemmas finite_types finite.permutations monoidal_1type.
 
 (** Defining the monoidal 1-type of finite sets*)
@@ -354,7 +354,7 @@ of finite sets and isomorphisms*)
       FinType_triangle1 FinType_triangle2 FinType_pentagon FinType_hexagon.
 End FinType.
 
-From A_BPQ Require Import monoids_and_groups.
+From GCTT Require Import monoids_and_groups.
 Section Assoc_Nat_to_Assoc_FinType.
   (** Now we prove that associativity of sum_FinType on canonical finite types correspond to
    associativity of natural numbers. *)

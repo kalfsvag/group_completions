@@ -1,7 +1,8 @@
 echo "Generating documentation for files in _CoqProject:"
 {
- while read F  ; do
-	 echo "  " $F
-     coqdoc -R . "A_BPQ" -d docs $F
- done
-}<tail -n+1 _CoqProject
+	read
+	while read F  ; do
+		echo "  " $F
+		coqdoc -R . "GCTT" -d docs $F #add --latex to generate tex files
+	done 
+} < _CoqProject

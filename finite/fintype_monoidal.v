@@ -616,7 +616,8 @@ End Iso_Fin.
     
 
 
-Load group_complete_category.
+From GCTT Require Import  group_complete_category.
+
 Definition group_complete_isofin := group_completion_moncat moncat_isofin.
 
 Definition sum_group_complete_isofin :

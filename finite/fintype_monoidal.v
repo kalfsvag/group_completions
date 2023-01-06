@@ -616,7 +616,7 @@ End Iso_Fin.
     
 
 
-From GCTT Require Import  group_complete_category.
+From GCTT Require Import  quotients group_complete_category.
 
 Definition group_complete_isofin := group_completion_moncat moncat_isofin.
 
@@ -691,8 +691,8 @@ Proof.
 Defined.
 
 Definition assoc_group_complete_isofin (A1 A2 A3 : group_complete_isofin)
-  : sum_group_complete_isofin (sum_group_complete_isofin (A1, A2), A3) -->
-    sum_group_complete_isofin (A1, sum_group_complete_isofin (A2, A3)).
+  : morphism _ (sum_group_complete_isofin (sum_group_complete_isofin (A1, A2), A3) )
+             (sum_group_complete_isofin (A1, sum_group_complete_isofin (A2, A3))).
 Proof.
   srefine (FinFin_to_GrpCompl _1 _). cbn.
   (* simpl. apply class_of. *)
@@ -702,21 +702,21 @@ Proof.
 Defined.
 
 Definition lid_group_complete_isofin (A : group_complete_isofin)
-  : sum_group_complete_isofin ((FinType_id, FinType_id), A) --> A.
+  : morphism _ (sum_group_complete_isofin ((FinType_id, FinType_id), A)) A.
 Proof.
   srefine (FinFin_to_GrpCompl _1 _). cbn.
   exact (sum_empty_l _ , sum_empty_l _).
 Defined.
 
 Definition rid_group_complete_isofin (A : group_complete_isofin)
-  : sum_group_complete_isofin (A, (FinType_id, FinType_id)) --> A.
+  : morphism _ (sum_group_complete_isofin (A, (FinType_id, FinType_id))) A.
 Proof.
   srefine (FinFin_to_GrpCompl _1 _). cbn.
   exact (sum_empty_r _ , sum_empty_r _).
 Defined.
 
 Definition sym_group_complete_isofin (A B : group_complete_isofin)
-  : sum_group_complete_isofin (A, B) --> sum_group_complete_isofin (B, A).
+  : morphism _ (sum_group_complete_isofin (A, B)) (sum_group_complete_isofin (B, A)).
 Proof.
   srefine (FinFin_to_GrpCompl _1 _). cbn.
   exact (equiv_sum_symm _ _, equiv_sum_symm _ _).
@@ -898,3 +898,12 @@ Proof.
 Defined.
 
   
+
+
+
+
+
+
+
+
+

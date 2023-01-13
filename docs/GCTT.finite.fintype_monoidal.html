@@ -75,6 +75,12 @@ of finite sets and isomorphisms
 &nbsp;&nbsp;&nbsp;&nbsp;:= <a class="idref" href="GCTT.finite.fintype_monoidal.html#Build_FinType"><span class="id" type="constructor">Build_FinType</span></a> <a class="idref" href="GCTT.finite.fintype_monoidal.html#n"><span class="id" type="variable">n</span></a>.<br/>
 
 <br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="FinType_to_Type"><span class="id" type="definition">FinType_to_Type</span></a> : <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType"><span class="id" type="record">FinType</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#::type_scope:x_'->'_x"><span class="id" type="notation">-&gt;</span></a> <span class="id" type="keyword">Type</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> [<span class="id" type="var">a</span> [<span class="id" type="var">A</span> <span class="id" type="var">p</span>]]. <span class="id" type="tactic">exact</span> <span class="id" type="var">A</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
 </div>
 
 <div class="doc">
@@ -113,6 +119,26 @@ Describing the path types in FinType.
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">refine</span> (<span class="id" type="notation">(</span><span class="id" type="definition">equiv_ap</span> <a class="idref" href="GCTT.finite.fintype_monoidal.html#issig_FinType"><span class="id" type="definition">issig_FinType</span></a> <span class="id" type="var">A</span> <span class="id" type="var">B</span><span class="id" type="notation">)^-1</span> <span class="id" type="notation">oE</span> <span class="id" type="var">_</span>).<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">exact</span> (<span class="id" type="definition">equiv_path_finite_types'</span> (<a class="idref" href="GCTT.finite.fintype_monoidal.html#issig_FinType"><span class="id" type="definition">issig_FinType</span></a> <span class="id" type="var">A</span>) (<a class="idref" href="GCTT.finite.fintype_monoidal.html#issig_FinType"><span class="id" type="definition">issig_FinType</span></a> <span class="id" type="var">B</span>) ).<br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Extra lemma to connect to how it is presented in thesis.
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="isembedding_FinType_to_Type"><span class="id" type="lemma">isembedding_FinType_to_Type</span></a> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">forall</span> <span class="id" type="var">A</span> <span class="id" type="var">B</span> : <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType"><span class="id" type="record">FinType</span></a><span class="id" type="notation">,</span> <span class="id" type="class">IsEquiv</span>(@<span class="id" type="definition">ap</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType_to_Type"><span class="id" type="definition">FinType_to_Type</span></a> <a class="idref" href="GCTT.finite.fintype_monoidal.html#A"><span class="id" type="variable">A</span></a> <a class="idref" href="GCTT.finite.fintype_monoidal.html#B"><span class="id" type="variable">B</span></a>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assert</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">rw</span> : <span class="id" type="notation">(</span>@<span class="id" type="definition">ap</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType_to_Type"><span class="id" type="definition">FinType_to_Type</span></a> <span class="id" type="var">A</span> <span class="id" type="var">B</span><span class="id" type="notation">)</span> <span class="id" type="notation">=</span> <span class="id" type="notation">((</span><span class="id" type="definition">equiv_path_universe</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="notation">oE</span> <span class="id" type="lemma">equiv_inverse</span> (<a class="idref" href="GCTT.finite.fintype_monoidal.html#equiv_path_FinType"><span class="id" type="definition">equiv_path_FinType</span></a> <span class="id" type="var">A</span> <span class="id" type="var">B</span>)<span class="id" type="notation">))</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="id" type="tactic">apply</span> <span class="id" type="definition">path_arrow</span>. <span class="id" type="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intro</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">unfold</span> <span class="id" type="definition">path_universe_uncurried</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">p</span>. <span class="id" type="tactic">simpl</span>. <span class="id" type="tactic">apply</span> <span class="id" type="definition">inverse</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <span class="id" type="projection">eissect</span>. }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">rewrite</span> <span class="id" type="var">rw</span>. <span class="id" type="tactic">exact</span> <span class="id" type="var">_</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
 
 <br/>
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="inv_equiv_path_FinType"><span class="id" type="definition">inv_equiv_path_FinType</span></a> (<span class="id" type="var">A</span> <span class="id" type="var">B</span> : <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType"><span class="id" type="record">FinType</span></a>) : <br/>
@@ -210,7 +236,7 @@ path_FinType respects composition
 &nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="FinType_id"><span class="id" type="definition">FinType_id</span></a> : <a class="idref" href="GCTT.finite.fintype_monoidal.html#FinType"><span class="id" type="record">FinType</span></a> := <a class="idref" href="GCTT.finite.fintype_monoidal.html#canon_FinType"><span class="id" type="definition">canon_FinType</span></a> 0.<br/>
 
 <br/>
-&nbsp;&nbsp;<span class="id" type="keyword">Local</span>&nbsp;<span class="id" type="keyword">Notation</span> <a name=":4857.FinType"><span class="id" type="notation">"</span></a>S1 ⊕ S2" := (<a class="idref" href="GCTT.finite.fintype_monoidal.html#sum_FinType"><span class="id" type="definition">sum_FinType</span></a> <span class="id" type="var">S1</span> <span class="id" type="var">S2</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 50, <span class="id" type="keyword">no</span> <span class="id" type="keyword">associativity</span>).<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Local</span>&nbsp;<span class="id" type="keyword">Notation</span> <a name=":5450.FinType"><span class="id" type="notation">"</span></a>S1 ⊕ S2" := (<a class="idref" href="GCTT.finite.fintype_monoidal.html#sum_FinType"><span class="id" type="definition">sum_FinType</span></a> <span class="id" type="var">S1</span> <span class="id" type="var">S2</span>) (<span class="id" type="tactic">at</span> <span class="id" type="keyword">level</span> 50, <span class="id" type="keyword">no</span> <span class="id" type="keyword">associativity</span>).<br/>
 
 <br/>
 </div>

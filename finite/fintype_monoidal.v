@@ -39,6 +39,11 @@ of finite sets and isomorphisms*)
     : Finite_Types n -> FinType
     := Build_FinType n.
 
+  Definition FinType_to_Type : FinType -> Type.
+  Proof.
+    intros [a [A p]]. exact A.
+  Defined.
+
   (** Canonical objects in FinType*)
   Definition canon_FinType (n : nat) : FinType := fin_to_FinType (canon n).
 
@@ -65,6 +70,20 @@ of finite sets and isomorphisms*)
     exact (equiv_path_finite_types' (issig_FinType A) (issig_FinType B) ).
   Defined.
 
+  (** Extra lemma to connect to how it is presented in thesis.*)
+  Lemma isembedding_FinType_to_Type :
+    forall A B : FinType, IsEquiv(@ap _ _ FinType_to_Type A B).
+  Proof.
+    intros.
+    assert
+      (rw : (@ap _ _ FinType_to_Type A B) = ((equiv_path_universe _ _ oE equiv_inverse (equiv_path_FinType A B)))).
+    { apply path_arrow. simpl. 
+      intro p. unfold path_universe_uncurried.
+      destruct p.  simpl. apply inverse.
+      apply eissect. }
+    rewrite rw. exact _.
+  Qed.
+  
 
   Definition inv_equiv_path_FinType (A B : FinType) : 
     (equiv_inverse (equiv_path_FinType A B)) == inv_path_FinType.

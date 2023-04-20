@@ -61,6 +61,8 @@ Proof.
     apply wd_R. exact r.
 Defined.
 
+
+
 Definition isequiv_double_set_quotient_rec_uncurried `{Funext}
            (A B : Type) (R : relation A) (S: relation B) (C : Type) {isset_C : IsHSet C}
   : IsEquiv (double_set_quotient_rec_uncurried A B R S C).
@@ -94,5 +96,50 @@ Proof.
 Defined.
 
                   
-      
-    
+(** The following code is technically reduntant, but is included for parity with thesis.  *)
+Definition precompose_class_of_prod (A B : Type) (R : relation A) (S: relation B) (C : Type) :
+  (set_quotient R * set_quotient S -> C) ->
+  {f : A * B -> C &
+                (forall a : A, iswelldef S (fun b : B => f (a, b))) *
+                (forall b : B, iswelldef R (fun a : A => f (a, b)))}.
+Proof.
+  intro g.
+  exists (g o (Prod.functor_prod (class_of R) (class_of S))).
+    srapply @pair.
+    + intro a.
+      unfold iswelldef. intros b b' s.
+      unfold Prod.functor_prod. simpl.
+      apply (ap (fun x => g (class_of R a, x))).
+      apply related_classes_eq. exact s.
+    + intro b.
+      unfold iswelldef. intros a a' r.
+      apply (ap (fun x => g (x, class_of S b))).
+      apply related_classes_eq. exact r.
+Defined.
+
+Lemma isequiv_precompose_class_of_prod `{Funext} (A B : Type) (R : relation A) (S: relation B)
+           (C : Type) {isset_C : IsHSet C} :
+  IsEquiv (precompose_class_of_prod A B R S C).
+Proof.
+  srapply @isequiv_adjointify.
+  - apply double_set_quotient_rec_uncurried. exact isset_C.
+  - intros [f [wd_S wd_R]]. simpl.
+    apply path_sigma_hprop. simpl.
+    reflexivity.
+  - intro g. simpl.
+    apply path_arrow.
+    intros [a b].
+    revert b.
+    srapply @set_quotient_ind_prop.
+    revert a.
+    srapply @set_quotient_ind_prop.
+    intro a. simpl.
+    intro b.
+    reflexivity.
+Qed.
+  
+
+
+
+
+

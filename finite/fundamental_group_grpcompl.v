@@ -1515,7 +1515,7 @@ Section IsEquiv_GrpCompl_To_Fin2.
   Defined.
 
   (** Remember that Z0 is the component of [N1 (group_completion_FinType)] containing [0].
-   Thus this is the same as the main result in the thesis. *)
+   Thus this is the same as the main result in the thesis. (Should rename stuff so that this is more immediate.) *)
   Definition isequiv_fin2_to_Z0 : IsEquiv (fin2_to_Z0).
   Proof.
     apply (isequiv_adjointify fin2_to_Z0 Z0_to_fin2 ).

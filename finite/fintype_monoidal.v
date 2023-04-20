@@ -532,7 +532,7 @@ Section Assoc_Nat_to_Assoc_FinType.
   Qed.
 End Assoc_Nat_to_Assoc_FinType.  
 
-(** Would have been better to define this stuff before doing all the above, but but.*)
+(* Would have been better to define this stuff before doing all the above, but but.*)
 Require Import monoidal_category.
 Section Iso_Fin.
   Definition iso_fin : PreCategory.
